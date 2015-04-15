@@ -7,10 +7,6 @@ before_script:
 - bower install --save
 - bower install filepicker --save
 - npm install grunt-contrib-sass --save
-- curl https://js.stripe.com/v2/ -o client/bower_components/angular-payments/stripe.js
 script: grunt test
 after_success:
 - bash ./travis/deploy.sh
-# deploy:
-#   api_key:
-#     secure: JBBIAf2YopeKLOGn06t9ajDzxZbaL/NEyNrXbc2c5aAshYekdgxt7buaandglnX3bXn5XLjFq3IqIXrYaKtnf9g2Jh91vJN1LqHxWzFe4zEh2PctX0tx4gC8p3r73pSmH9hChKZGBymUVnMAGFNxduNQWwewJe+cxY5YaALlxLI=
