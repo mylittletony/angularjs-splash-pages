@@ -1,7 +1,6 @@
 'use strict';
 
 var app = angular.module('ctLoginsApp.directives', [
-
   'ctLoginsApp.facebook.directives',
   'ctLoginsApp.google.directives',
   'ctLoginsApp.guests.directives',
@@ -10,5 +9,4 @@ var app = angular.module('ctLoginsApp.directives', [
   'ctLoginsApp.main.directives',
   'ctLoginsApp.orders.directives',
   'ctLoginsApp.social.directives'
-
 ]);
