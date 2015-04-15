@@ -1,0 +1,46 @@
+<div ng-if="showcart == true">
+  <div ng-hide="redirecting">
+    <h2><b>You have {{ cart.products.length }} Internet voucher in your cart.</b> <a href="" ng-click="emptyCart()">Empty cart</a>.</h2>
+    <div class="row">
+      <div class="small-12 medium-8 columns medium-centered">
+        <div class="panel">
+          <h1>{{ cart.products[0].value / 100 | currency: store.currency }} {{ cart.products[0].description }}</h1>
+        </div>
+      </div>
+    </div>
+    <p><b>Buy Now With PayPal</b></p>
+    <a href="" ng-click="paypal()">
+      <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">
+    </a>
+    <hr>
+  </div>
+  <div ng-if="redirecting">
+    <br>
+    <br>
+    <h1>Redirecting you to PayPal, please hold tight</h1>
+    <p>Don't refresh the page, we'll send you on your way soon.</p>
+  </div>
+</div>
+
+<div ng-hide="redirecting" class="small-12 medium-10 small-centered columns">
+  <div ng-show="products.length">
+    <h1><b>Choose {{ cart.products.length ? 'another' : 'a' }} Voucher</b></h1>
+    <p>You can purchase this with your PayPal account. Or, <b><a href="" ng-click="goHome()">click here</a></b> to go back to the login page</p>
+    <table width="100%">
+      <tr>
+        <th>Cost</th>
+        <th>Description</th>
+        <th>Purchase</th>
+      </tr>
+      <tr ng-repeat='product in products'>
+        <td>{{ product.value / 100 | currency : store.currency  }}</td>
+        <td>
+          {{ product.description || 'No description' }}
+          <br>
+          <small>{{product.duration}} {{ product.distance }} </small>
+        </td>
+        <td><a href="" ng-click="addToCart(product._id)"><i ng-hide="adding == product._id" class="fa fa-cart-plus fa-2x"></i> <span ng-if="adding == product._id"><i class="fa fa-spinner fa-spin fa-2x"></i></span></a></td>
+      </tr>
+    </table>
+  </div>
+</div>

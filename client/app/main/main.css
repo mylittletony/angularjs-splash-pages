@@ -1,0 +1,176 @@
+body {
+  padding-top: 20px!important;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: transparent;
+}
+
+body.login-reset {
+}
+
+body.login-error {
+  color: '#000'!important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #ff5a5a;
+  /* opacity: 0.2; */
+}
+
+body.login-layout {
+  color: '#000'!important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #CCC;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.break { clear: both; }
+
+.banner {
+  text-align: center;
+  /* margin: -25px -20px 20px -20px; */
+  /* display: block; */
+}
+
+.loading {
+  position: fixed; /* or absolute */
+  top: 40%;
+  left: 50%;
+  color: #404040;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+
+}
+
+.error {
+  color: #404040;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.loading, .error h1 {
+  font-size: 30px!important;
+  font-weight: 300;
+}
+
+.inner_container {
+  display: none;
+}
+
+.footer { display: none; }
+
+.center {
+  text-align: center;
+}
+
+.errors h2 {
+  color: #FFBDBD!important;
+}
+
+.errors p {
+  color: #FFBDBD!important;
+}
+
+.container {
+  width: 100%!important;
+}
+
+img {
+  max-width: 90%;
+}
+
+label {
+  color: #4d4d4d;
+  cursor: pointer;
+  display: block;
+  font-weight: normal;
+  line-height: 1.5;
+  margin-top: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.splash-container {
+  /* display: none; */
+}
+
+.hidden {
+  display: none;
+}
+
+input {
+  display: inline!important;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.facebook {
+  background-color: #3b5998;
+  min-width: 150px;
+}
+
+.google {
+  background-color: #dd4b39;
+  min-width: 150px;
+}
+
+.linkedin {
+  background-color: #007bb6;
+  min-width: 150px;
+}
+
+.reset p {
+  color: #878c8f!important;
+  font-weight: 300;
+}
+
+.reset p {
+  font-size: 14px!important;
+  padding: 0;
+  margin: 0;
+  font-family: "open-sans","Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
+  line-height: 1.8;
+  position: relative;
+  cursor: auto;
+  /* text-align: center; */
+}
+
+.store {
+
+}
+
+.store h1 {
+  font-weight: 900;
+  font-size: 30px;
+}
+
+.store h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.8em;
+  margin-bottom: 7px;
+  color: #555459;
+}
+
+.store h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.store label {
+  font-size: 15px!important;
+}
+
+.store .text-danger {
+  color: #870000;
+}
