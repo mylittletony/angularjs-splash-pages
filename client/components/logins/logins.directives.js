@@ -69,11 +69,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var init = function() {
-
       CT.status().then(function(res) {
         addForm();
       }, function(err) {
-
         scope.state.status = undefined;
         scope.state.hidden = undefined;
         scope.state.errors = err;

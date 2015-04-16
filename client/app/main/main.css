@@ -15,7 +15,8 @@ body.login-error {
   top: 0;
   bottom: 0;
   right: 0;
-  background: #ff5a5a;
+  /* background: #ff5a5a; */
+  background: #1fad5c;
   /* opacity: 0.2; */
 }
 

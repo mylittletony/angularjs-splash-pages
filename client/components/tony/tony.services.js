@@ -43,7 +43,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     var genericError = function(msg) {
       clearUp();
-      $rootScope.state.errors = '<h1>' + msg + '</h1>';
+      var message = (msg.message === '' || msg.message === null || msg.message === undefined) ? msg : msg.message;
+      $rootScope.state.errors = '<h1>' + message + '</h1>';
       $rootScope.bodylayout = 'login-error' ;
       // $timeout(function() {
       //   $window.location.href = 'http://bbc.co.uk/';
