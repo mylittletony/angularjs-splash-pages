@@ -58,14 +58,12 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var cleanUp = function() {
-
       $rootScope.bodylayout   = undefined;
       scope.state.hidden      = undefined;
       scope.state.status      = undefined;
       scope.password          = undefined;
       scope.username          = undefined;
       scope.error             = undefined;
-
     };
 
     var init = function() {
