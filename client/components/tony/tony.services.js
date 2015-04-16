@@ -315,7 +315,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     function status() {
       var deferred = $q.defer();
       if ($rootScope.deviceId === '1') {
-
         Coova.status({}).$promise.then(function(res) {
           if (res.clientState === 0) {
             deferred.resolve(res);
@@ -325,6 +324,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           }
         }, function(err) {
           var msg = '<h1>Oh! Something\'s Gone Wrong </h1><p>You\'re connected to a wireless network that doesn\'t support splash pages. <br>Please check your settings and refresh the page.</p>';
+          console.log(err);
           deferred.reject(msg);
         });
       } else {

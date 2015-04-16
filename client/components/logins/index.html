@@ -24,7 +24,8 @@
   </div>
   <div class="row footer">
     <div id="" class="small-12 medium-6 columns">
-      <a class="left" href="{{ splash.copyright }}">Powered by PolkaSpots</a>
+      <span ng-show="splash.powered_by == true"><a class="left" href="http://www.ctapp.io/captive-portal" target="_blank">Captive Portal by Cucumber Tony &nbsp</a></span>
+      <span class="left">SD: {{ splash.id }}</span>
     </div>
     <div id="footer-right" class="small-12 medium-6 columns">
       <a href="{{ splash.terms_url }}" class="right">Terms and Conditions</a>
