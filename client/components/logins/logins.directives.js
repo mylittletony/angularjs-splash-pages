@@ -35,6 +35,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var onFail = function(err) {
+      // Insert a CT service error handler //
       cleanUp();
       $rootScope.banneralert = 'banner alert-box alert';
       $rootScope.error = err;

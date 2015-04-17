@@ -19,12 +19,10 @@ app.factory('Coova', ['$resource', '$location',
       { callback: 'JSON_CALLBACK' },
       {
       status: {
-        timeout: 100000,
+        timeout: 10000,
         method: 'JSONP',
         isArray: false,
         params: {
-          // uamip: '@uamip',
-          // uamport: '@uamport',
           uamSsl: '@ssl',
           action: 'status'
         }
@@ -34,8 +32,6 @@ app.factory('Coova', ['$resource', '$location',
         method: 'JSONP',
         isArray: false,
         params: {
-          // uamip: '@uamip',
-          // uamport: '@uamport',
           uamSsl: '@uamSsl',
           username: '@username',
           response: '@response',
