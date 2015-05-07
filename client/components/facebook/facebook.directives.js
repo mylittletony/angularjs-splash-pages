@@ -76,7 +76,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       FB.login(function(response){
         authResponse = response.authResponse;
         deferred.resolve(response);
-      },{scope: 'publish_actions,email,user_checkins'});
+      },{scope: 'publish_actions,public_profile,email'});
       return deferred.promise;
     }
 
