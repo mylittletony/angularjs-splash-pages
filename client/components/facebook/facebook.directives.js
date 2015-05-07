@@ -62,7 +62,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       controller.$scope.fbPageId = attrs.fbPageId;
 
       var msg =
-        '<div class=\'small-12 medium-6 medium-centered columns\'>'+
+        '<div class=\'small-12 medium-8 medium-centered columns\'>'+
         '<label for=\'checkin\'>Hey, ' + user.first_name + ', <b> you just logged in!</b> Please checkin in and leave a note on your Facebook page.</label>'+
         '<textarea ng-model=\'message\' rows=3 placeholder=\'Please type a message, this will be posted on your wall.\'></textarea>'+
         '<button ng-disabled=\'checkin\' ng-click=\'doCheckin()\'><span ng-hide=\'checkin\'>Checkin</span> <span ng-if=\'checkin\'>Checking in <i class="fa fa-spinner fa-pulse"></i></span> </button>' +
