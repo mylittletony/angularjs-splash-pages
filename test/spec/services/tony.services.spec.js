@@ -16,13 +16,13 @@ describe("Tony Unit Tests", function() {
     Tony = _Tony_;
     $httpBackend = $injector.get('$httpBackend');
 
-    $httpBackend.when('POST', 'http://127.0.0.1:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
+    $httpBackend.when('POST', 'http://mywifi.local:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
       .respond(200, {});
 
-    $httpBackend.when('POST', 'http://127.0.0.1:8080/api/v1/store_carts?product_ids=1&product_ids=2&product_ids=3&store_id=123')
+    $httpBackend.when('POST', 'http://mywifi.local:8080/api/v1/store_carts?product_ids=1&product_ids=2&product_ids=3&store_id=123')
       .respond(200, {});
 
-    $httpBackend.when('GET', 'http://127.0.0.1:8080/api/v1/store_carts/123')
+    $httpBackend.when('GET', 'http://mywifi.local:8080/api/v1/store_carts/123')
       .respond(200, {});
 
    }));
@@ -34,19 +34,19 @@ describe("Tony Unit Tests", function() {
 
   it('should have sent a GET request to location zones', function() {
     var result = Tony.create({username: 'simon', password: 'morley', mac: '11:22:33:44:55:66', challenge: 'challenge', request_uri: 'polkaspots.my-wifi.co'});
-    $httpBackend.expectPOST('http://127.0.0.1:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
+    $httpBackend.expectPOST('http://mywifi.local:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
     $httpBackend.flush();
   });
 
   it('should have sent a POST request to create a store cart', function() {
     var result = Tony.addToCart({store_id: 123, product_ids: [1,2,3]});
-    $httpBackend.expectPOST('http://127.0.0.1:8080/api/v1/store_carts?product_ids=1&product_ids=2&product_ids=3&store_id=123');
+    $httpBackend.expectPOST('http://mywifi.local:8080/api/v1/store_carts?product_ids=1&product_ids=2&product_ids=3&store_id=123');
     $httpBackend.flush();
   });
 
   it('should have sent a get request to fetch a store cart', function() {
     var result = Tony.getCart({ id: 123 });
-    $httpBackend.expectGET('http://127.0.0.1:8080/api/v1/store_carts/123');
+    $httpBackend.expectGET('http://mywifi.local:8080/api/v1/store_carts/123');
     $httpBackend.flush();
   });
 
@@ -94,7 +94,7 @@ describe("Tony Unit Tests", function() {
   describe("Tony Init Function", function() {
 
     it('should test that we get the logins from CT', function() {
-      httpBackend.whenGET("http://127.0.0.1:8080/api/v1/logins?splash_id=123&v=2").respond(200, {});
+      httpBackend.whenGET("http://mywifi.local:8080/api/v1/logins?splash_id=123&v=2").respond(200, {});
       CTService.init();
       $scope.$apply()
       expect($scope.bodyLayout).toBe(undefined);
@@ -107,7 +107,7 @@ describe("Tony Unit Tests", function() {
 
       $scope.state = {}
       var deferred = q.defer();
-      httpBackend.whenGET("http://127.0.0.1:8080/api/v1/logins?splash_id=123&v=2").respond(422, {});
+      httpBackend.whenGET("http://mywifi.local:8080/api/v1/logins?splash_id=123&v=2").respond(422, {});
 
       CTService.init();
       deferred.reject();
@@ -136,7 +136,7 @@ describe("Tony Unit Tests", function() {
 
       spyOn(CTService, "status").andCallThrough();
       spyOn(coovaFactory, 'status').andCallThrough()
-      httpBackend.whenPOST("http://127.0.0.1:8080/api/v1/logins?password=morley&username=simon").respond(200, {});
+      httpBackend.whenPOST("http://mywifi.local:8080/api/v1/logins?password=morley&username=simon").respond(200, {});
 
       CTService.login(params);
 

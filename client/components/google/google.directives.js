@@ -13,7 +13,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
           then(controller.autoLogin).
           then(controller.doCtLogin).
           then(function() {
-            console.log(123123123123123);
+          console.log(123123123123123);
             loginHandler();
           }, function(err) {
             $rootScope.banneralert = 'banner alert-box alert';
