@@ -9,7 +9,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
     function signinCallback(authResult) {
       var msg;
       console.log(123123, authResult);
-      if (authResult.status.signed_in && authResult.status.method !== 'AUTO') {
+      if (authResult.status.signed_in && (authResult.status.method !== 'AUTO' || authResult.status.method !== 'PROMPT')) {
         fetchUser(authResult).
           then(controller.autoLogin).
           then(controller.doCtLogin).
