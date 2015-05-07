@@ -18,7 +18,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
             loginHandler();
           }, function(err) {
             $rootScope.banneralert = 'banner alert-box alert';
-            $rootScope.error = err.msg;
+            $rootScope.error = err.msg || 'A weird error just happened';
             console.log(err.res);
             scope.loggingIn = undefined;
             buildTemplate();
