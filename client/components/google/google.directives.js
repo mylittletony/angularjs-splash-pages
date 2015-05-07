@@ -8,13 +8,12 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
 
     function signinCallback(authResult) {
       var msg;
-      console.log(123123, authResult);
+      // console.log(123123, authResult);
       if (authResult.status.signed_in && (authResult.status.method !== 'AUTO' || authResult.status.method !== 'PROMPT')) {
         fetchUser(authResult).
           then(controller.autoLogin).
           then(controller.doCtLogin).
           then(function() {
-          console.log(123123123123123);
             loginHandler();
           }, function(err) {
             $rootScope.banneralert = 'banner alert-box alert';
@@ -23,14 +22,10 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
             scope.loggingIn = undefined;
             buildTemplate();
           });
-      } else if (authResult.error === 'access_denied') {
+      } else if (authResult.error === 'access_denied' || authResult.error === 'immediate_failed') {
         msg = 'Hey, something went wrong logging you in. Please try again.';
         errorMsg(msg);
-        console.log(123,authResult);
-      } else if (authResult.error === 'immediate_failed') {
-        msg = 'Hey, something went wrong logging you in. Please try again.';
-        errorMsg(msg);
-        console.log(354,authResult);
+        console.log(authResult);
       }
     }
 
