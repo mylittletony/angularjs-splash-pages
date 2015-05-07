@@ -8,6 +8,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
 
     function signinCallback(authResult) {
       var msg;
+      console.log(123123, authResult);
       if (authResult.status.signed_in && authResult.status.method !== 'AUTO') {
         fetchUser(authResult).
           then(controller.autoLogin).
@@ -25,10 +26,11 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
       } else if (authResult.error === 'access_denied') {
         msg = 'Hey, something went wrong logging you in. Please try again.';
         errorMsg(msg);
+        console.log(123,authResult);
       } else if (authResult.error === 'immediate_failed') {
         msg = 'Hey, something went wrong logging you in. Please try again.';
         errorMsg(msg);
-        console.log(authResult);
+        console.log(354,authResult);
       }
     }
 
