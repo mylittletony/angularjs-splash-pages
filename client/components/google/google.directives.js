@@ -7,11 +7,13 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
   var link = function(scope,element,attrs,controller) {
 
     function signinCallback(authResult) {
+      var msg;
       if (authResult.status.signed_in && authResult.status.method !== 'AUTO') {
         fetchUser(authResult).
           then(controller.autoLogin).
           then(controller.doCtLogin).
           then(function() {
+            console.log(123123123123123);
             loginHandler();
           }, function(err) {
             $rootScope.banneralert = 'banner alert-box alert';
@@ -21,8 +23,12 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
             buildTemplate();
           });
       } else if (authResult.error === 'access_denied') {
-        var msg = 'Hey, something went wrong logging you in. Please try again.';
+        msg = 'Hey, something went wrong logging you in. Please try again.';
         errorMsg(msg);
+      } else if (authResult.error === 'immediate_failed') {
+        msg = 'Hey, something went wrong logging you in. Please try again.';
+        errorMsg(msg);
+        console.log(authResult);
       }
     }
 
@@ -30,6 +36,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
       callback: signinCallback,
       clientid: attrs.gApiKey,
       cookiepolicy: 'single_host_origin',
+      approvalprompt: 'force',
       scope: 'https://www.googleapis.com/auth/plus.profile.emails.read',
       requestvisibleactions: 'http://schema.org/AddAction'
     };
@@ -41,15 +48,15 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
     scope.checkState = function() {
 
       scope.processing = true;
-      gapi.auth.checkSessionState(additionalParams, function(res) {
-        // if (res === true) {
-        //   // Log user in to CT
-        // } else {
-          scope.processing = undefined;
+      // gapi.auth.checkSessionState(additionalParams, function(res) {
+      //   // if (res === true) {
+      //   //   // Log user in to CT
+      //   // } else {
+      //     scope.processing = undefined;
           signIn();
-        // }
+      //   // }
 
-      });
+      // });
     };
 
     function fetchUser(authResult) {

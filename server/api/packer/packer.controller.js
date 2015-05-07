@@ -7,7 +7,7 @@ exports.index = function(req, res) {
   var body = req.query;
   packItUp({
     request_uri: body.request_uri,
-    location_id: body.location_id,
+    // location_id: body.location_id,
     request_os: ua,
     request_ip: req.connection.remoteAddress,
     request_mac: body.mac,

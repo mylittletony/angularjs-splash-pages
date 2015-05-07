@@ -437,7 +437,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         '#container-c1 {\n'+
-        '\tpadding: 0px 40px 0 40px;\n'+
+        '\tpadding: 0px 10px 0 10px;\n'+
         '}\n\n' +
 
         '.skinny-c1 {\n'+
