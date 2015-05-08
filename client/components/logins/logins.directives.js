@@ -410,7 +410,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tborder: 1px solid {{ splash.border_colour || \'#CCC\' }};\n'+
         '\tbackground-color: {{ splash.container_colour }}!important;\n'+
         '\topacity: {{ splash.container_transparency }};\n'+
-        '\tpadding: 20px 10px;\n'+
+        // '\tpadding: 20px 10px;\n'+
         '\twidth: {{splash.container_inner_width}};\n'+
         '\tmin-height: 300px;\n'+
         '\tdisplay: block;\n'+
@@ -437,7 +437,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         '#container-c1 {\n'+
-        '\tpadding: 0px 10px 0 10px;\n'+
+        '\tpadding: 10px 10px 0 10px;\n'+
         '}\n\n' +
 
         '.skinny-c1 {\n'+
