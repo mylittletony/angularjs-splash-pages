@@ -48,8 +48,8 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/scripts/config.js',
         },
         constants: {
-          API_END_POINT: 'https://beta.polkaspots.com/api/v1',
-          API_URL: 'https://beta.polkaspots.com'
+          API_END_POINT: 'https://api.polkaspots.com/api/v1',
+          API_URL: 'https://api.polkaspots.com'
         }
       }
     },
