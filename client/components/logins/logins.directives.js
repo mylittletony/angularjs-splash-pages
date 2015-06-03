@@ -8,7 +8,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
   var link = function(scope,element,attrs) {
 
     scope.submit = function() {
-
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
       } else {

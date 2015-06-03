@@ -108,7 +108,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
               if (response.state === 1) {
                 deferred.resolve();
               } else {
-                deferred.reject();
+                deferred.reject(response);
               }
             } else {
               finaliseLogin(response)
@@ -401,7 +401,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject({msg: msg, res: auth});
         }
       }, function(err) {
-        var msg = err.status === 0 ? 'Epic authentication server failure, does not compute. Better call support.' : err;
+        var msg = err.status === 0 ? 'Epic authentication server failure, does not compute. Better call Saul.' : err;
         deferred.reject(msg);
       });
       return deferred.promise;

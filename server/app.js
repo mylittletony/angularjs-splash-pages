@@ -9,12 +9,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var fs  = require("fs");
 
-// var options = {
-//   key: fs.readFileSync('/Users/simonmorley/mywifi.keys/private.key'),
-//   cert: fs.readFileSync('/Users/simonmorley/mywifi.keys/public.pem'),
-//   // ca: fs.readFileSync('./ssl/gd_bundle.crt')
-// };
-
 var express = require('express');
 var config = require('./config/environment');
 // Setup server
