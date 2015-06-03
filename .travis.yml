@@ -5,7 +5,6 @@ before_script:
 - gem install sass
 - npm install -g bower grunt grunt-cli grunt-karma karma --save-dev
 - bower install --save
-- bower install filepicker --save
 - npm install grunt-contrib-sass --save
 script: grunt test
 after_success:
