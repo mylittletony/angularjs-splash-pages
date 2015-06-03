@@ -58,7 +58,7 @@ describe('logins init', function () {
 
     beforeEach(inject(function($compile, $rootScope, $q, $routeParams, $location, $httpBackend, $cookies ) {
       cookies = $cookies;
-      cookies.cartId = 123;
+      cookies.cartId = '123';
       compile = $compile;
       location = $location;
       $scope = $rootScope;
@@ -263,7 +263,7 @@ describe('logins init', function () {
       cookies = $cookies;
       location = _$location_
       timeout = _$timeout_;
-      cookies.cartId = 123
+      cookies.cartId = '123';
       compile = $compile;
       location = $location;
       $scope = $rootScope;
@@ -374,10 +374,10 @@ describe('logins init', function () {
 
     beforeEach(inject(function($compile, $rootScope, $q, $routeParams, $location, $httpBackend, $cookies) {
       cookies = $cookies;
-      cookies.cartId = 123;
+      cookies.cartId = '123';
       $scope = $rootScope;
       q = $q;
-      $scope.guest = { email: 123, guest_id: 678 }
+      $scope.guest = { email: '123', guest_id: 678 }
       $scope.order = { state: 'pending' }
       element = angular.element('<finalise-order state="order.state"></finalise-order>');
       $compile(element)($rootScope)
@@ -385,7 +385,7 @@ describe('logins init', function () {
     }))
 
     it("should finalise the order with guest id", function() {
-      var order = { a: 123 }
+      var order = { a: '123' }
       expect(cookies.cartId).toBe('123')
       spyOn(orderFactory, 'finalise').andCallThrough();
       element.isolateScope().finalise($scope.guest);
@@ -401,7 +401,7 @@ describe('logins init', function () {
     })
 
     it("should not finalise the order with guest id", function() {
-      var order = { a: 123 }
+      var order = { a: '123' }
       expect(cookies.cartId).toBe('123')
       spyOn(orderFactory, 'finalise').andCallThrough();
       element.isolateScope().finalise($scope.guest);

@@ -43,7 +43,7 @@ describe('logins init', function () {
       $scope = $rootScope;
       q = $q;
       $scope.guest = {};
-      $scope.state = { status: 'loading' } 
+      $scope.state = { status: 'loading' }
       element = angular.element('<guest-reset state="state"></guest-reset>');
       $compile(element)($rootScope)
       element.scope().$apply();
