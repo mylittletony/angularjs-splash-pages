@@ -53,8 +53,12 @@ app.controller('LoginsShopController', ['$q', '$cookies', '$rootScope', '$scope'
 
     $rootScope.bodylayout = 'login-layout';
     $rootScope.state = { status: 'loading', hidden: true, order: 'loading' };
+    var cartId = $cookies.get('cartId');
 
-    var client = JSON.parse($localStorage.searchParams);
+    var searchParams = $localStorage.searchParams;
+    if (searchParams) {
+      var client = JSON.parse($localStorage.searchParams);
+    }
 
     var init = function() {
       var deferred = $q.defer();
@@ -75,7 +79,6 @@ app.controller('LoginsShopController', ['$q', '$cookies', '$rootScope', '$scope'
       var orderId = $routeParams.orderId;
       var token = $routeParams.token;
       var payerId = $routeParams.PayerID;
-      var cartId = $cookies.cartId;
 
       Order.update({cart_id: cartId, id: orderId, token: token, payerId: payerId }).$promise.then(function(results) {
         $rootScope.state = {};
@@ -96,7 +99,7 @@ app.controller('LoginsShopController', ['$q', '$cookies', '$rootScope', '$scope'
       }
     };
 
-    if ($cookies.cartId === undefined) {
+    if (cartId === undefined || cartId === null) {
       handleInvalid();
     } else {
       init().then(updateCt);

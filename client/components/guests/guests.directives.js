@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.guests.directives', []);
 
-app.directive('guestReset', ['$q', '$cookies', '$rootScope', '$routeParams', '$compile', 'CT',
-  function($q, $cookies, $rootScope, $routeParams, $compile, CT) {
+app.directive('guestReset', ['$q', '$rootScope', '$routeParams', '$compile', 'CT',
+  function($q, $rootScope, $routeParams, $compile, CT) {
 
     function link(scope, element) {
 

@@ -8,18 +8,21 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
 
     function link(scope,element,attrs) {
 
+      var cartId  = $cookies.get('cartId');
+      var guestId = $cookies.get('guestId');
+
       scope.finalise = function(guest) {
         scope.finalising = true;
         guest = guest || {};
         loadingTemplate();
 
         Order.finalise({
-          guest_id: $cookies.guestId,
+          guest_id: guestId,
           email: guest.email,
           id: $routeParams.orderId,
           token: $routeParams.token,
           payerId: $routeParams.PayerID,
-          cart_id: $cookies.cartId
+          cart_id: cartId
         }).$promise.then(function(results) {
           scope.finalising = undefined;
           scope.finalised = true;
@@ -27,12 +30,12 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
             displayVouchers(results.vouchers);
           }
           scope.state = 'complete!';
-          delete $cookies.cartId;
+          $cookies.remove(cartId);
         }, function() {
           scope.finalising = undefined;
           scope.finalised = undefined;
           scope.errors = true;
-          delete $cookies.cartId;
+          $cookies.remove(cartId);
         });
 
       };
@@ -58,7 +61,7 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
           username = scope.vouchers[0].username;
           password = scope.vouchers[0].password;
         }
-        CT.login({guestId: $cookies.guestId, username: username, password: password}).then(function(res) {
+        CT.login({guestId: guestId, username: username, password: password}).then(function(res) {
           deferred.resolve();
         }, function(err) {
           console.log(err);
@@ -151,7 +154,7 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
         CT.guestLogin({email: guest.email, password: guest.password}).then(function(resp) {
           scope.error = undefined;
           scope.loggedIn = true;
-          $cookies.guestId = resp.guestId;
+          $cookies.put('guestId', resp.guestId);
           scope.loading = undefined;
           scope.finaliseOrder({guest_id: resp.guestId});
         }, function() {
@@ -171,7 +174,7 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
         CT.guestCreate({email: guest.email, password: guest.password}).then(function(resp) {
           scope.error = undefined;
           scope.loggedIn = true;
-          $cookies.guestId = resp.guestId;
+          $cookies.put('guestId', resp.guestId);
           scope.loading = undefined;
           scope.finaliseOrder({guest_id: resp.guestId});
         }, function() {
@@ -191,19 +194,19 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
       };
 
       scope.logout = function() {
-        delete $cookies.guestId;
+        $cookies.remove('guestId');
         scope.loginForm();
       };
 
       scope.finaliseOrder = function(g) {
-        var guest = g || { guest_id: $cookies.guestId };
+        var guest = g || { guest_id: $cookies.get('guestId') };
         controller.$scope.finalise(g);
       };
 
       scope.cancelOrder = function() {
         var msg = 'This will cancel the order completely. You will need to start again to purchase an Internet voucher.';
         if ( window.confirm(msg) ) {
-          delete $cookies.cartId;
+          $cookies.remove('cartId');
           $window.location.href = 'http://bbc.co.uk';
         }
       };
@@ -232,7 +235,8 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
       scope.loginForm = function() {
         var template;
 
-        if ($cookies.guestId !== undefined) {
+        var guestId = $cookies.get('guestId');
+        if (guestId !== undefined) {
 
           template =
             '<div class=\'small-11 small-centered columns\'>' +
@@ -348,7 +352,8 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
       };
 
       scope.loggedIn = function() {
-        if ( $cookies.guestId !== undefined ) {
+        var guestId = $cookies.get('guestId');
+        if (guestId !== undefined) {
           return true;
         }
       };
@@ -363,12 +368,11 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
               scope.registerUser();
             }
           } else {
-            delete $cookies.guestId;
+            $cookies.remove('guestId');
             emailForm();
           }
         }
       });
-
     }
 
     return {

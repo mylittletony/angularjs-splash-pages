@@ -208,7 +208,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     });
 
     function loadShop() {
-      if ($cookies.cartId === undefined) {
+      if ($cookies.get('cartId') === undefined) {
         scope.showstore = true;
       } else {
         scope.getCart();
@@ -216,7 +216,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     }
 
     scope.getCart = function() {
-      CT.getCart($cookies.cartId).then(function(res) {
+      CT.getCart($cookies.get('cartId')).then(function(res) {
         scope.cart = res;
         scope.showcart = true;
         sliceProducts(scope.cart.products[0]._id);

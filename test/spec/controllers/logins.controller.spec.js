@@ -180,7 +180,7 @@ describe('Controller: LoginsController', function () {
     beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, _$location_, $q, $injector, $routeParams, $localStorage, $cookies) {
 
       cookies = $cookies;
-      cookies.cartId = 123123
+      cookies.put('cartId', 123123)
       q = $q;
       localStorage = $localStorage;
       localStorage.searchParams = JSON.stringify({a: 123});
@@ -247,7 +247,7 @@ describe('Controller: LoginsController', function () {
     beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, _$location_, $q, $injector, $routeParams, $localStorage, $cookies) {
 
       cookies = $cookies;
-      cookies.cartId = 123123
+      cookies.put('cartId', 123123)
       q = $q;
       localStorage = $localStorage;
       localStorage.searchParams = JSON.stringify({a: 123});
