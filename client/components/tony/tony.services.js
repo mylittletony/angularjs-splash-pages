@@ -140,13 +140,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var deferred = $q.defer();
       Tony.addToCart({store_id: params.store_id, product_ids: params.product_ids}).$promise.then(function(res) {
         if (res !== undefined && res.cart !== undefined) {
-          $cookies.cartId = res.cart.cart_id;
+          $cookies.put('cartId', res.cart.cart_id);
         } else {
-          delete $cookies.cartId;
+          $cookies.remove('cartId');
         }
         deferred.resolve(res);
       }, function(err) {
-        delete $cookies.cartId;
+        $cookies.remove('cartId');
         deferred.reject(err);
       });
       return deferred.promise;
@@ -157,7 +157,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       Tony.getCart({id: id}).$promise.then(function(res) {
         deferred.resolve(res);
       }, function(err) {
-        delete $cookies.cartId;
+        $cookies.remove('cartId');
         deferred.reject(err);
       });
       return deferred.promise;
