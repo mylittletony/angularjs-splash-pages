@@ -389,7 +389,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     var coovaLogin = function() {
       var deferred = $q.defer();
-      console.log(123, auth)
       Coova.logon({
         uamSsl: client.uamSsl,
         username: auth.username,
@@ -402,8 +401,16 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject({msg: msg, res: auth});
         }
       }, function(err) {
-        console.log(222, err)
-        var msg = err.status === 0 ? 'Epic authentication server failure, does not compute. Better call Saul.' : err;
+        var msg;
+        if (err.status === 0) {
+          msg = 'Epic authentication server failure, does not compute. Better call Saul.';
+        } else if (err.status === 404) {
+          // Currently get this when the radius returns a response //
+          // Chilli is formatting the JSON strangely and we get into the weirdness //
+          msg = 'There was a problem logging you in. Please try again';
+        } else {
+          msg = err;
+        }
         deferred.reject(msg);
       });
       return deferred.promise;
