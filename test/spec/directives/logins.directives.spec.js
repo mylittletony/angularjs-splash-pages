@@ -35,6 +35,10 @@ describe('logins init', function () {
       }
     };
     tonyFactory = {
+      remind: function () {
+        deferred = q.defer();
+        return {$promise: deferred.promise};
+      },
       create: function () {
         deferred = q.defer();
         return {$promise: deferred.promise};
@@ -607,6 +611,51 @@ describe('logins init', function () {
 
       expect(cookies.cartId).toBe(undefined)
     })
+
+  });
+
+  describe('forgot passy link / template', function () {
+
+    var timeout;
+    
+    beforeEach(inject(function($compile, $rootScope, $q, $routeParams, $location, $httpBackend, $cookies, $injector, _$timeout_) {
+
+      $httpBackend = $injector.get('$httpBackend');
+      timeout = _$timeout_
+
+      $httpBackend.when('POST', 'http://mywifi.local:8080/api/v1/store_orders/remind?email=s@ps.com&splash_id=123')
+      .respond(200, {});
+
+      $scope = $rootScope;
+      $scope.splash = {active: true};
+      element = angular.element('<forgot-password active="{{splash.active}}"></forgot-password>');
+      $compile(element)($rootScope)
+      element.scope().$apply();
+    }))
+
+    it("display the link and then get the remind form", function() {
+      expect(element.html()).toEqual('<div class="ng-scope"><p><b><a href="" ng-click="showForm()">Forgot your details?</a></b></p></div>')
+    });
+
+    it("should display the remind form", function() {
+
+      spyOn(tonyFactory, 'remind').andCallThrough()
+
+      var a = '<div class="ng-scope"><p><b><a href="" ng-click="showForm()">Forgot your details?</a></b></p></div>'
+      expect(element.html()).toEqual(a)
+      element.isolateScope().showForm();
+      expect(element.isolateScope().remind).toEqual(true)
+      expect(element.html()).not.toEqual(a)
+
+      element.isolateScope().email = 's@ps.com';
+      element.isolateScope().sendReminder('s@ps.com', 123)
+      expect(element.isolateScope().reminding).toEqual(true)
+
+      deferred.resolve();
+      $scope.$apply()
+      // timeout.flush()
+      // expect(element.isolateScope().remind).toEqual(undefined)
+    });
 
   });
 

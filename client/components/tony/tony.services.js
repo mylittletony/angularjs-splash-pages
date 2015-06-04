@@ -269,7 +269,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     function guestUpdatePassword(params) {
       var deferred = $q.defer();
-      // Client.details().then(function(client) {
         var data = {
           // guest: {
             token: params.token,
@@ -331,6 +330,26 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         var msg = 'Are you in a hotspot?';
         deferred.resolve(msg);
       }
+      return deferred.promise;
+    }
+
+    function remind(email, splash_id) {
+      var deferred = $q.defer();
+      var data = {
+        email: email,
+        splash_id: splash_id
+      };
+      $http({
+        method: 'post',
+        url: API_END_POINT + '/store_orders/remind',
+        params: data
+      }).
+      success(function() {
+        deferred.resolve(email);
+      }).
+      error(function(err) {
+        deferred.reject(err);
+      });
       return deferred.promise;
     }
 
@@ -472,6 +491,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       status: status,
       me: me,
       init: init,
+      remind: remind,
       checkin: checkin,
       reporter: reporter,
       addToCart: addToCart,
@@ -479,7 +499,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       guestLogin: guestLogin,
       guestCreate: guestCreate,
       guestReset: guestReset,
-      guestUpdatePassword: guestUpdatePassword
+      guestUpdatePassword: guestUpdatePassword,
     };
 
   }

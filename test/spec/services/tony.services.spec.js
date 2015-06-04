@@ -181,4 +181,21 @@ describe("Tony Unit Tests", function() {
 
   });
 
+  describe("Tony Remind Function", function() {
+
+    // This doesnt really test much at the moment //
+    it('should test that we can get the password remind from CT', function() {
+
+      var email = 's@p.com';
+      var splash_id = '123';
+
+      httpBackend.whenPOST('http://mywifi.local:8080/api/v1/store_orders/remind?email='+ email + '&splash_id=' + splash_id).respond(200, {});
+      CTService.remind(email,splash_id).then(function(a) {
+        expect(a).toEqual(email);
+      });
+      httpBackend.flush();
+    });
+
+  });
+
 })

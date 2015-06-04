@@ -176,6 +176,78 @@ app.directive('welcome', ['$routeParams', '$rootScope', '$location', '$window', 
 
 }]);
 
+app.directive('forgotPassword', ['$timeout', '$location', '$compile', 'CT', function($timeout,$location,$compile,CT) {
+
+  var link = function(scope,element,attrs) {
+
+    scope.init = function() {
+      scope.remind = undefined;
+      scope.email  = undefined;
+      var template = '<div><p><b><a href=\'\' ng-click=\'showForm()\'>Forgot your details?</a></b></p></div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+
+    scope.sendReminder = function(email, splash_id) {
+      scope.reminding = true;
+      CT.remind(email, splash_id).then(function(res) {
+        scope.reminded = true;
+        $timeout(function() {
+          scope.init();
+        },2000);
+      }, function() {
+        scope.errors = true;
+        scope.remind = undefined;
+      });
+    };
+
+    scope.showForm = function() {
+      scope.remind = true;
+      scope.splash_id = attrs.splashId;
+      var template =
+        '<div class=\'row\'>'+
+        '<div class=\'small-12 medium-8 columns medium-centered\'>'+
+        '<div ng-show=\'reminded\'>'+
+        '<div class=\'alert-box success\'>'+
+        'Reminder email send. It shouldn\'t take long.'+
+        '</div>'+
+        '</div>'+
+        '<div ng-show=\'errors\'>'+
+        '<div class=\'alert-box alert\'>'+
+        'There was an error, try again later.'+
+        '</div>'+
+        '</div>'+
+        '<form name=\'myForm\' ng-submit=\'sendReminder(email,splash_id)\'>'+
+        '<label>Enter the email you signed-up with</label>'+
+        '<input type=\'email\' ng-model=\'email\' placeholder=\'Enter the email you signed-up with\' autofocus required></input>'+
+        '<br>'+
+        '<button ng-disabled=\'myForm.$invalid || myForm.$pristine\' class=\'button small success\'>Remind me <span ng-if=\'reminding\'><i class="fa fa-spinner fa-spin"></i></span></button>'+
+        '<p><a href=\'\' ng-click=\'init()\'>Cancel</a></p>'+
+        '</form>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+
+    attrs.$observe('active', function(val){
+      if (val !== '' && val === 'true') {
+        scope.init();
+      }
+    });
+  };
+
+  return {
+    link: link,
+    scope: {
+      active: '@',
+      splash_id: '@',
+      remind: '='
+    }
+  };
+
+}]);
+
 app.directive('loginsPartial', ['$location', function($location) {
   var link = function(scope, element, attrs) {
     scope.partial = function() {

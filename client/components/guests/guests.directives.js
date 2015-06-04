@@ -7,9 +7,7 @@ app.directive('guestReset', ['$q', '$rootScope', '$routeParams', '$compile', 'CT
 
     function link(scope, element) {
 
-      var token;
-
-      token = $routeParams.token;
+      var token = $routeParams.token;
 
       if (token === undefined) {
         var template = '<div>404, nothing to be seen</div>';
