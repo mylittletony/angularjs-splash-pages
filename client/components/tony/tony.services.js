@@ -402,7 +402,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject({msg: msg, res: auth});
         }
       }, function(err) {
-        console.log(222, res)
+        console.log(222, err)
         var msg = err.status === 0 ? 'Epic authentication server failure, does not compute. Better call Saul.' : err;
         deferred.reject(msg);
       });
