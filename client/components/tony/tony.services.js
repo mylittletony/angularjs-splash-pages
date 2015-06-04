@@ -398,11 +398,11 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         if (res.clientState === 1) {
           deferred.resolve();
         } else {
-          console.log(222, res)
           var msg = res.message || 'We were unable to log you in. Please try again later.';
           deferred.reject({msg: msg, res: auth});
         }
       }, function(err) {
+        console.log(222, res)
         var msg = err.status === 0 ? 'Epic authentication server failure, does not compute. Better call Saul.' : err;
         deferred.reject(msg);
       });
