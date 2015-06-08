@@ -12,7 +12,7 @@ describe("Login Unit Tests", function() {
     Login = _Login_;
     $httpBackend = $injector.get('$httpBackend');
 
-    $httpBackend.when('GET', 'http://mywifi.local:8080/api/v1/logins?v=2&welcome=true')
+    $httpBackend.when('GET', 'http://mywifi.dev:8080/api/v1/logins?v=2&welcome=true')
       .respond(200, {});
 
    }));
@@ -24,7 +24,7 @@ describe("Login Unit Tests", function() {
 
   it('should have sent a GET request to welcome show', function() {
     var result = Login.welcome({v: 2, welcome: true});
-    $httpBackend.expectGET('http://mywifi.local:8080/api/v1/logins?v=2&welcome=true')
+    $httpBackend.expectGET('http://mywifi.dev:8080/api/v1/logins?v=2&welcome=true')
     $httpBackend.flush();
   });
 

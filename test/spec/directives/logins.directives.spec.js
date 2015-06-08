@@ -105,7 +105,7 @@ describe('logins init', function () {
 
       $httpBackend = $injector.get('$httpBackend');
 
-      $httpBackend.when('POST', '/api/v1/packer?api_url=http:%2F%2Fmywifi.local:8080%2Fapi%2Fv1&request_uri=server')
+      $httpBackend.when('POST', '/api/v1/packer?api_url=http:%2F%2Fmywifi.dev:8080%2Fapi%2Fv1&request_uri=server')
       .respond(200, {});
 
       $scope = $rootScope;
@@ -623,7 +623,7 @@ describe('logins init', function () {
       $httpBackend = $injector.get('$httpBackend');
       timeout = _$timeout_
 
-      $httpBackend.when('POST', 'http://mywifi.local:8080/api/v1/store_orders/remind?email=s@ps.com&splash_id=123')
+      $httpBackend.when('POST', 'http://mywifi.dev:8080/api/v1/store_orders/remind?email=s@ps.com&splash_id=123')
       .respond(200, {});
 
       $scope = $rootScope;
