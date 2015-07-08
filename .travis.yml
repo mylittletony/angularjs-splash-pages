@@ -8,4 +8,4 @@ before_script:
 - npm install grunt-contrib-sass --save
 script: grunt test
 after_success:
-- bash ./travis/deploy.sh
+# - bash ./travis/deploy.sh

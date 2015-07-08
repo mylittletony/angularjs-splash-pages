@@ -39,8 +39,8 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/scripts/config.js',
         },
         constants: {
-          API_END_POINT: 'http://mywifi.local:8080/api/v1',
-          API_URL: 'http://mywifi.local:8080'
+          API_END_POINT: 'http://mywifi.dev:8080/api/v1',
+          API_URL: 'http://mywifi.dev:8080'
         }
       },
       production: {

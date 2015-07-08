@@ -27,7 +27,12 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.resolve(results);
         }
       }, function(err) {
-        var msg = err || 'A problem has occured. Please try again.';
+        var generic =
+            '<h2>Captive Portal Assistant Error.</h2>'+
+            '<p>Please close this window, your device cannot connect to the Internet.</p>'+
+            '<p>If you\'re using an Apple device, you should close this window and use a real browser instead.</p>'+
+            '<p>Read how to fix this <a style="" href="http://www.ctapp.io/documentation/#article/10239/bypass-ios-popup">here</a>. Does not compute.</p>';
+        var msg = err || generic;
         genericError(msg);
         deferred.reject(err);
       });
@@ -416,8 +421,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         if (res.clientState === 1) {
           deferred.resolve();
         } else {
-          var msg = res.message || 'We were unable to log you in. Please try again later.';
-          deferred.reject({msg: msg, res: auth});
+          var msg = res.message || 'Unable to log you in.';
+          deferred.reject(msg); // {msg: msg, res: auth});
         }
       }, function(err) {
         var msg;
