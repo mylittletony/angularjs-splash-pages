@@ -236,7 +236,8 @@ describe('logins init', function () {
         expect(coovaFactory.logon).toHaveBeenCalled();
         expect(element.isolateScope().state.status).toBe(undefined);
         expect(element.isolateScope().success).toBe(undefined);
-        expect($scope.error.res.username).toBe('simon');
+        // expect($scope.error.res.username).toBe('simon');
+        expect($scope.error).toBe('Unable to log you in.');
       });
 
       it("should try and log a user in but fail because the password is wrong CT response", function() {

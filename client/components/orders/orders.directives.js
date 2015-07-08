@@ -30,12 +30,12 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
             displayVouchers(results.vouchers);
           }
           scope.state = 'complete!';
-          $cookies.remove(cartId);
+          $cookies.remove('cartId');
         }, function() {
           scope.finalising = undefined;
           scope.finalised = undefined;
           scope.errors = true;
-          $cookies.remove(cartId);
+          $cookies.remove('cartId');
         });
 
       };
@@ -80,13 +80,13 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
           '<div class=\'\'>' +
           '<p>Success! That\'s gone well, you can login now.</p>' +
           '</div>'+
-          '<span ng-hide=\'guestLoginErrors\'><button ng-disabled=\'loggingIn\' ng-click=\'loginNow()\'>Login Now <span ng-show=\'loggingIn\'><i class="fa fa-spinner fa-pulse"></i></span></button></span>' +
+          '<span ng-hide=\'guestLoginErrors\'><button ng-disabled=\'loggingIn\' ng-click=\'loginNow()\'>Login Now <span ng-show=\'loggingIn\'><i class="fa fa-cog fa-pulse"></i></span></button></span>' +
           // '<p ng-show=\'guestLoginErrors\'><a href="http://bbc.co.uk/" class=\'button\' >Go Home</a></p>'+
           '<p>We will log you in automatically this time. Next time you will need to use your account details.</p>' +
           '</span>' +
           '<div class=\'alert-box alert\' ng-show=\'errors\'>' +
           'There was an error, please go <a href=\'\' ng-click=\'showCart()\'>back to the cart and start again</a>.<br><br>' +
-          '<b>This has happened because your PayPal credentials were wrong.</b>' +
+          '<b>Your order may have already been completed.</b>' +
           '</div>' +
           '<span ng-hide=\'errors\'>' +
           '<div class=\'alert-box\'ng-show=\'finalising\'>'+
@@ -119,7 +119,7 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
           '</tr>'+
           '</table>' +
           '</div>' +
-          '<button ng-click=\'loginNow()\'>Login Now</button>' +
+          '<button ng-click=\'loginNow()\' ng-disabled=\'loggingIn\'><span ng-if=\'!loggingIn\'>Login Now</span> <span ng-if=\'loggingIn\'>Logging In <i class="fa fa-cog fa-spin"></i></span></button>' +
           '</div>' +
           '</div>';
         var templateObj = $compile(template)(scope);
