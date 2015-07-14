@@ -69,7 +69,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var init = function() {
       CT.status().then(function(res) {
         addForm();
-        scope.newsletter = attrs.newsletter === 'true';
+        // ignore or delete me //
+        scope.newsletter = (attrs.newsletter === 'true');
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
