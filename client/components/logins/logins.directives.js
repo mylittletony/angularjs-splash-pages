@@ -69,6 +69,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var init = function() {
       CT.status().then(function(res) {
         addForm();
+        scope.newsletter = attrs.newsletter === 'true';
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
@@ -121,7 +122,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     scope: {
       code: '@',
       redirects: '@',
-      state: '='
+      state: '=',
+      newsletter: '@'
     }
   };
 

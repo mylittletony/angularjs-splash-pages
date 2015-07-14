@@ -54,7 +54,8 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', function
         memberId: auth.memberId,
         signature: auth.signature,
         signature_version: auth.signature_version,
-        signature_order: auth.signature_order
+        signature_order: auth.signature_order,
+        newsletter: $scope.newsletter
       };
       CT.login(params).then(function() {
         deferred.resolve(1);
