@@ -16,7 +16,7 @@ module.exports = function (grunt) {
     express: 'grunt-express-server',
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
-    cdnify: 'grunt-google-cdn',
+    // cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control'
@@ -687,7 +687,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'cdnify',
+    // 'cdnify',
     'cssmin',
     'uglify',
     'rev',
