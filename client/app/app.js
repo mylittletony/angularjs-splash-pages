@@ -14,7 +14,7 @@ var app = angular.module('ctLoginsApp', [
 
 app.config(function ($routeProvider, $locationProvider, $httpProvider) {
 
-  $httpProvider.interceptors.push('apInterceptor');
+  // $httpProvider.interceptors.push('apInterceptor');
 
   // console.log('%cI do it with Tony everyday.', 'font: 3em sans-serif; color: red;');
   // console.log('%cFrom time to time, we\'ll need some information from this console. This will help us debug problems you\'re having, we hope it\'s not too much bother.', 'font: 1.4em sans-serif; color: black; line-height: 1.4em;');
@@ -82,49 +82,49 @@ app.constant('DEVICES', {
   unknown: '999'
 });
 
-app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', 'DEVICES',
-  function($q, $location, $rootScope, $routeParams, DEVICES) {
-    return {
+// app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', 'DEVICES',
+//   function($q, $location, $rootScope, $routeParams, DEVICES) {
+//     return {
 
-      response: function (response) {
-        return response;
-      },
+//       response: function (response) {
+//         return response;
+//       },
 
-      request: function(config) {
+//       request: function(config) {
 
-        var setDevice = function() {
-          console.log($routeParams);
-          if ($routeParams.preview === 'true') {
-            $rootScope.deviceId = DEVICES.preview;
-          } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
-            $rootScope.deviceId = DEVICES.ct;
-          } else if ( $routeParams.switchip !== undefined && $routeParams.cmd !== undefined ) {
-            $rootScope.deviceId = DEVICES.aruba;
-          } else if ( $routeParams['Called-Station-Id'] !== undefined && $routeParams['NAS-ID'] !== undefined) {
-            $rootScope.deviceId = DEVICES.aerohive;
-          } else if ( $routeParams.login_url !== undefined && $routeParams.ap_tags !== undefined) {
-            $rootScope.deviceId = DEVICES.meraki;
-          } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
-            $rootScope.deviceId = DEVICES.xirrus;
-          } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
-            $rootScope.deviceId = DEVICES.ruckus;
-          } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
-            // $location.path('/hello');
-          }
-        };
+//         var setDevice = function() {
+//           console.log($routeParams);
+//           if ($routeParams.preview === 'true') {
+//             $rootScope.deviceId = DEVICES.preview;
+//           } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
+//             $rootScope.deviceId = DEVICES.ct;
+//           } else if ( $routeParams.switchip !== undefined && $routeParams.cmd !== undefined ) {
+//             $rootScope.deviceId = DEVICES.aruba;
+//           } else if ( $routeParams['Called-Station-Id'] !== undefined && $routeParams['NAS-ID'] !== undefined) {
+//             $rootScope.deviceId = DEVICES.aerohive;
+//           } else if ( $routeParams.login_url !== undefined && $routeParams.ap_tags !== undefined) {
+//             $rootScope.deviceId = DEVICES.meraki;
+//           } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
+//             $rootScope.deviceId = DEVICES.xirrus;
+//           } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
+//             $rootScope.deviceId = DEVICES.ruckus;
+//           } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
+//             // $location.path('/hello');
+//           }
+//         };
 
-        $rootScope.$on('$routeChangeSuccess', function () {
-          if ($rootScope.deviceId === undefined) {
-            setDevice();
-          }
-        });
-        return config;
-      },
+//         $rootScope.$on('$routeChangeSuccess', function () {
+//           if ($rootScope.deviceId === undefined) {
+//             setDevice();
+//           }
+//         });
+//         return config;
+//       },
 
-      responseError: function(response) {
-        return $q.reject(response);
-      }
-    };
-  }
-]);
+//       responseError: function(response) {
+//         return $q.reject(response);
+//       }
+//     };
+//   }
+// ]);
 
