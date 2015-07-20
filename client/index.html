@@ -23,8 +23,8 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body>
-  <!-- <body ng-app="ctLoginsApp" class="{{bodylayout}}" ng-cloak> -->
+  <!-- <body> -->
+  <body ng-app="ctLoginsApp" class="{{bodylayout}}" ng-cloak>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -35,7 +35,7 @@
     <div class="{{ banneralert || 'hidden' }}">{{ error }}</div>
     <div class='container'>
       <div class='splash-container' ng-class="state.hidden ? 'hidden' : ''">
-        <!-- <div ng-view=""></div> -->
+        <div ng-view=""></div>
       </div>
     </div>
 
@@ -101,18 +101,18 @@
           <script src="scripts/config.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
-    <script>
-      <!-- $(document).on("ready",function(){ -->
-        $.ajax({
-          type: 'GET',
-          dataType: 'JSONP',
-          contentType: 'application/json',
-          url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json',
-          success: function(data) {
-            console.log(data)
-          }
-        })
-      <!-- }); -->
-    </script>
+    <!-- <script> -->
+    <!--   <1!-- $(document).on("ready",function(){ --1> -->
+    <!--     $.ajax({ -->
+    <!--       type: 'GET', -->
+    <!--       dataType: 'JSONP', -->
+    <!--       contentType: 'application/json', -->
+    <!--       url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json', -->
+    <!--       success: function(data) { -->
+    <!--         console.log(data) -->
+    <!--       } -->
+    <!--     }) -->
+    <!--   <1!-- }); --1> -->
+    <!-- </script> -->
 </body>
 </html>
