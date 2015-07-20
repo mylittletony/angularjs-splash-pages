@@ -48,7 +48,8 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/scripts/config.js',
         },
         constants: {
-          API_END_POINT: 'https://api.polkaspots.com/api/v1',
+          API_END_POINT: 'https://c7e5c5a6.ngrok.io/api/v1',
+          // API_END_POINT: 'https://api.polkaspots.com/api/v1',
           API_URL: 'https://api.polkaspots.com'
         }
       }
