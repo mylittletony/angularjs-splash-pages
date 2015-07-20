@@ -12,6 +12,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params = params || {};
       params.splash_id = $routeParams.splash_id;
       getLogins(params).then(function(results) {
+        console.log(results)
         if (results.archived === true) {
           archivedLocation();
           deferred.reject(results);
@@ -67,13 +68,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     var getLogins = function(options) {
       options.v = 2;
       var deferred = $q.defer();
-      options.callback = "JSON_CALLBACK"
-      // var params = JSON.stringify({foo: 123});
-
-      // $http.jsonp(API_END_POINT + '/logins?data=' + params)
-      // .then(function(json) {
-      //     deferred.resolve()
-      // });
+      options.callback = 'JSON_CALLBACK';
       $http({
         method: 'JSONP',
         url: API_END_POINT + '/logins',
@@ -87,6 +82,31 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       });
       return deferred.promise;
     };
+
+    // var getLogins = function(options) {
+    //   options.v = 2;
+    //   var deferred = $q.defer();
+    //   // options.callback = "JSON_CALLBACK"
+    //   // options.osx = true
+    //   // var params = JSON.stringify({foo: 123});
+
+    //   // $http.jsonp(API_END_POINT + '/logins?data=' + params)
+    //   // .then(function(json) {
+    //   //     deferred.resolve()
+    //   // });
+    //   $http({
+    //     method: 'GET',
+    //     url: API_END_POINT + '/logins',
+    //     params: options
+    //   }).
+    //   success(function(msg) {
+    //     deferred.resolve(msg);
+    //   }).
+    //   error(function(err) {
+    //     deferred.reject(err);
+    //   });
+    //   return deferred.promise;
+    // };
 
     // var getLogins = function(options) {
     //   options.v = 2;
