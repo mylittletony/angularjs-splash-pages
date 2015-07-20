@@ -14,10 +14,11 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
 
       $.ajax({
         type: 'GET',
+        dataType: 'JSONP',
         contentType: 'application/json',
         url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json',
         success: function(data) {
-          console.log(data)
+          console.log(data);
         }
       });
       // var head = angular.element('head');

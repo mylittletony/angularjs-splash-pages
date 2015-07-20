@@ -23,7 +23,7 @@
     "angular-scenario": ">=1.4.*"
   },
   "resolutions": {
-    "angular": "1.4.3",
+    "angular": "1.4.2",
     "jquery": ">= 2.1.0",
     "angular-cookies": ">=1.4.*"
   }
