@@ -266,7 +266,7 @@ describe('logins init', function () {
         $scope.$apply();
         expect(tonyFactory.create).toHaveBeenCalled();
         expect($scope.error).toBe(123);
-        expect($scope.banneralert).toBe('banner alert-box alert');
+        expect($scope.banneralert).toBe('banner-alert alert-box alert');
         expect(element.isolateScope().state.status).toBe(undefined);
         expect(element.isolateScope().password).toBe(undefined);
       });

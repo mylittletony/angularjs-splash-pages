@@ -36,7 +36,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var onFail = function(err) {
       // Insert a CT service error handler //
       cleanUp();
-      $rootScope.banneralert = 'banner alert-box alert';
+      $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = err;
       addForm();
     };
@@ -315,7 +315,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
           wipeCart();
         }
       }, function(err) {
-        $rootScope.banneralert = 'banner alert-box alert';
+        $rootScope.banneralert = 'banner-alert alert-box alert';
         $rootScope.error = 'Something\'s gone wrong.';
         scope.cart = { errors: err };
         scope.adding = undefined;
@@ -323,7 +323,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     };
 
     function addProductToCart(res) {
-      $rootScope.banneralert = 'banner alert-box success';
+      $rootScope.banneralert = 'banner-alert alert-box success';
       $rootScope.error = 'Voucher added to cart.';
       if (scope.cart !== undefined && scope.cart.products !== null) {
         scope.products.push(scope.cart.products[0]);
@@ -336,7 +336,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     }
 
     function wipeCart() {
-      $rootScope.banneralert = 'banner alert-box success';
+      $rootScope.banneralert = 'banner-alert alert-box success';
       $rootScope.error = 'That\'s gone well. We\'ve emptied your cart.';
       scope.cart = undefined;
       scope.showcart = undefined;
@@ -536,8 +536,8 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
 
         '{{ splash.custom_css }}';
 
-      head.append($compile('<link ng-href=\'{{custom_url}}\' rel=\'stylesheet\' />')(scope));
       head.append($compile('<style>' + template + '</style>')(scope));
+      head.append($compile('<link ng-href=\'{{splash.external_css}}\' rel=\'stylesheet\' />')(scope));
       // $window.document.title = scope.splash.location_name;
       addCopy(data);
     };

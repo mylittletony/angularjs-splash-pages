@@ -36,7 +36,7 @@ app.directive('linkedin', ['$window', '$compile', '$q', '$rootScope', '$timeout'
       controller.doCtLogin().then(function(a) {
         loginHandler();
       }, function(err) {
-        $rootScope.banneralert = 'banner alert-box alert';
+        $rootScope.banneralert = 'banner-alert alert-box alert';
         $rootScope.error = err.msg;
         console.log(err.res);
         scope.processing = undefined;

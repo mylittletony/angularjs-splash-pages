@@ -121,7 +121,7 @@ describe('logins init', function () {
       expect(loginScope.isolateScope().loggedIn).toBe(undefined);
       expect(loginScope.isolateScope().guest.password).toBe(undefined);
       expect($scope.error).toBe('Username or password incorrect or not a valid guest account');
-      expect($scope.banneralert).toBe('banner alert-box alert');
+      expect($scope.banneralert).toBe('banner-alert alert-box alert');
     });
 
     it("should remove the login form and put a registerionation one up", function() {
@@ -241,7 +241,7 @@ describe('logins init', function () {
       expect(loginScope.isolateScope().loading).toBe(undefined);
       expect(cookies.cartId).toBe('123')
       expect($scope.error).toBe('Invalid details, please try again. Are you already registered?');
-      expect($scope.banneralert).toBe('banner alert-box alert');
+      expect($scope.banneralert).toBe('banner-alert alert-box alert');
     });
 
     // xit("should cancel an order", function() {

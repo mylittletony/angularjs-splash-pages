@@ -7,10 +7,10 @@
 <div ng-hide="state.errors" ng-cloak>
   <div class='row'>
     <div class='small-12 columns'>
-      <div class="location_logo" ng-hide="splash.header_image_name">
+      <div class="location_logo" ng-if="splash.header_image_type == 1">
         <a href='{{splash.website}}'><img src="{{ splash.logo_file_name }}" ng-class="splash.header_image_type == 1 ? 'logo' : 'banner'"></img></a>
       </div>
-      <div class="banner" ng-show="splash.header_image_name">
+      <div class="banner" ng-if="splash.header_image_type == 2">
         <a href='{{splash.website}}'><img src="{{ splash.header_image_name }}" class='banner'></img></a>
       </div>
     </div>

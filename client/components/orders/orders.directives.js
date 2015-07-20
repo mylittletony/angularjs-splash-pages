@@ -49,7 +49,7 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
         guestLogin().then(function(a) {
           $window.location.href = 'http://google.com';
         }, function(err) {
-          $rootScope.banneralert = 'banner alert-box alert';
+          $rootScope.banneralert = 'banner-alert alert-box alert';
           $rootScope.error = err;
         });
       };
@@ -162,7 +162,7 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
           scope.error = true;
           scope.loading = undefined;
           scope.guest.password = undefined;
-          $rootScope.banneralert = 'banner alert-box alert';
+          $rootScope.banneralert = 'banner-alert alert-box alert';
           $rootScope.error = 'Username or password incorrect or not a valid guest account';
         });
 
@@ -179,7 +179,7 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
           scope.finaliseOrder({guest_id: resp.guestId});
         }, function() {
           scope.loggedIn = undefined;
-          $rootScope.banneralert = 'banner alert-box alert';
+          $rootScope.banneralert = 'banner-alert alert-box alert';
           $rootScope.error = 'Invalid details, please try again. Are you already registered?';
           scope.error = true;
           scope.loading = undefined;
@@ -222,7 +222,7 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
           scope.error = undefined;
 
         }, function(err) {
-          $rootScope.banneralert = 'banner alert-box alert';
+          $rootScope.banneralert = 'banner-alert alert-box alert';
           $rootScope.error = 'We were unable to reset your password. Please check your email and try again.';
           scope.guest.email = undefined;
           scope.resetting = undefined;

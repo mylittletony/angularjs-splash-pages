@@ -36,7 +36,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       controller.doCtLogin().then(function(a) {
         loginHandler();
       }, function(err) {
-        $rootScope.banneralert = 'banner alert-box alert';
+        $rootScope.banneralert = 'banner-alert alert-box alert';
         $rootScope.error = err.msg;
         console.log(err.res);
         controller.$scope.loggingIn = undefined;
@@ -124,7 +124,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
     }
 
     function errorMsg(msg) {
-      $rootScope.banneralert = 'banner alert-box alert';
+      $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = msg;
     }
 

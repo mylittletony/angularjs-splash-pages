@@ -16,7 +16,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
           then(function() {
             loginHandler();
           }, function(err) {
-            $rootScope.banneralert = 'banner alert-box alert';
+            $rootScope.banneralert = 'banner-alert alert-box alert';
             $rootScope.error = err.msg || 'A weird error just happened';
             console.log(err.res);
             scope.loggingIn = undefined;
@@ -97,7 +97,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
       element.html(templateObj);
     }
     function errorMsg(msg) {
-      $rootScope.banneralert = 'banner alert-box alert';
+      $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = msg;
       scope.$apply();
     }

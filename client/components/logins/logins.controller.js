@@ -12,24 +12,15 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
 
     var init = function(client) {
 
-      // $.ajax({
-      //   type: 'GET',
-      //   dataType: 'JSONP',
-      //   contentType: 'application/json',
-      //   url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json',
-      //   success: function(data) {
-      //     console.log(data);
-      //   }
-      // });
-
       var head = angular.element('head');
       var template;
 
       CT.init({request_uri: client.requestUri, clientMac: client.clientMac, apMac: client.apMac, tags: client.apTags}).then(function(results) {
+        console.log(results)
         $scope.products = results.products;
-        if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
-          $scope.goHome();
-        }
+        // if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
+        //   $scope.goHome();
+        // }
         $scope.store      = results.store;
         $scope.cart       = { cart_id: null, products: null };
         $scope.custom_url = results.splash.custom_url;
