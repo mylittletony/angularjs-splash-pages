@@ -74,7 +74,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       //     deferred.resolve()
       // });
       $http({
-        method: 'GET',
+        method: 'JSONP',
         url: API_END_POINT + '/logins',
         params: options
       }).
