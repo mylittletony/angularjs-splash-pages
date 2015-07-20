@@ -16,7 +16,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
         type: 'GET',
         dataType: 'JSONP',
         contentType: 'application/json',
-        url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json',
+        url: 'https://api.polkaspots.com/api/v1/ping.json',
         success: function(data) {
           console.log(data);
         }
