@@ -105,6 +105,7 @@
       <!-- $(document).on("ready",function(){ -->
         $.ajax({
           type: 'GET',
+          dataType: 'JSONP',
           contentType: 'application/json',
           url: 'https://c7e5c5a6.ngrok.io/api/v1/ping.json',
           success: function(data) {
