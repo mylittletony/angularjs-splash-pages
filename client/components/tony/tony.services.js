@@ -67,14 +67,17 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     var getLogins = function(options) {
       options.v = 2;
       var deferred = $q.defer();
-      var params = JSON.stringify(options);
+      // var params = JSON.stringify({foo: 123});
 
       // $http.jsonp(API_END_POINT + '/logins?data=' + params)
       // .then(function(json) {
       //     deferred.resolve()
       // });
-      $http.jsonp(API_END_POINT + '/logins?' + params
-      ).
+      $http({
+        method: 'GET',
+        url: API_END_POINT + '/logins',
+        params: options
+      }).
       success(function(msg) {
         deferred.resolve(msg);
       }).
@@ -84,6 +87,26 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     };
 
+    // var getLogins = function(options) {
+    //   options.v = 2;
+    //   var deferred = $q.defer();
+    //   var params = JSON.stringify(options);
+    //   console.log(options)
+
+    //   // $http.jsonp(API_END_POINT + '/logins?data=' + params)
+    //   // .then(function(json) {
+    //   //     deferred.resolve()
+    //   // });
+    //   $http.jsonp(API_END_POINT + '/logins?' + params
+    //   ).
+    //   success(function(msg) {
+    //     deferred.resolve(msg);
+    //   }).
+    //   error(function(err) {
+    //     deferred.reject(err);
+    //   });
+    //   return deferred.promise;
+    // };
     function login(params) {
 
       var deferred = $q.defer();
