@@ -67,6 +67,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     var getLogins = function(options) {
       options.v = 2;
       var deferred = $q.defer();
+      options.callback = "JSON_CALLBACK"
       // var params = JSON.stringify({foo: 123});
 
       // $http.jsonp(API_END_POINT + '/logins?data=' + params)
