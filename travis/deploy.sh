@@ -10,7 +10,7 @@ echo "   StrictHostKeyChecking no" >> ~/.ssh/config
 echo "   CheckHostIP no" >> ~/.ssh/config;
 echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config;
 
-if [[ $TRAVIS_PULL_REQUEST == "false" && ($TRAVIS_BRANCH == "master" || $TRAVIS_BRANCH == "staging") ]]
+if [[ $TRAVIS_PULL_REQUEST == "false" && ($TRAVIS_BRANCH == "master" || $TRAVIS_BRANCH == "captive-portal-assist") ]]
   then
     gem install heroku
     heroku keys:clear
