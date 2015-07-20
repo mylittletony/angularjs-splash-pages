@@ -67,11 +67,14 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     var getLogins = function(options) {
       options.v = 2;
       var deferred = $q.defer();
-      $http({
-        method: 'GET',
-        url: API_END_POINT + '/logins',
-        params: options
-      }).
+      var params = JSON.stringify(options);
+
+      // $http.jsonp(API_END_POINT + '/logins?data=' + params)
+      // .then(function(json) {
+      //     deferred.resolve()
+      // });
+      $http.jsonp(API_END_POINT + '/logins?' + params
+      ).
       success(function(msg) {
         deferred.resolve(msg);
       }).

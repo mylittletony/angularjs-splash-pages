@@ -1,38 +1,37 @@
-hi
-<!-- <build-page></build-page> -->
+<build-page></build-page>
 
-<!-- <div ng-show="state.errors" ng-cloak> -->
-<!--   <div class='error'><span ng-bind-html="state.errors"></span></div> -->
-<!-- </div> -->
+<div ng-show="state.errors" ng-cloak>
+  <div class='error'><span ng-bind-html="state.errors"></span></div>
+</div>
 
-<!-- <div ng-hide="state.errors" ng-cloak> -->
-<!--   <div class='row'> -->
-<!--     <div class='small-12 columns'> -->
-<!--       <div class="location_logo" ng-hide="splash.header_image_name"> -->
-<!--         <a href='{{splash.website}}'><img src="{{ splash.logo_file_name }}" ng-class="splash.header_image_type == 1 ? 'logo' : 'banner'"></img></a> -->
-<!--       </div> -->
-<!--       <div class="banner" ng-show="splash.header_image_name"> -->
-<!--         <a href='{{splash.website}}'><img src="{{ splash.header_image_name }}" class='banner'></img></a> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div class='inner_container'> -->
-<!--     <div class='row'> -->
-<!--       <div class='small-12 columns'> -->
-<!--         <logins-partial></logins-partial> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div class="row footer"> -->
-<!--     <div id="" class="small-6 medium-6 columns"> -->
-<!--       <span ng-show="splash.powered_by == true"><a class="left" href="http://www.ctapp.io/captive-portal" target="_blank">Powered by Cucumber Tony &nbsp</a></span> -->
-<!--       <span class="left">{{ splash.id }}</span> -->
-<!--     </div> -->
-<!--     <div id="footer-right" class="small-6 medium-6 columns"> -->
-<!--       <div class="right"> -->
-<!--         <a href="{{ splash.terms_url }}" class="show-for-medium-up">Terms and Conditions</a> -->
-<!--         <a href="{{ splash.terms_url }}" class="show-for-small-only">Terms</a> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!-- </div> -->
+<div ng-hide="state.errors" ng-cloak>
+  <div class='row'>
+    <div class='small-12 columns'>
+      <div class="location_logo" ng-hide="splash.header_image_name">
+        <a href='{{splash.website}}'><img src="{{ splash.logo_file_name }}" ng-class="splash.header_image_type == 1 ? 'logo' : 'banner'"></img></a>
+      </div>
+      <div class="banner" ng-show="splash.header_image_name">
+        <a href='{{splash.website}}'><img src="{{ splash.header_image_name }}" class='banner'></img></a>
+      </div>
+    </div>
+  </div>
+  <div class='inner_container'>
+    <div class='row'>
+      <div class='small-12 columns'>
+        <logins-partial></logins-partial>
+      </div>
+    </div>
+  </div>
+  <div class="row footer">
+    <div id="" class="small-6 medium-6 columns">
+      <span ng-show="splash.powered_by == true"><a class="left" href="http://www.ctapp.io/captive-portal" target="_blank">Powered by Cucumber Tony &nbsp</a></span>
+      <span class="left">{{ splash.id }}</span>
+    </div>
+    <div id="footer-right" class="small-6 medium-6 columns">
+      <div class="right">
+        <a href="{{ splash.terms_url }}" class="show-for-medium-up">Terms and Conditions</a>
+        <a href="{{ splash.terms_url }}" class="show-for-small-only">Terms</a>
+      </div>
+    </div>
+  </div>
+</div>
