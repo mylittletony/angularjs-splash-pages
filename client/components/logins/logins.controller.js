@@ -16,11 +16,10 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       var template;
 
       CT.init({request_uri: client.requestUri, clientMac: client.clientMac, apMac: client.apMac, tags: client.apTags}).then(function(results) {
-        console.log(results)
         $scope.products = results.products;
-        // if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
-        //   $scope.goHome();
-        // }
+        if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
+          $scope.goHome();
+        }
         $scope.store      = results.store;
         $scope.cart       = { cart_id: null, products: null };
         $scope.custom_url = results.splash.custom_url;

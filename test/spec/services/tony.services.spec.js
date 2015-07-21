@@ -16,7 +16,7 @@ describe("Tony Unit Tests", function() {
     Tony = _Tony_;
     $httpBackend = $injector.get('$httpBackend');
 
-    $httpBackend.when('POST', 'http://mywifi.dev:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
+    $httpBackend.when('JSONP', 'http://mywifi.dev:8080/api/v1/logins?callback=JSON_CALLBACK&challenge=challenge&mac=11:22:33:44:55:66&password=morley&request_uri=polkaspots.my-wifi.co&type=create&username=simon')
       .respond(200, {});
 
     $httpBackend.when('POST', 'http://mywifi.dev:8080/api/v1/store_carts?product_ids=1&product_ids=2&product_ids=3&store_id=123')
@@ -34,7 +34,7 @@ describe("Tony Unit Tests", function() {
 
   it('should have sent a GET request to location zones', function() {
     var result = Tony.create({username: 'simon', password: 'morley', mac: '11:22:33:44:55:66', challenge: 'challenge', request_uri: 'polkaspots.my-wifi.co'});
-    $httpBackend.expectPOST('http://mywifi.dev:8080/api/v1/logins?challenge=challenge&password=morley&request_uri=polkaspots.my-wifi.co&username=simon')
+    $httpBackend.expectJSONP('http://mywifi.dev:8080/api/v1/logins?callback=JSON_CALLBACK&challenge=challenge&mac=11:22:33:44:55:66&password=morley&request_uri=polkaspots.my-wifi.co&type=create&username=simon')
     $httpBackend.flush();
   });
 
