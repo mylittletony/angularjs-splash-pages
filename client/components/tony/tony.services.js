@@ -12,7 +12,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params = params || {};
       params.splash_id = $routeParams.splash_id;
       getLogins(params).then(function(results) {
-        console.log(results)
         if (results.archived === true) {
           archivedLocation();
           deferred.reject(results);
@@ -387,7 +386,11 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         var options = {username: res.username, password: res.challengeResp, state: res.clientState};
         deferred.resolve(options);
       }, function(err) {
-        deferred.reject(err.data.message);
+        var msg = 'Unable to log you in';
+        if (err.data && err.data.message) {
+          msg = err.data.message;
+        }
+        deferred.reject(msg);
       });
       return deferred.promise;
     };
@@ -604,9 +607,11 @@ app.factory('Tony', ['$resource', 'API_END_POINT',
       {},
       {
       create: {
-        method: 'POST',
+        method: 'JSONP',
         isArray: false,
         params: {
+          callback: 'JSON_CALLBACK',
+          xxxxxxxx: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
           username: '@username',
           password: '@password',
           splash_id: '@splash_id',

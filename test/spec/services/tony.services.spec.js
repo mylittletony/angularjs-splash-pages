@@ -94,7 +94,7 @@ describe("Tony Unit Tests", function() {
   describe("Tony Init Function", function() {
 
     it('should test that we get the logins from CT', function() {
-      httpBackend.whenGET("http://mywifi.dev:8080/api/v1/logins?splash_id=123&v=2").respond(200, {});
+      httpBackend.whenJSONP("http://mywifi.dev:8080/api/v1/logins?callback=JSON_CALLBACK&splash_id=123&v=2").respond(200, {});
       CTService.init();
       $scope.$apply()
       expect($scope.bodyLayout).toBe(undefined);
@@ -107,7 +107,7 @@ describe("Tony Unit Tests", function() {
 
       $scope.state = {}
       var deferred = q.defer();
-      httpBackend.whenGET("http://mywifi.dev:8080/api/v1/logins?splash_id=123&v=2").respond(422, {});
+      httpBackend.whenJSONP("http://mywifi.dev:8080/api/v1/logins?callback=JSON_CALLBACK&splash_id=123&v=2").respond(422, {});
 
       CTService.init();
       deferred.reject();
