@@ -611,7 +611,6 @@ app.factory('Tony', ['$resource', 'API_END_POINT',
         isArray: false,
         params: {
           callback: 'JSON_CALLBACK',
-          xxxxxxxx: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
           username: '@username',
           password: '@password',
           splash_id: '@splash_id',
@@ -619,6 +618,7 @@ app.factory('Tony', ['$resource', 'API_END_POINT',
           challenge: '@challenge',
           request_uri: '@request_uri',
           login_uri: '@loginUri',
+          type: 'create', // important for CT and JSONP
           action: 'logins'
         }
       },
