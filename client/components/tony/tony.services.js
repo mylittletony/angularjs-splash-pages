@@ -12,20 +12,26 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params = params || {};
       params.splash_id = $routeParams.splash_id;
       getLogins(params).then(function(results) {
-        if (results.archived === true) {
-          archivedLocation();
-          deferred.reject(results);
-        }
-        else if ( results.error ) {
-          var msg = results.error;
-          genericError(msg);
-          deferred.reject(results);
+        if (results.error) {
+          genericError(results.message);
+          deferred.reject(results.message);
         } else {
-          if ($location.path() === '/oh') {
-            $location.path('');
+          if (results.archived === true) {
+            archivedLocation();
+            deferred.reject(results);
           }
-          deferred.resolve(results);
+          else if ( results.error ) {
+            var msg = results.error;
+            genericError(msg);
+            deferred.reject(results);
+          } else {
+            if ($location.path() === '/oh') {
+              $location.path('');
+            }
+            deferred.resolve(results);
+          }
         }
+
       }, function(err) {
         var generic =
             '<h2>Captive Portal Assistant Error.</h2>'+
@@ -329,7 +335,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           }
         }, function(err) {
           var msg = '<h1>Oh! Something\'s Gone Wrong </h1><p>You\'re connected to a wireless network that doesn\'t support splash pages. <br>Please check your settings and refresh the page.</p>';
-          console.log(err);
           deferred.reject(msg);
         });
       } else {
@@ -383,8 +388,12 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         signatureVersion:   loginDetails.signature_version,
         signatureOrder:     loginDetails.signature_order,
       }).$promise.then(function(res) {
-        var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-        deferred.resolve(options);
+        if (res.error) {
+          deferred.reject(res.message);
+        } else {
+          var options = {username: res.username, password: res.challengeResp, state: res.clientState};
+          deferred.resolve(options);
+        }
       }, function(err) {
         var msg = 'Unable to log you in';
         if (err.data && err.data.message) {
