@@ -37,7 +37,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
         loginHandler();
       }, function(err) {
         $rootScope.banneralert = 'banner-alert alert-box alert';
-        $rootScope.error = err.msg || err;
+        $rootScope.error = err.msg || err || 'Unknown error logging in';
         controller.$scope.loggingIn = undefined;
         scope.processing = undefined;
       });
