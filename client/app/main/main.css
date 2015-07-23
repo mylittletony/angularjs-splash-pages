@@ -118,6 +118,15 @@ input {
   display: none !important;
 }
 
+.email_access {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  color: #696969;
+  min-width: 150px;
+  max-width: 280px;
+  width: 100%;
+}
+
 .facebook {
   background-color: #3b5998;
   min-width: 150px;
