@@ -107,6 +107,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.signature_order    = params.signature_order;
       loginDetails.signature_version  = params.signature_version;
 
+      console.log(loginDetails)
+
       Client.details()
       .then(function(resp) {
         client = resp;
