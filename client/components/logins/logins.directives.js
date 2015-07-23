@@ -69,8 +69,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var init = function() {
       CT.status().then(function(res) {
         addForm();
-        // ignore or delete me //
-        scope.newsletter = (attrs.newsletter === 'true');
+        scope.email_required  = (attrs.emailRequired === 'true');
+        scope.newsletter      = (attrs.newsletter === 'true') || scope.email_required;
+
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
@@ -124,6 +125,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       code: '@',
       redirects: '@',
       state: '=',
+      emailRequired: '@',
       newsletter: '@'
     }
   };
