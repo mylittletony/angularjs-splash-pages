@@ -94,7 +94,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', function
     };
 
     this.compileTemplate = function(msg) {
-
       document.querySelector('#backup').className = 'hidden';
       var templateObj = $compile('<div>' + msg +'</div>')($scope);
       $element.html(templateObj);

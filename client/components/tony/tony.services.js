@@ -439,7 +439,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       }, function(err) {
         var msg;
         if (err.status === 0) {
-          msg = 'Epic authentication server failure, does not compute. Better call Saul.';
+          msg = 'Authentication failure. Please contact support. Ref: #9862';
         } else if (err.status === 404) {
           // Currently get this when the radius returns a response //
           // Chilli is formatting the JSON strangely and we get into the weirdness //
