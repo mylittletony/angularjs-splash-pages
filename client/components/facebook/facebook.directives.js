@@ -55,15 +55,16 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
     }
 
     function addCheckinForm() {
-      controller.$scope.loggingIn = undefined;
-      controller.$scope.redirectUrl = redirectUrl();
-      controller.$scope.fbPageDirect = attrs.fbPageRedirect === 'true';
-      controller.$scope.fbPageId = attrs.fbPageId;
-
+      controller.$scope.loggingIn     = undefined;
+      controller.$scope.redirectUrl   = redirectUrl();
+      controller.$scope.fbPageDirect  = attrs.fbPageRedirect === 'true';
+      controller.$scope.fbPageId      = attrs.fbPageId;
+      controller.$scope.message       = attrs.fbMsg;
+      
       var msg =
         '<div class=\'small-12 medium-8 medium-centered columns\'>'+
         '<label for=\'checkin\'>Hey, ' + user.first_name + ', <b> you just logged in!</b> Please checkin in and leave a note on your Facebook page.</label>'+
-        '<textarea ng-model=\'message\' rows=3 placeholder=\'Please type a message, this will be posted on your wall.\'></textarea>'+
+        '<textarea ng-model=\'message\' rows=3 placeholder=\'Please type a message, this will be posted on your wall.\'>oh</textarea>'+
         '<button ng-disabled=\'checkin\' ng-click=\'doCheckin()\'><span ng-hide=\'checkin\'>Checkin</span> <span ng-if=\'checkin\'>Checking in <i class="fa fa-spinner fa-pulse"></i></span> </button>' +
         '<p><small><a ng-disabled=\'checkin\' href="' + redirectUrl() + '">Or click here to get online.</a></small></p>' +
         '</div>';
@@ -96,6 +97,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
     }
 
     function handleReturningUser() {
+      controller.$scope.backup = true;
       scope.backup = true;
       var msg;
       if (controller.$scope.attrs.autoLogin === 'true') {
@@ -186,7 +188,8 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       fbTimeout: '@',
       fbPageId: '@',
       fbPageRedirect: '@',
-      backup: '='
+      backup: '=',
+      fbMsg: '@'
     },
     template: '<div></div>',
     require: '^social'

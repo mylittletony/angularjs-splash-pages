@@ -35,9 +35,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       }, function(err) {
         var generic =
             '<h2>Captive Portal Assistant Error.</h2>'+
-            '<p>Please close this window, your device cannot connect to the Internet.</p>'+
-            '<p>If you\'re using an Apple device, you should close this window and use a real browser instead.</p>'+
-            '<p>Read how to fix this <a style="" href="http://www.ctapp.io/documentation/#article/10239/bypass-ios-popup">here</a>. Does not compute.</p>';
+            '<p>Please close this window, your device cannot connect to the Internet.</p>';
         var msg = err || generic;
         genericError(msg);
         deferred.reject(err);
