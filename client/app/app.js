@@ -106,6 +106,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
             $rootScope.deviceId = DEVICES.meraki;
           } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
             $rootScope.deviceId = DEVICES.xirrus;
+          // } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
+          //   $rootScope.deviceId = DEVICES.ruckus;
           } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
             $rootScope.deviceId = DEVICES.ruckus;
           } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {

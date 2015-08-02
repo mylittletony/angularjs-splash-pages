@@ -15,7 +15,15 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       var head = angular.element('head');
       var template;
 
-      CT.init({request_uri: client.requestUri, clientMac: client.clientMac, apMac: client.apMac, tags: client.apTags}).then(function(results) {
+      var params = {
+        request_uri: client.requestUri,
+        clientMac: client.clientMac,
+        clientIp: client.clientIp,
+        apMac: client.apMac,
+        tags: client.apTags
+      };
+
+      CT.init(params).then(function(results) {
         $scope.products = results.products;
         if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
           $scope.goHome();
