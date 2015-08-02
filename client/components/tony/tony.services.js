@@ -526,7 +526,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl;
     var obj;
 
     var details = function() {
@@ -558,6 +558,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientMac = $routeParams.client_mac;
         apMac = $routeParams.mac;
         apTags = $routeParams.lid;
+        clientIp = $routeParams.uip;
       } else if ($rootScope.deviceId === '5') {
         clientMac = $routeParams['Called-Station-Id'];
         apMac = $routeParams.mac;
@@ -573,6 +574,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
       }
       obj = {
         clientMac: clientMac,
+        clientIp: clientIp,
         apMac: apMac,
         redirectUri: redirectUri,
         deviceId: $rootScope.deviceId,
