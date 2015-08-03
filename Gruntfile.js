@@ -49,8 +49,8 @@ module.exports = function (grunt) {
         },
         constants: {
           // API_END_POINT: 'https://c7e5c5a6.ngrok.io/api/v1',
-          API_END_POINT: 'https://api.polkaspots.com/api/v1',
-          API_URL: 'https://api.polkaspots.com'
+          API_END_POINT: 'https://beta.polkaspots.com/api/v1',
+          API_URL: 'https://beta.polkaspots.com'
           // API_URL: 'https://c7e5c5a6.ngrok.io'
         }
       }
