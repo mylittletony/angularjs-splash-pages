@@ -390,7 +390,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-          console.log(options);
           deferred.resolve(options);
         }
       }, function(err) {
