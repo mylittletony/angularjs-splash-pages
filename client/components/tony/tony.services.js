@@ -374,6 +374,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         challenge:          challenge,
         request_uri:        client.requestUri,
         clientMac:          client.clientMac,
+        clientIp:           client.clientIp,
         apMac:              client.apMac,
         loginUri:           client.loginUri,
         token:              loginDetails.token,
@@ -556,9 +557,9 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         uamip = $routeParams.sip;
         uamport = 9997;
         clientMac = $routeParams.client_mac;
+        clientIp = $routeParams.uip;
         apMac = $routeParams.mac;
         apTags = $routeParams.lid;
-        clientIp = $routeParams.uip;
       } else if ($rootScope.deviceId === '5') {
         clientMac = $routeParams['Called-Station-Id'];
         apMac = $routeParams.mac;
