@@ -9,7 +9,7 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', function
     scope.doCheckin = function() {
       scope.checkin = true;
       var options = {
-        pageId: attrs.fbPageId,
+        pageId: scope.fbPageId,
         accessToken: scope.authResponse.accessToken,
         message: scope.message
       };

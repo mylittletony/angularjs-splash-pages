@@ -60,6 +60,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       controller.$scope.fbPageDirect  = attrs.fbPageRedirect === 'true';
       controller.$scope.fbPageId      = attrs.fbPageId;
       controller.$scope.message       = attrs.fbMsg;
+      controller.$scope.fbPageId      = attrs.fbPageId;
       
       var msg =
         '<div class=\'small-12 medium-8 medium-centered columns\'>'+
