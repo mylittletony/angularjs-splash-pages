@@ -60,7 +60,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       CT.login(params).then(function(a) {
         if (a !== undefined && a.type === 'ruckus') {
           loginRuckus(a).then(function(b) {
-            console.log(b);
             deferred.resolve(1);
           });
         } else {
@@ -73,17 +72,30 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       return deferred.promise;
     };
 
+    /// Refactor into Tony ////
+
     var loginRuckus = function(auth) {
       var deferred = $q.defer();
+      addForm();
       Client.details().then(function(client) {
         var openUrl = 'http://' + client.uamip + ':' + client.uamport +'/login?username='+ auth.username +'&password=' + auth.password;
         $scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
-          deferred.resolve('Logged in Ruckus client');
+          deferred.resolve();
         },3000);
       });
       return deferred.promise;
     };
+
+    var addForm = function() {
+      var template =
+        '<iframe style="display: block;" width="0" height="0" ng-src="{{detailFrame}}"></iframe>'+
+        '</div>';
+
+      var templateObj = $compile(template)($scope);
+      $element.html(templateObj);
+    };
+
 
     this.autoLogin = function() {
       var deferred = $q.defer();
