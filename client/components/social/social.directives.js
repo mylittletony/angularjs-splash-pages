@@ -2,7 +2,7 @@
 
 var app = angular.module('ctLoginsApp.social.directives', ['ngResource']);
 
-app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', function(CT, $q, $timeout, $compile, $window) {
+app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client', '$sce', function(CT, $q, $timeout, $compile, $window, Client, $sce) {
 
   var link = function(scope, element, attrs) {
 
@@ -57,11 +57,30 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', function
         signature_order: auth.signature_order,
         newsletter: $scope.newsletter
       };
-      CT.login(params).then(function() {
-        deferred.resolve(1);
+      CT.login(params).then(function(a) {
+        if (a !== undefined && a.type === 'ruckus') {
+          loginRuckus(a).then(function(b) {
+            console.log(b);
+            deferred.resolve(1);
+          });
+        } else {
+          deferred.resolve(1);
+        }
       }, function(err) {
         $scope.loggingIn = undefined;
         deferred.reject(err);
+      });
+      return deferred.promise;
+    };
+
+    var loginRuckus = function(auth) {
+      var deferred = $q.defer();
+      Client.details().then(function(client) {
+        var openUrl = 'http://' + client.uamip + ':' + client.uamport +'/login?username='+ auth.username +'&password=' + auth.password;
+        $scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
+        $timeout(function() {
+          deferred.resolve('Logged in Ruckus client');
+        },3000);
       });
       return deferred.promise;
     };
