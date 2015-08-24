@@ -113,7 +113,10 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           loginDetails.authResp = coovaResp;
           createLogin()
           .then(function(response) {
-            // Meraki login if state is present in response //
+            //////////////////////////////////////////////////
+            // Meraki login if state is present in response /////////
+            // Is now also for VSG users or other server side auth ///
+            // ///////////////////////////////////////////////
             if (response.state !== undefined) {
               if (response.state === 1) {
                 deferred.resolve();
