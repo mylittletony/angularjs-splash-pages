@@ -89,7 +89,7 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
 
     var addForm = function() {
       var template =
-        '<iframe style="display: block;" width="0" height="0" ng-src="{{detailFrame}}"></iframe>'+
+        '<iframe style="display: none;" width="0" height="0" ng-src="{{detailFrame}}"></iframe>'+
         '</div>';
 
       var templateObj = $compile(template)($scope);
