@@ -88,7 +88,9 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
     };
 
     var addForm = function() {
+      document.querySelector('#backup').className = 'hidden';
       var template =
+        '<div class=\'small-12 medium-6 medium-centered columns alert-box success\'>Logging you in, please hold tight...</div>' +
         '<iframe style="display: none;" width="0" height="0" ng-src="{{detailFrame}}"></iframe>'+
         '</div>';
 
