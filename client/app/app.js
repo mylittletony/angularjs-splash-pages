@@ -78,6 +78,7 @@ app.constant('DEVICES', {
   ruckus: '4',
   aerohive: '5',
   xirrus: '6',
+  vsz: '7',
   preview: '500',
   unknown: '999'
 });
@@ -91,9 +92,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
       },
 
       request: function(config) {
-
+        console.log($routeParams, $rootScope.deviceId);
         var setDevice = function() {
-          console.log($routeParams);
           if ($routeParams.preview === 'true') {
             $rootScope.deviceId = DEVICES.preview;
           } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
@@ -106,9 +106,9 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
             $rootScope.deviceId = DEVICES.meraki;
           } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
             $rootScope.deviceId = DEVICES.xirrus;
-          // } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
-          //   $rootScope.deviceId = DEVICES.ruckus;
-          } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined) {
+          } else if ( $routeParams.sip !== undefined && $routeParams.nbiIP !== undefined) {
+            $rootScope.deviceId = DEVICES.vsz;
+          } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined && $routeParams.nbiIp === undefined) {
             $rootScope.deviceId = DEVICES.ruckus;
           } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
             // $location.path('/hello');
