@@ -426,7 +426,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       } else if ($rootScope.deviceId === '6') {
         return xirrusLogin();
       } else if ($rootScope.deviceId === '7') {
-        return ruckusLogin();
+        // Doesnt do anything since we return a 1 from ct //
+        // return ruckusLogin();
       }
       return deferred.promise;
     };
