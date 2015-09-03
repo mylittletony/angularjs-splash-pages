@@ -391,9 +391,11 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         signatureOrder:     loginDetails.signature_order,
       }).$promise.then(function(res) {
         if (res.error) {
+          console.log('Auth rejected:', res);
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
+          console.log('Auth OK:', res.username);
           deferred.resolve(options);
         }
       }, function(err) {
@@ -423,6 +425,9 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         return hiveLogin();
       } else if ($rootScope.deviceId === '6') {
         return xirrusLogin();
+      } else if ($rootScope.deviceId === '7') {
+        // Doesnt do anything since we return a 1 from ct //
+        // return ruckusLogin();
       }
       return deferred.promise;
     };
@@ -478,13 +483,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     var ruckusLogin = function() {
       var deferred = $q.defer();
-      var openUrl = 'http://10.0.1.161:9997/login?username=xxxx&password=xxxxx';
-      var redirectTo = 'http://bbc.co.uk';
-      $rootScope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
-      // $timeout(function() {
-        // $window.location.href = redirectTo;
-        auth.type = 'ruckus';
-        deferred.resolve();
+      // var openUrl = 'http://10.0.1.161:9997/login?username=xxxx&password=xxxxx';
+      // var redirectTo = 'http://bbc.co.uk';
+      // $rootScope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
+      // // $timeout(function() {
+      //   // $window.location.href = redirectTo;
+      //   auth.type = 'ruckus';
+      //   deferred.resolve();
       // },0);
       return deferred.promise;
       // return Ruckus.login({
@@ -575,6 +580,12 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         challenge = $routeParams.challenge;
         uamip = $routeParams.uamip;
         uamport = $routeParams.uamport;
+      } else if ($rootScope.deviceId === '7') {
+        uamip = $routeParams.sip;
+        clientMac = $routeParams.client_mac;
+        clientIp = $routeParams.uip;
+        apMac = $routeParams.mac;
+        apTags = $routeParams.lid;
       }
       obj = {
         clientMac: clientMac,
