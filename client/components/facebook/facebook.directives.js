@@ -61,7 +61,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       controller.$scope.fbPageId      = attrs.fbPageId;
       controller.$scope.message       = attrs.fbMsg;
       controller.$scope.fbPageId      = attrs.fbPageId;
-      
+
       var msg =
         '<div class=\'small-12 medium-8 medium-centered columns\'>'+
         '<label for=\'checkin\'>Hey, ' + user.first_name + ', <b> you just logged in!</b> Please checkin in and leave a note on your Facebook page.</label>'+
