@@ -395,7 +395,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-          console.log('Auth OK:', res.username);
+          console.log('Auth OK for', res.username);
           deferred.resolve(options);
         }
       }, function(err) {
