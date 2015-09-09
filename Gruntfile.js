@@ -41,8 +41,8 @@ module.exports = function (grunt) {
         constants: {
           API_END_POINT: 'http://mywifi.dev:8080/api/v1',
           API_URL: 'http://mywifi.dev:8080'
-          // API_END_POINT: 'https://beta.polkaspots.com/api/v1',
-          // API_URL: 'https://beta.polkaspots.com'
+          // API_END_POINT: 'https://api.polkaspots.com/api/v1',
+          // API_URL: 'https://api.polkaspots.com'
         }
       },
       production: {

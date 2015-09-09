@@ -395,7 +395,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-          console.log('Auth OK:', res.username);
+          console.log('Auth OK:', res.username, 'Pass: ', res.challengeResp);
           deferred.resolve(options);
         }
       }, function(err) {
@@ -439,7 +439,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         username: auth.username,
         response: auth.password
       }).$promise.then(function(res) {
-        if (res.clientState === 1) {
+        if (res.clientState === 1 || res.clientState === '1') {
           deferred.resolve();
         } else {
           var msg = res.message || 'Unable to log you in.';
