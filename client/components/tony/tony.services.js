@@ -483,22 +483,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     var ruckusLogin = function() {
       var deferred = $q.defer();
+      // WHAT ?? //
       var openUrl = 'http://10.0.1.161:9997/login?username=xxxx&password=xxxxx';
       var redirectTo = 'http://bbc.co.uk';
       $rootScope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
-      // $timeout(function() {
-      //   $window.location.href = redirectTo;
-        auth.type = 'ruckus';
-        deferred.resolve();
-      // },0);
+      auth.type = 'ruckus';
+      deferred.resolve();
       return deferred.promise;
-      // return Ruckus.login({
-      //   uamip: $routeParams.sip,
-      //   uamport: 9997,
-      //   username: auth.username,
-      //   password: auth.password
-      // }).then(function() {
-      // });
     };
 
     var xirrusLogin = function() {
