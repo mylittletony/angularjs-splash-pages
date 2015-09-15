@@ -35,6 +35,12 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
         $scope.splash     = results.splash;
         $scope.form       = results.form.body;
         $scope.redirects  = results.redirects;
+        if (results.splash.registration === true && results.form && results.form.body && results.form.body.fields ) {
+          $scope.registration = true;
+          console.log('Displaying a registration page');
+        } else if (results.splash.registration === true) {
+          console.log('Welcome back, looks like you\'ve been here before.');
+        } 
       }, function(err) {
 
       });

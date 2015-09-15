@@ -67,7 +67,7 @@ body.login-layout {
 
 .inner_container {
   display: none;
-  padding-top: 20px;
+  /* padding-top: 20px; */
 }
 
 .footer { display: none; }
@@ -192,4 +192,8 @@ input {
 
 .store .text-danger {
   color: #870000;
+}
+
+input.has-error {
+  border:1px solid red;
 }

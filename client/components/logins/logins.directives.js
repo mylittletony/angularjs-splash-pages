@@ -7,7 +7,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
   var link = function(scope,element,attrs) {
 
-    scope.submit = function() {
+    scope.submit = function(custom_data) {
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
       } else {
@@ -16,11 +16,15 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         $rootScope.error = undefined;
         scope.state.hidden = true;
         scope.state.status = 'login';
+        if (custom_data && custom_data.fields) {
+          scope.fields = custom_data.fields;
+        }
         CT.login({
           username: scope.username,
           password: scope.password,
           email: scope.email,
-          newsletter: scope.newsletter
+          newsletter: scope.newsletter,
+          data: scope.fields
         }).then(onSuccess, onFail);
       }
     };
@@ -38,7 +42,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
       $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = err;
-      addForm();
+      chooseForm();
     };
 
     var finishLogin = function() {
@@ -68,7 +72,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
     var init = function() {
       CT.status().then(function(res) {
-        addForm();
+        chooseForm();
         scope.email_required  = (attrs.emailRequired === 'true');
         scope.newsletter      = (attrs.newsletter === 'true') || scope.email_required;
 
@@ -78,6 +82,54 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.state.errors = err;
         $rootScope.bodylayout = 'login-error';
       });
+    };
+
+    var chooseForm = function() {
+      if (attrs.registration === 'true') {
+        if (attrs.code){
+            try {
+              scope.data = JSON.parse(attrs.code);
+            } catch(e){
+              scope.data = 'Nothing to be seen';
+            }
+        }
+        scope.reqreg = attrs.reqreg === 'true';
+        addReg();
+      } else {
+        addForm();
+      }
+    };
+
+    var addReg = function() {
+      var template =
+        '<div ng-hide=\'login == true\'>'+
+        '<div ng-show=\'reqreg == true\'>'+
+        '<form name=\'myForm\'>'+
+        '<label>Email Address</label>'+
+        '<input ng-model=\'username\' name=\'username\' type=\'email\' placeholder=\'Enter your registered email\' required></input>'+
+        '<p ng-show=\'myForm.username.$error.required\'><small>Email is invalid.</small></p>'+
+        '<label>Password</label>'+
+        '<input ng-model=\'password\' name=\'password\' type=\'password\' placeholder=\'Enter your password\' required></input>'+
+        '<p ng-show=\'myForm.password.$error.required\'><small>Password is required.</small></p>'+
+        '<p><button ng-disabled="myForm.$invalid" ng-click="submit()">Login</button></p>' +
+        '</form>'+
+        '</div>'+
+        '<h2>{{ data.title }}</h2>'+
+        '<h3>{{ data.message }}</h3>'+
+        '<form name="loginForm" novalidate>'+
+        '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
+        '<label ng-hide="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
+        '<input type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></input>' +
+        '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
+        '<p class="text-danger" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required"><small>{{ field.label }} is Required</small></p>'+
+        '</div>' +
+        '<button ng-disabled="loginForm.$invalid" ng-click="submit(data)">Login</button>' +
+        '</form>' +
+        '</div>';
+
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+      cleanUp();
     };
 
     var addForm = function() {
@@ -126,8 +178,20 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       redirects: '@',
       state: '=',
       emailRequired: '@',
-      newsletter: '@'
-    }
+      newsletter: '@',
+      registration: '@'
+    },
+    // template:
+    //   '<div>'+
+    //   '{{ fields }}'+
+    //   '<form name="loginForm" novalidate>'+
+    //   '<div ng-form="sF_{{$index}}" ng-repeat="name in fields | orderBy: \'order\' ">' +
+    //   '<input type="{{ name.field_type }}" ng-model="name.value" name="input_{{$index}}_0" ng-required="name.required" placeholder=\'Enter your {{ name.name }}\'></input>' +
+    //   '<p class="text-danger" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ name.name }} required</p>'+
+    //   '</div>' +
+    //   '<button ng-click="oh()">OH</button>' +
+    //   '</form>' +
+    //   '</div>'
   };
 
 }]);
@@ -482,6 +546,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         '.inner_container {\n'+
+        '\tborder-radius: {{ splash.container_inner_radius }};\n'+
         '\ttext-align: {{ splash.container_text_align }};\n'+
         '\tborder: 1px solid {{ splash.border_colour || \'#CCC\' }};\n'+
         '\tbackground-color: {{ splash.container_colour }}!important;\n'+
@@ -490,12 +555,14 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\twidth: {{splash.container_inner_width}};\n'+
         '\tmin-height: 300px;\n'+
         '\tdisplay: block;\n'+
+        '\tpadding: {{ splash.container_inner_padding }};\n'+
         '}\n\n'+
 
         '.footer {\n'+
         '\tdisplay: block;\n'+
         '\tpadding: 10px 0;\n'+
         '\tfont-size: 10px;\n'+
+        '\twidth: {{splash.container_inner_width}};\n'+
         '}\n\n'+
 
         '.location_logo {\n'+
@@ -534,6 +601,10 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
 
         'input {\n'+
         '\tmax-width: 400px!important;\n' +
+        '\tpadding: {{ splash.input_padding}}!important;\n' +
+        '\tborder: {{ splash.input_border_width}} solid {{ splash.input_border_colour}}!important;\n' +
+        '\tborder-radius: {{ splash.input_border_radius }}!important;\n' +
+        '\tbox-shadow: inset 0 1px 2px rgb(255, 255, 255)!important;\n' +
         '}\n\n' +
 
         '{{ splash.custom_css }}';

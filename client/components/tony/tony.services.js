@@ -88,10 +88,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     function login(params) {
 
+      console.log(params)
+
       var deferred = $q.defer();
 
       params = params || {};
 
+      loginDetails.data               = params.data;
       loginDetails.username           = params.username;
       loginDetails.password           = params.password;
       loginDetails.email              = params.email;
@@ -389,6 +392,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         signature:          loginDetails.signature,
         signatureVersion:   loginDetails.signature_version,
         signatureOrder:     loginDetails.signature_order,
+        data:               JSON.stringify(loginDetails.data)
       }).$promise.then(function(res) {
         if (res.error) {
           console.log('Auth rejected:', res);
