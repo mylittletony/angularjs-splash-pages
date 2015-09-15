@@ -88,8 +88,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     function login(params) {
 
-      console.log(params)
-
       var deferred = $q.defer();
 
       params = params || {};
