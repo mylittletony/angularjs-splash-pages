@@ -428,6 +428,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       } else if ($rootScope.deviceId === '7') {
         // Doesnt do anything since we return a 1 from ct //
         // return ruckusLogin();
+      } else if ($rootScope.deviceId === '8') {
+        alert(21312)
       }
       return deferred.promise;
     };
@@ -586,6 +588,11 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientIp = $routeParams.uip;
         apMac = $routeParams.mac;
         apTags = $routeParams.lid;
+      } else if ($rootScope.deviceId === '8') {
+        uamip = $routeParams['link-login-only'];
+        clientMac = $routeParams.mac_client;
+        clientIp = $routeParams.ip;
+        apMac = $routeParams.mac;
       }
       obj = {
         clientMac: clientMac,

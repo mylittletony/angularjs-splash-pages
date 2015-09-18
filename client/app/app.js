@@ -79,6 +79,7 @@ app.constant('DEVICES', {
   aerohive: '5',
   xirrus: '6',
   vsz: '7',
+  microtik: '8',
   preview: '500',
   unknown: '999'
 });
@@ -92,7 +93,9 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
       },
 
       request: function(config) {
-        console.log($routeParams, $rootScope.deviceId);
+        if ($routeParams.debug) {
+          console.log($routeParams);
+        }
         var setDevice = function() {
           if ($routeParams.preview === 'true') {
             $rootScope.deviceId = DEVICES.preview;
@@ -110,6 +113,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
             $rootScope.deviceId = DEVICES.vsz;
           } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined && $routeParams.nbiIp === undefined) {
             $rootScope.deviceId = DEVICES.ruckus;
+          } else if ( $routeParams.mac_client !== undefined && $routeParams.device !== undefined ) {
+            $rootScope.deviceId = DEVICES.microtik;
           } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
             // $location.path('/hello');
           }
