@@ -441,7 +441,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         username: auth.username,
         response: auth.password
       }).$promise.then(function(res) {
-        if (res.clientState === 1 || res.clientState === '1') {
+        if (res.clientState === 1) {
           deferred.resolve();
         } else {
           var msg = res.message || 'Unable to log you in.';
