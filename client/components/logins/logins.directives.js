@@ -32,6 +32,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var onSuccess = function(auth) {
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
+      }
+      else if ( auth !== undefined && auth.type === 'microtik' ) {
+        loginMicrotik(auth);
       } else {
         finishLogin();
       }
@@ -54,6 +57,16 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var loginRuckus = function(auth) {
       Client.details().then(function(client) {
         var openUrl = 'http://' + client.uamip + ':' + client.uamport +'/login?username='+ auth.username +'&password=' + auth.password;
+        scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
+        $timeout(function() {
+          finishLogin();
+        },3000);
+      });
+    };
+
+    var loginMicrotik = function(auth) {
+      Client.details().then(function(client) {
+        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
         scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           finishLogin();

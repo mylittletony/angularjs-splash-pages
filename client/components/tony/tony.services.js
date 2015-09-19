@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.tony.services', ['ngResource']);
 
-app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'API_END_POINT', '$sce',
-  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, API_END_POINT, $sce) {
+app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'API_END_POINT', '$sce',
+  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, API_END_POINT, $sce) {
 
     var auth, client, loginDetails = {};
 
@@ -381,6 +381,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         clientIp:           client.clientIp,
         apMac:              client.apMac,
         loginUri:           client.loginUri,
+        device:             client.device,
         token:              loginDetails.token,
         userId:             loginDetails.userId,
         memberId:           loginDetails.memberId,
@@ -430,6 +431,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       } else if ($rootScope.deviceId === '7') {
         // Doesnt do anything since we return a 1 from ct //
         // return ruckusLogin();
+      } else if ($rootScope.deviceId === '8') {
+        return microtikLogin();
       }
       return deferred.promise;
     };
@@ -463,14 +466,14 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     };
 
+    var microtikLogin = function() {
+      var deferred = $q.defer();
+      auth.type = 'microtik';
+      deferred.resolve();
+      return deferred.promise;
+    };
+
     var hiveLogin = function() {
-      // return Aruba.login({
-      //   username: auth.username,
-      //   password: auth.password,
-      //   clientMac: client.clientMac,
-      //   uamip: client.uamip
-      // }).then(function() {
-      // });
     };
 
     var arubaLogin = function() {
@@ -485,10 +488,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
     var ruckusLogin = function() {
       var deferred = $q.defer();
-      // WHAT ?? //
-      var openUrl = 'http://10.0.1.161:9997/login?username=xxxx&password=xxxxx';
-      var redirectTo = 'http://bbc.co.uk';
-      $rootScope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
       auth.type = 'ruckus';
       deferred.resolve();
       return deferred.promise;
@@ -528,7 +527,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device;
     var obj;
 
     var details = function() {
@@ -579,6 +578,12 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientIp = $routeParams.uip;
         apMac = $routeParams.mac;
         apTags = $routeParams.lid;
+      } else if ($rootScope.deviceId === '8') {
+        uamip = $routeParams['link-login-only'];
+        clientMac = $routeParams.mac_client;
+        clientIp = $routeParams.ip;
+        apMac = $routeParams.mac;
+        device = 'routerOS';
       }
       obj = {
         clientMac: clientMac,
@@ -592,7 +597,8 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         apTags: apTags,
         requestUri: $location.host(),
         challenge: challenge,
-        uamSsl: uamSsl
+        uamSsl: uamSsl,
+        device: device
       };
 
       if (obj.clientMac === undefined) {

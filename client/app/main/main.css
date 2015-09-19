@@ -197,3 +197,7 @@ input {
 input.has-error {
   border:1px solid red;
 }
+
+input.btn {
+  padding: 15px 13px!important;
+}

@@ -62,6 +62,11 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
           loginRuckus(a).then(function(b) {
             deferred.resolve(1);
           });
+        }
+        else if (a !== undefined && a.type === 'microtik') {
+          loginMicrotik(a).then(function(b) {
+            deferred.resolve(1);
+          });
         } else {
           deferred.resolve(1);
         }
@@ -79,6 +84,19 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       addForm();
       Client.details().then(function(client) {
         var openUrl = 'http://' + client.uamip + ':' + client.uamport +'/login?username='+ auth.username +'&password=' + auth.password;
+        $scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
+        $timeout(function() {
+          deferred.resolve();
+        },3000);
+      });
+      return deferred.promise;
+    };
+
+    var loginMicrotik = function(auth) {
+      var deferred = $q.defer();
+      addForm();
+      Client.details().then(function(client) {
+        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
         $scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           deferred.resolve();
