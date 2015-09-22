@@ -110,7 +110,7 @@ label {
   display: none;
 }
 
-input {
+input, textarea {
   display: inline!important;
 }
 

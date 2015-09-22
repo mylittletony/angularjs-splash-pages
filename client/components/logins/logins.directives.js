@@ -60,7 +60,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           finishLogin();
-        },3000);
+        },2000);
       });
     };
 
@@ -70,7 +70,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           finishLogin();
-        },3000);
+        },2000);
       });
     };
 
@@ -99,7 +99,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
     var chooseForm = function() {
       if (attrs.registration === 'true') {
-        if (attrs.code){
+        if (attrs.code) {
             try {
               scope.data = JSON.parse(attrs.code);
             } catch(e){
@@ -116,7 +116,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var addReg = function() {
       var template =
         '<div ng-hide=\'login == true\'>'+
-        '<div ng-show=\'reqreg == true\'>'+
+        '<div ng-show=\'reqreg == true && show_reg_login\'>'+
         '<form name=\'myForm\'>'+
         '<label>Email Address</label>'+
         '<input ng-model=\'username\' name=\'username\' type=\'email\' placeholder=\'Enter your registered email\' required></input>'+
@@ -124,20 +124,25 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         '<label>Password</label>'+
         '<input ng-model=\'password\' name=\'password\' type=\'password\' placeholder=\'Enter your password\' required></input>'+
         '<p ng-show=\'myForm.password.$error.required\'><small>Password is required.</small></p>'+
-        '<p><button ng-disabled="myForm.$invalid" ng-click="submit()">Login</button></p>' +
+        '<p><button ng-disabled="myForm.$invalid" ng-click="submit()">Login</button></br>' +
+        '<a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Sign-up Now.</a></p>'+
         '</form>'+
         '</div>'+
+        '<div ng-hide=\'show_reg_login\'>'+
         '<h2>{{ data.title }}</h2>'+
         '<h3>{{ data.message }}</h3>'+
         '<form name="loginForm" novalidate>'+
         '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
         '<label ng-hide="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
-        '<input type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></input>' +
+        '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></input>' +
         '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
+        '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
         '<p class="text-danger" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required"><small>{{ field.label }} is Required</small></p>'+
         '</div>' +
         '<button ng-disabled="loginForm.$invalid" ng-click="submit(data)">Login</button>' +
+        '<p><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
         '</form>' +
+        '</div>' +
         '</div>';
 
       var templateObj = $compile(template)(scope);
@@ -612,7 +617,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tpadding-right: 0px!important;\n'+
         '}\n\n'+
 
-        'input {\n'+
+        'input, textarea {\n'+
         '\tmax-width: 400px!important;\n' +
         '\tpadding: {{ splash.input_padding}}!important;\n' +
         '\tborder: {{ splash.input_border_width}} solid {{ splash.input_border_colour}}!important;\n' +
