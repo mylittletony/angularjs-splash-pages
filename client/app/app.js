@@ -9,6 +9,7 @@ var app = angular.module('ctLoginsApp', [
   'ctLoginsApp.controllers',
   'ctLoginsApp.services',
   'ctLoginsApp.directives',
+  'ctLoginsApp.filters',
   'config'
 ]);
 

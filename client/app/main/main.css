@@ -201,3 +201,8 @@ input.has-error {
 input.btn {
   padding: 15px 13px!important;
 }
+
+p.required {
+  margin-top: -10px;
+  color: #D92121;
+}

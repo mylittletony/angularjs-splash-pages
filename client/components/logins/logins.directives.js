@@ -137,7 +137,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></input>' +
         '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
         '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
-        '<p class="text-danger" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required"><small>{{ field.label }} is Required</small></p>'+
+        '<p class="text-danger required" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required"><small>{{ field.name | sentenceCase }} is required</small></p>'+
         '</div>' +
         '<button ng-disabled="loginForm.$invalid" ng-click="submit(data)">Login</button>' +
         '<p><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
