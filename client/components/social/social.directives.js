@@ -96,7 +96,7 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       var deferred = $q.defer();
       addForm();
       Client.details().then(function(client) {
-        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
+        var openUrl = client.uamip + '?username='+ auth.username +'\&password=' + auth.password;
         $scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           deferred.resolve();

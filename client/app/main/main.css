@@ -195,14 +195,10 @@ input, textarea {
 }
 
 input.has-error {
-  border:1px solid red;
+  border-bottom: 1px solid #c00!important;
 }
 
 input.btn {
   padding: 15px 13px!important;
 }
 
-p.required {
-  margin-top: -10px;
-  color: #D92121;
-}

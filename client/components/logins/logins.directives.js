@@ -66,7 +66,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
     var loginMicrotik = function(auth) {
       Client.details().then(function(client) {
-        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
+        var openUrl = client.uamip + '?username='+ auth.username +'\&password=' + auth.password;
         scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           finishLogin();
@@ -88,6 +88,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         chooseForm();
         scope.email_required  = (attrs.emailRequired === 'true');
         scope.newsletter      = (attrs.newsletter === 'true') || scope.email_required;
+        scope.reqreg          = (attrs.reqreg === 'true');
+        scope.btn_text        = (attrs.btntext || 'Submit');
+        scope.terms           = (attrs.terms === 'true');
 
       }, function(err) {
         scope.state.status = undefined;
@@ -106,7 +109,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
               scope.data = 'Nothing to be seen';
             }
         }
-        scope.reqreg = attrs.reqreg === 'true';
         addReg();
       } else {
         addForm();
@@ -133,14 +135,22 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         '<h3>{{ data.message }}</h3>'+
         '<form name="loginForm" novalidate>'+
         '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
-        '<label ng-hide="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
-        '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></input>' +
+        '<label ng-hide="field.field_type == \'checkbox\' || field.label == \'hidden\' ">{{ field.label }}</label>'+
+        '<span ng-hide="field.field_type == \'radio\'">'+
+        '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name == "username" ? "email" : field.name }}\'></input>' +
         '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
         '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
-        '<p class="text-danger required" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required"><small>{{ field.name | sentenceCase }} is required</small></p>'+
+        '<p class="required"><span ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ field.name | sentenceCase }} is required</span></p>'+
+        '</span>'+
+        '<span ng-show="field.field_type == \'radio\'">'+
+        '<span id="radio_container_{{$index}}" ng-repeat="attr in field.attrs">'+
+        '<input type="radio" ng-model="field.value" value="{{attr}}" id="radio_inner_{{ $index }}"><label>{{attr}}</label>'+
+        '</div>'+
+        '</span>'+
+        '<div class=\'break\'></div>'+
         '</div>' +
-        '<button ng-disabled="loginForm.$invalid" ng-click="submit(data)">Login</button>' +
-        '<p><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
+        '<button ng-disabled="loginForm.$invalid" class="btn" ng-click="submit(data)">{{ btn_text }}</button>' +
+        '<p ng-show="reqreg == true"><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
         '</form>' +
         '</div>' +
         '</div>';
@@ -181,7 +191,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       }
     };
 
-    attrs.$observe('code', function(val){
+    attrs.$observe('btntext', function(val){
       if (val !== '' ) {
         init();
       }
@@ -197,7 +207,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       state: '=',
       emailRequired: '@',
       newsletter: '@',
-      registration: '@'
+      registration: '@',
+      reqreg: '@',
+      terms: '@',
+      btntext: '@'
     },
     // template:
     //   '<div>'+
@@ -456,9 +469,6 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
   return {
     link: link,
     scope: false,
-    // scope: {
-    //   state: '='
-    // },
     templateUrl: 'components/logins/_display_store.html'
   };
 
@@ -521,9 +531,8 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tcolor: {{splash.link_colour}};\n'+
         '}\n\n'+
 
-        '.btn {\n'+
+        '.btn, button {\n'+
         '\tdisplay: inline-block;\n'+
-        '\tmargin-bottom: 0;\n'+
         '\ttext-align: center;\n'+
         '\tvertical-align: middle;\n'+
         '\tcursor: pointer;\n'+
@@ -540,15 +549,36 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tfont-size: {{ splash.btn_font_size }}!important;\n'+
         '\tcolor: {{splash.btn_font_colour}}!important;\n'+
         '\tmargin: 10px 0 15px 0;\n'+
-        '\tpadding: 10px 16px;\n'+
+        '\tpadding: {{ splash.button_padding }};\n'+
         '\tline-height: 1.33;\n'+
-        '\tborder-radius: 6px;\n'+
+        '\tborder-radius: {{ splash.button_radius }};\n'+
         '\tbackground-color: {{splash.button_colour}};\n'+
-        '\tborder-color: #cccccc;\n'+
+        '\tborder-color: {{ splash.button_border_colour }};\n'+
+        '}\n\n'+
+
+        'button.disabled, button[disabled], .button.disabled, .button[disabled] {\n'+
+        '\tbackground-color: {{splash.button_colour}};\n'+
+        '\tborder-color: {{ splash.button_border_colour }};\n'+
+        '\topacity: 0.8;\n'+
+        '}\n\n'+
+
+        'button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus, button:hover, button:focus, .button:hover, .button:focus {\n'+
+        '\tbackground-color: {{splash.button_colour}}!important;\n'+
+        '\tborder-color: {{ splash.button_border_colour }};\n'+
+        '\topacity: 0.9;\n'+
         '}\n\n'+
 
         'small, .small {\n'+
         '\tfont-size: 11px;\n'+
+        '}\n\n'+
+
+        'input, textarea {\n'+
+        '\tbackground-color: {{ splash.input_background }}!important;\n'+
+        '\tborder-width: {{ splash.input_border_width }}!important;\n'+
+        '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
+        '\tpadding: {{ splash.input_padding }}!important;\n'+
+        '\tmargin: 0 0 1rem -5px!important;\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n'+
 
         '.container {\n'+
@@ -571,7 +601,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\topacity: {{ splash.container_transparency }};\n'+
         // '\tpadding: 20px 10px;\n'+
         '\twidth: {{splash.container_inner_width}};\n'+
-        '\tmin-height: 300px;\n'+
+        '\tmin-height: 100px;\n'+
         '\tdisplay: block;\n'+
         '\tpadding: {{ splash.container_inner_padding }};\n'+
         '}\n\n'+
@@ -581,11 +611,17 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tpadding: 10px 0;\n'+
         '\tfont-size: 10px;\n'+
         '\twidth: {{splash.container_inner_width}};\n'+
+        '\tcolor: {{splash.footer_text_colour}};\n'+
+        '}\n\n'+
+
+        '.footer a {\n'+
+        '\tcolor: {{splash.footer_text_colour}}!important;\n'+
         '}\n\n'+
 
         '.location_logo {\n'+
         '\ttext-align: {{ splash.logo_position }};\n'+
-        '\tmargin-bottom: 20px;\n'+
+        '\tmargin: 0 0px 20px 0px;\n'+
+        '\tmax-width: 220px;\n'+
         '}\n\n'+
 
         '.social {\n'+
@@ -598,7 +634,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         '#container-c1 {\n'+
-        '\tpadding: 10px 10px 0 10px;\n'+
+        '\tpadding: 0px 0px 0 0px;\n'+
         '}\n\n' +
 
         '.skinny-c1 {\n'+
@@ -617,12 +653,18 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tpadding-right: 0px!important;\n'+
         '}\n\n'+
 
+        'p.required {\n'+
+        '\tmargin-top: -10px;\n'+
+        '\tfont-size: {{ splash.input_required_size }}!important;\n'+
+        '\tcolor: {{ splash.input_required_colour }};\n'+
+        '}\n\n'+
+
         'input, textarea {\n'+
-        '\tmax-width: 400px!important;\n' +
+        '\tmax-width: {{ splash.input_max_width }}!important;\n' +
         '\tpadding: {{ splash.input_padding}}!important;\n' +
         '\tborder: {{ splash.input_border_width}} solid {{ splash.input_border_colour}}!important;\n' +
         '\tborder-radius: {{ splash.input_border_radius }}!important;\n' +
-        '\tbox-shadow: inset 0 1px 2px rgb(255, 255, 255)!important;\n' +
+        '\tbox-shadow: inset 0 0px 0px rgb(255, 255, 255)!important;\n' +
         '}\n\n' +
 
         '{{ splash.custom_css }}';
