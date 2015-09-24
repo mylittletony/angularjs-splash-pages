@@ -66,7 +66,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
     var loginMicrotik = function(auth) {
       Client.details().then(function(client) {
-        var openUrl = client.uamip + '?username='+ auth.username +'\&password=' + auth.password;
+        var openUrl = client.uamip + '?username='+ auth.username +'\\&password=' + auth.password;
         scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
         $timeout(function() {
           finishLogin();
