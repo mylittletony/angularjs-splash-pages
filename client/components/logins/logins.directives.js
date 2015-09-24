@@ -191,7 +191,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       }
     };
 
-    attrs.$observe('btntext', function(val){
+    attrs.$observe('code', function(val){
       if (val !== '' ) {
         init();
       }
