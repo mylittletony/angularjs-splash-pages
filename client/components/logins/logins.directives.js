@@ -131,7 +131,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         '</form>'+
         '</div>'+
         '<div ng-hide=\'show_reg_login\'>'+
-        '<h2>{{ data.title }}</h2>'+
         '<h3>{{ data.message }}</h3>'+
         '<form name="loginForm" novalidate>'+
         '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
