@@ -570,15 +570,6 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tfont-size: 11px;\n'+
         '}\n\n'+
 
-        'input, textarea {\n'+
-        '\tbackground-color: {{ splash.input_background }}!important;\n'+
-        '\tborder-width: {{ splash.input_border_width }}!important;\n'+
-        '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
-        '\tpadding: {{ splash.input_padding }}!important;\n'+
-        '\tmargin: 0 0 1rem -5px!important;\n'+
-        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
-        '}\n\n'+
-
         '.container {\n'+
         '\tfloat: {{ splash.container_float }}!important;\n'+
         '}\n\n'+
@@ -663,6 +654,13 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tborder: {{ splash.input_border_width}} solid {{ splash.input_border_colour}}!important;\n' +
         '\tborder-radius: {{ splash.input_border_radius }}!important;\n' +
         '\tbox-shadow: inset 0 0px 0px rgb(255, 255, 255)!important;\n' +
+        '\tbackground-color: {{ splash.input_background }}!important;\n'+
+        '\tborder-width: {{ splash.input_border_width }}!important;\n'+
+        '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
+        '\tmargin: 0 0 1rem -5px!important;\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '\theight: {{ splash.input_height || \'40px\' }}!important;\n'+
+        '\tline-height: {{ splash.input_height || \'40px\' }}!important;\n'+
         '}\n\n' +
 
         '{{ splash.custom_css }}';
