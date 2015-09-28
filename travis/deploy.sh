@@ -12,7 +12,7 @@ echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config;
 
 if [[ $TRAVIS_PULL_REQUEST == "false" && ($TRAVIS_BRANCH == "master") || ( $TRAVIS_BRANCH == "captive-portal-assist" )]]
   then
-    gem install heroku
+    gem install heroku -v 3.41.5
     heroku keys:clear
     rm -rf /home/travis/.ssh/id_rsa
     echo yes | heroku keys:add
