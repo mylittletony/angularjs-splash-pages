@@ -118,40 +118,39 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var addReg = function() {
       var template =
         '<div ng-hide=\'login == true\'>'+
-        '<div ng-show=\'reqreg == true && show_reg_login\'>'+
-        '<form name=\'myForm\'>'+
-        '<label>Email Address</label>'+
-        '<input ng-model=\'username\' name=\'username\' type=\'email\' placeholder=\'Enter your registered email\' required></input>'+
-        '<p ng-show=\'myForm.username.$error.required\'><small>Email is invalid.</small></p>'+
-        '<label>Password</label>'+
-        '<input ng-model=\'password\' name=\'password\' type=\'password\' placeholder=\'Enter your password\' required></input>'+
-        '<p ng-show=\'myForm.password.$error.required\'><small>Password is required.</small></p>'+
-        '<p><button ng-disabled="myForm.$invalid" ng-click="submit()">Login</button></br>' +
-        '<a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Sign-up Now.</a></p>'+
-        '</form>'+
-        '</div>'+
-        '<div ng-hide=\'show_reg_login\'>'+
-        '<h3>{{ data.message }}</h3>'+
-        '<form name="loginForm" novalidate>'+
-        '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
-        '<label ng-hide="field.field_type == \'checkbox\' || field.label == \'hidden\' ">{{ field.label }}</label>'+
-        '<span ng-hide="field.field_type == \'radio\'">'+
-        '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name == "username" ? "email" : field.name }}\'></input>' +
-        '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
-        '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
-        '<p class="required"><span ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ field.name | sentenceCase }} is required</span></p>'+
-        '</span>'+
-        '<span ng-show="field.field_type == \'radio\'">'+
-        '<span id="radio_container_{{$index}}" ng-repeat="attr in field.attrs">'+
-        '<input type="radio" ng-model="field.value" value="{{attr}}" id="radio_inner_{{ $index }}"><label>{{attr}}</label>'+
-        '</div>'+
-        '</span>'+
-        '<div class=\'break\'></div>'+
-        '</div>' +
-        '<button ng-disabled="loginForm.$invalid" class="btn" ng-click="submit(data)">{{ btn_text }}</button>' +
-        '<p ng-show="reqreg == true"><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
-        '</form>' +
-        '</div>' +
+          '<div ng-show=\'reqreg == true && show_reg_login\'>'+
+            '<form name=\'myForm\'>'+
+              '<label>Email Address</label>'+
+              '<input ng-model=\'username\' name=\'username\' type=\'email\' placeholder=\'Enter your registered email\' required></input>'+
+              '<p ng-show=\'myForm.username.$error.required\'><small>Email is invalid.</small></p>'+
+              '<label>Password</label>'+
+              '<input ng-model=\'password\' name=\'password\' type=\'password\' placeholder=\'Enter your password\' required></input>'+
+              '<p ng-show=\'myForm.password.$error.required\'><small>Password is required.</small></p>'+
+              '<p><button ng-disabled="myForm.$invalid" ng-click="submit()">Login</button></br>' +
+              '<a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Sign-up Now.</a></p>'+
+            '</form>'+
+          '</div>'+
+          '<div ng-hide=\'show_reg_login\'>'+
+            '<h3>{{ data.message }}</h3>'+
+            '<form name="loginForm" novalidate>'+
+              '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
+                '<label ng-hide="field.field_type == \'checkbox\' || field.label == \'hidden\' ">{{ field.label }}</label>'+
+                '<span ng-hide="field.field_type == \'radio\'">'+
+                  '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name == "username" ? "email" : field.name }}\'></input>' +
+                  '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
+                  '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
+                  '<p class="required"><span ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ field.name | sentenceCase }} is required</span></p>'+
+                '</span>'+
+                '<span ng-show="field.field_type == \'radio\'">'+
+                  '<span id="radio_container_{{$index}}" ng-repeat="attr in field.attrs">'+
+                    '<input type="radio" ng-model="field.value" value="{{attr}}" id="radio_inner_{{ $index }}"><label>{{attr}}</label>'+
+                '</span>'+
+              '</div>'+
+              '<div class=\'break\'></div>'+
+              '<button ng-disabled="loginForm.$invalid" class="btn" ng-click="submit(data)">{{ btn_text }}</button>' +
+              '<p ng-show="reqreg == true"><a href=\'\' ng-click=\'show_reg_login = !show_reg_login\'>Already registered? Login now.</a></p>'+
+            '</form>' +
+          '</div>' +
         '</div>';
 
       var templateObj = $compile(template)(scope);
