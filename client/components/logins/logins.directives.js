@@ -610,6 +610,9 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '.location_logo {\n'+
         '\ttext-align: {{ splash.logo_position }};\n'+
         '\tmargin: 0 0px 20px 0px;\n'+
+        '}\n\n'+
+
+        '.location_logo img {\n'+
         '\tmax-width: 220px;\n'+
         '}\n\n'+
 
