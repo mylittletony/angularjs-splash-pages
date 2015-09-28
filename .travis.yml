@@ -9,4 +9,5 @@ before_script:
 - npm install grunt-contrib-sass --save
 script: grunt test
 after_success:
+- rvm 1.9.3 do gem install net-ssh -v 2.9.2
 - bash ./travis/deploy.sh
