@@ -547,8 +547,9 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tfont-size: {{ splash.btn_font_size }}!important;\n'+
         '\tcolor: {{splash.btn_font_colour}}!important;\n'+
         '\tmargin: 10px 0 15px 0;\n'+
-        '\tpadding: {{ splash.button_padding }};\n'+
-        '\tline-height: 1.33;\n'+
+        '\tpadding: {{ splash.button_padding }}!important;\n'+
+        '\tline-height: {{ splash.button_height || "50px" }}!important;\n'+
+        '\theight: {{ splash.button_height || "50px" }}!important;\n'+
         '\tborder-radius: {{ splash.button_radius }};\n'+
         '\tbackground-color: {{splash.button_colour}};\n'+
         '\tborder-color: {{ splash.button_border_colour }};\n'+
@@ -665,6 +666,11 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\theight: {{ splash.input_height || \'40px\' }}!important;\n'+
         '\tline-height: {{ splash.input_height || \'40px\' }}!important;\n'+
         '}\n\n' +
+
+        'input[type="checkbox"] {\n'+
+        '\theight: 12px!important;\n'+
+        '\tline-height: 12px!important;\n'+
+        '}\n\n'+
 
         '{{ splash.custom_css }}';
 
