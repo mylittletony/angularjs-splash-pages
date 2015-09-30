@@ -2,7 +2,7 @@
   <h1>{{ splash.header_text }}</h1>
   <h2>{{ splash.info }}</h2>
   <span ng-if="products.length && splash.design_id == 1">
-    <h1 class="ct-shop"><a href="" ng-click="goShop()" class="ct-buy-access">Click here</a> to buy Internet access.</h1>
+    <h2 class="shop"><a href="" ng-click="goShop()" class="ct-buy-access">{{ splash.store_buy_link_text || "Buy Voucher Now" }}</a></h2>
     <p>Use your PayPal account to buy time and get online</p>
     <hr>
   </span>
