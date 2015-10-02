@@ -336,7 +336,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
             deferred.reject(msg);
           }
         }, function(err) {
-          var msg = '<h1>Oh! Something\'s Gone Wrong </h1><p>You\'re connected to a wireless network that doesn\'t support splash pages. <br>Please check your settings and refresh the page.</p>';
+          var msg = '<h1>Splash Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>';
           deferred.reject(msg);
         });
       } else {
