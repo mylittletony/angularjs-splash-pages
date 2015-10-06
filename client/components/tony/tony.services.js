@@ -453,7 +453,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         }
       }, function(err) {
         var msg;
-        if (err.status === 0) {
+        if (err.status === 0 || err.status === -1) {
           msg = 'Authentication failure. Please contact support. Ref: #9862';
         } else if (err.status === 404) {
           // Currently get this when the radius returns a response //
