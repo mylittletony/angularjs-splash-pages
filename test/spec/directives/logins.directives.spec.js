@@ -160,7 +160,7 @@ describe('logins init', function () {
         deferred.reject();
         $scope.$apply()
         expect(element.isolateScope().login).toBe(undefined);
-        expect(element.isolateScope().state.errors).toBe('<h1>Splash Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>');
+        expect(element.isolateScope().state.errors).toBe('<h1>Connection Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>');
       });
 
       it("should successfully log a user in via chilli and redirect to the welcome page and also send params to reporter", function() {
@@ -305,7 +305,7 @@ describe('logins init', function () {
         expect(coovaFactory.status).toHaveBeenCalled();
 
         expect(element.isolateScope().state.status).toBe(undefined);
-        expect(element.isolateScope().state.errors).toBe('<h1>Splash Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>');
+        expect(element.isolateScope().state.errors).toBe('<h1>Connection Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>');
       });
 
     });

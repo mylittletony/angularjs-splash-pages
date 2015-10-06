@@ -34,8 +34,9 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
       }, function(err) {
         var generic =
-            '<h2>Captive Portal Assistant Error.</h2>'+
-            '<p>Please close this window, your device cannot connect to the Internet.</p>';
+            '<h2>Connection Error.</h2>'+
+            '<p>Your device is unable to connect to the Internet.</p>' +
+            '<p>This could be a browser issue or a problem with your connection. Try a different browser and check your firewall settings. Ensure you have the latest updates installed.</p>';
         var msg = err || generic;
         genericError(msg);
         deferred.reject(err);
@@ -336,7 +337,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
             deferred.reject(msg);
           }
         }, function(err) {
-          var msg = '<h1>Splash Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>';
+          var msg = '<h1>Connection Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>';
           deferred.reject(msg);
         });
       } else {
