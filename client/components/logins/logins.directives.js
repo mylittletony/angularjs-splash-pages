@@ -689,6 +689,8 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
 
       head.append($compile('<style>' + template + '</style>')(scope));
       head.append($compile('<link ng-href=\'{{splash.external_css}}\' rel=\'stylesheet\' />')(scope));
+      // $window.document.title = scope.splash;
+
       addCopy(data);
     };
 
