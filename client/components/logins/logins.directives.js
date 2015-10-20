@@ -133,8 +133,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           '<div ng-hide=\'show_reg_login\'>'+
             '<h3>{{ data.message }}</h3>'+
             '<form name="loginForm" novalidate>'+
-              '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'">' +
-                '<label ng-hide="field.field_type == \'checkbox\' || field.label == \'hidden\' ">{{ field.label }}</label>'+
+              '<div ng-form="sF_{{$index}}" ng-repeat="field in data.fields | orderBy: \'order\'" class=\'reg-fields\'>' +
+                '<label class="ct-label" ng-hide="field.field_type == \'checkbox\' || field.label == \'hidden\'">{{ field.label }}</label>'+
                 '<span ng-hide="field.field_type == \'radio\'">'+
                   '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name == "username" ? "email" : field.name }}\'></input>' +
                   '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
@@ -143,7 +143,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
                 '</span>'+
                 '<span ng-show="field.field_type == \'radio\'">'+
                   '<span id="radio_container_{{$index}}" ng-repeat="attr in field.attrs">'+
-                    '<input type="radio" ng-model="field.value" value="{{attr}}" id="radio_inner_{{ $index }}"><label>{{attr}}</label>'+
+                    '<input type="radio" ng-model="field.value" value="{{attr}}" id="radio_inner_{{ attr }}_{{ $index }}">'+
+                    '<label for="radio_inner_{{ attr }}_{{$index}}" class="ct-label" ><span></span>{{attr}}</label>'+
                 '</span>'+
               '</div>'+
               '<div class=\'break\'></div>'+
@@ -600,6 +601,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tdisplay: block;\n'+
         '\tpadding: 10px 0;\n'+
         '\tfont-size: 10px;\n'+
+        '\tline-height: 18px;\n'+
         '\twidth: {{splash.container_inner_width}};\n'+
         '\tcolor: {{splash.footer_text_colour}};\n'+
         '}\n\n'+
@@ -683,16 +685,10 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\tline-height: 12px!important;\n'+
         '}\n\n'+
 
-        'input[type="checkbox"] {\n'+
-        '\theight: 12px!important;\n'+
-        '\tline-height: 12px!important;\n'+
-        '}\n\n'+
-
         '{{ splash.custom_css }}';
 
       head.append($compile('<style>' + template + '</style>')(scope));
       head.append($compile('<link ng-href=\'{{splash.external_css}}\' rel=\'stylesheet\' />')(scope));
-      // $window.document.title = scope.splash.location_name;
       addCopy(data);
     };
 
