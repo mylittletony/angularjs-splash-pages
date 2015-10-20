@@ -138,7 +138,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
                 '<span ng-hide="field.field_type == \'radio\'">'+
                   '<input ng-show=\'field.field_type != "textarea"\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name == "username" ? "email" : field.name }}\'></input>' +
                   '<label ng-show="field.field_type == \'checkbox\'">{{ field.label }}</label>'+
-                  '<textarea ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
+                  '<textarea rows=\'5\' ng-show=\'field.field_type == "textarea"\' rows=\'3\' type="{{ field.field_type }}" ng-model="field.value" name="input_{{$index}}_0" ng-required="field.required" ng-class="{ \'has-error\' : loginForm.sF_{{$index}}.input_{{$index}}_0.$invalid }" placeholder=\'Enter your {{ field.name }}\'></textarea>' +
                   '<p class="required"><span ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ field.name | sentenceCase }} is required</span></p>'+
                 '</span>'+
                 '<span ng-show="field.field_type == \'radio\'">'+
@@ -663,9 +663,25 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
         '\tmargin: 0 0 1rem -5px!important;\n'+
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+        'input[type=text], textarea {\n'+
         '\theight: {{ splash.input_height || \'40px\' }}!important;\n'+
         '\tline-height: {{ splash.input_height || \'40px\' }}!important;\n'+
         '}\n\n' +
+
+        'textarea {\n'+
+        '\tpadding: 10px!important;\n' +
+        '\theight: auto!important;\n'+
+        '\tresize: vertical!important;\n'+
+        '\tline-height: 1em!important;\n'+
+        '}\n\n' +
+
+        'input[type="checkbox"], input[type=radio] {\n'+
+        // '\tmargin: {{ splash.container_inner_padding }};\n'+
+        // '\theight: 12px!important;\n'+
+        // '\tline-height: 12px!important;\n'+
+        '}\n\n'+
 
         'input[type="checkbox"] {\n'+
         '\theight: 12px!important;\n'+
