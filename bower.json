@@ -13,7 +13,7 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "ngStorage": "~0.2.0",
-    "foundation": "~5.5.0",
+    "foundation": "5.5.0",
     "fontawesome": "~4.3.0",
     "ngstorage": "~0.3.0",
     "components-font-awesome": "~4.3.0"
