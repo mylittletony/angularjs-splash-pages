@@ -150,6 +150,12 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       $element.html(templateObj);
     };
 
+    // OAuth.initialize('');
+
+    // $scope.popup = function() {
+    //   OAuth.popup('twitter').done(function(facebook, res) {
+    //   }).fail(function(err) {
+    //   });};
   };
 
   return {

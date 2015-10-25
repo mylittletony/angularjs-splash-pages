@@ -366,7 +366,7 @@ app.directive('loginsPartial', ['$location', function($location) {
 
 }]);
 
-app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$window', 'Order', 'Client', '$localStorage', function(CT, $cookies, $rootScope, $location, $window, Order, Client, $localStorage) {
+app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$window', 'Order', 'Client', '$localStorage', '$q', function(CT, $cookies, $rootScope, $location, $window, Order, Client, $localStorage, $q) {
 
   var link = function(scope, element, attrs) {
 
@@ -379,7 +379,8 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     });
 
     function loadShop() {
-      if ($cookies.get('cartId') === undefined) {
+      scope.cartId = $cookies.get('cartId');
+      if (scope.cartId === undefined) {
         scope.showstore = true;
       } else {
         scope.getCart();
@@ -390,6 +391,10 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       CT.getCart($cookies.get('cartId')).then(function(res) {
         scope.cart = res;
         scope.showcart = true;
+
+        if (scope.cart.store.merchant_type === 'stripe') {
+          loadStripe();
+        }
         sliceProducts(scope.cart.products[0]._id);
       });
     };
@@ -406,8 +411,14 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       scope.adding = id;
       CT.addToCart({store_id: attrs.id, product_ids: id}).then(function(res) {
         if (res && res.cart) {
+          scope.cartId = true;
           addProductToCart(res);
+          scope.cart = res;
+          if (scope.cart.store.merchant_type === 'stripe' && !scope.stripe_loaded) {
+            loadStripe();
+          }
         } else {
+          scope.cartId = undefined;
           wipeCart();
         }
       }, function(err) {
@@ -424,7 +435,6 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       if (scope.cart !== undefined && scope.cart.products !== null) {
         scope.products.push(scope.cart.products[0]);
       }
-
       scope.cart = { products: res.products, cart: { cart_id: res.cart.cart_id } };
       scope.showstore = undefined;
       scope.showcart = true;
@@ -449,10 +459,98 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
         scope.redirecting = true;
         var return_url = $location.protocol() + '://' + $location.host() + '/confirm';
         Order.create({clientMac: client.clientMac, return_url: return_url, cart_id: scope.cart.cart.cart_id }).$promise.then(function(results) {
-          $window.location.href = results.redirect_url;
+          $window.location.href = results.response;
         });
       });
     };
+
+    var loadStripe = function() {
+      if (scope.stripe_loaded === undefined) {
+        var src = 'https://checkout.stripe.com/checkout.js';
+        $.getScript( src, function( data, textStatus, jqxhr ) {
+          scope.stripe_loaded = true;
+          configureStripe();
+        });
+      }
+    };
+
+    var handler;
+    var configureStripe = function() {
+      handler = StripeCheckout.configure({
+        key: scope.cart.store.token_stripe,
+        // image: '/img/documentation/checkout/marketplace.png',
+        locale: 'auto',
+        token: function(token) {
+          scope.stripeProcess(token);
+        },
+        closed: function() {
+          scope.cart.state = undefined;
+          scope.showcart = true;
+          scope.$digest();
+        }
+      });
+      scope.$digest();
+    };
+
+    scope.stripeProcess = function(token) {
+      scope.$digest();
+      createOrder(token);
+    };
+
+    var createOrder = function(token) {
+      Client.details().then(function(client) {
+        Order.create({clientMac: client.clientMac, cart_id: scope.cart.cart.cart_id, email: token.email, card: token.id }).$promise.then(function(results) {
+          scope.vouchers = results.response;
+          scope.cart.state = 'complete';
+          $cookies.remove('cartId');
+        }, function(err) {
+          $rootScope.banneralert = 'banner-alert alert-box alert';
+          $rootScope.error = 'Your card was declined, please try again';
+          scope.cart.state = 'declined';
+          scope.cart.error = err.message;
+          scope.showcart   = true;
+        });
+      });
+    };
+
+    scope.stripePayment = function() {
+      $rootScope.banneralert = undefined;
+      handler.open({
+        name: 'Cucumber WiFi',
+        description: '2 widgets',
+        currency: scope.cart.store.currency || 'gbp',
+        amount: scope.cart.cart.total
+      });
+      scope.cart.state = 'processing';
+      scope.showcart = undefined;
+    };
+
+    scope.loginNow = function() {
+      scope.loggingIn = true;
+      guestLogin().then(function(a) {
+        $window.location.href = 'http://google.com';
+      }, function(err) {
+        $rootScope.banneralert = 'banner-alert alert-box alert';
+        $rootScope.error = err;
+      });
+    };
+
+    function guestLogin() {
+      var deferred = $q.defer();
+      var username, password;
+      if (scope.vouchers !== undefined && scope.vouchers.length > 0) {
+        username = scope.vouchers[0].username;
+        password = scope.vouchers[0].password;
+      }
+      CT.login({username: username, password: password}).then(function(res) {
+        deferred.resolve();
+      }, function(err) {
+        console.log(err);
+        deferred.reject('We were unable to log you in, go back to the home page and try again.');
+      });
+      return deferred.promise;
+    }
+
 
     var cleanUp = function() {
 

@@ -571,6 +571,7 @@ describe('logins init', function () {
       q = $q;
       $scope.products = [{ value: 100, description: 'Simon', _id: '999' }]
       $scope.store = { store_id: 12312312 }
+      $scope.state = {};
       element = angular.element('<display-store id="{{store.store_id}}" products="{{products}}"></display-store>');
       $compile(element)($rootScope)
       element.scope().$apply();
@@ -611,6 +612,58 @@ describe('logins init', function () {
       $scope.$apply()
 
       expect(cookies.cartId).toBe(undefined)
+    })
+
+    it("should process the stripe payment", function() {
+      spyOn(tonyFactory, 'getCart').andCallThrough()
+      spyOn(ordersFactory, 'create').andCallThrough()
+      var cart = { cart: { cart_id: '123'}, products: [{ _id: '999', description: 'abc' }], store: { merchant_type: 'stripe' } }
+
+      deferred.resolve(cart);
+      $scope.$apply()
+
+      var token = { id: 123, email: 'simon@ps.com' }
+      $scope.stripeProcess(token)
+      expect($scope.cart.state).toBe('processing')
+
+      var order = {response: [{username: "feeling-7214", password: "letter"}]}
+
+      // Client details //
+      deferred.resolve(order)
+      $scope.$apply()
+
+      // Create order //
+      deferred.resolve(order)
+      $scope.$apply()
+
+      expect($scope.vouchers.length).toEqual(1)
+      expect($scope.cart.state).toBe('complete')
+    })
+
+    it("not fail to process the stripe payment", function() {
+      spyOn(tonyFactory, 'getCart').andCallThrough()
+      spyOn(ordersFactory, 'create').andCallThrough()
+      var cart = { cart: { cart_id: '123'}, products: [{ _id: '999', description: 'abc' }], store: { merchant_type: 'stripe' } }
+
+      deferred.resolve(cart);
+      $scope.$apply()
+
+      var token = { id: 123, email: 'simon@ps.com' }
+      $scope.stripeProcess(token)
+      expect($scope.cart.state).toBe('processing')
+
+
+      // Client details //
+      deferred.resolve({message: 123})
+      $scope.$apply()
+
+      // Create order //
+      deferred.reject({message: 123})
+      $scope.$apply()
+
+      expect($scope.vouchers).toEqual(undefined)
+      expect($scope.cart.error).toEqual(123)
+      expect($scope.cart.state).toBe('declined')
     })
 
   });

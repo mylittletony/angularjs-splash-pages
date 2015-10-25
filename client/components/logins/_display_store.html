@@ -8,24 +8,37 @@
         </div>
       </div>
     </div>
-    <p><b>Buy Now With PayPal</b></p>
-    <a href="" ng-click="paypal()">
-      <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">
-    </a>
-    <hr>
+    <span ng-show="cart.store.merchant_type == 'paypal'">
+      <p><b>Buy Now With PayPal</b></p>
+      <a href="" ng-click="paypal()">
+        <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">
+      </a>
+    </span>
   </div>
   <div ng-if="redirecting">
-    <br>
     <br>
     <h1>Redirecting you to PayPal, please hold tight</h1>
     <p>Don't refresh the page, we'll send you on your way soon.</p>
   </div>
+<!-- <hr> -->
+</div>
+
+<div ng-if="cart.state == 'complete'">
+  <display-order></display-order>
+</div>
+
+<div ng-show="cart.state == 'processing'">
+  <h2>Processing order, please wait.</h2>
+</div>
+
+<div ng-hide="!stripe_loaded || !cartId || (cart.state == 'processing' || cart.state == 'complete')">
+  <button id="customButton" class="button success" ng-click="stripePayment()">Purchase</button>
 </div>
 
 <div ng-hide="redirecting" class="small-12 medium-10 small-centered columns">
   <div ng-show="products.length">
     <h1><b>Choose {{ cart.products.length ? 'another' : 'a' }} Voucher</b></h1>
-    <p>You can purchase this with your PayPal account. Or, <b><a href="" ng-click="goHome()">click here</a></b> to go back to the login page</p>
+    <p>Puchase this now or, <b><a href="" ng-click="goHome()">click here</a></b> to go back to the login page</p>
     <table width="100%">
       <tr>
         <th>Cost</th>

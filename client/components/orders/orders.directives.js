@@ -105,23 +105,7 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
       function displayVouchers(vouchers) {
         scope.vouchers = vouchers;
         var template =
-          '<div>'+
-          '<div class=\'small-12 medium-8 small-centered columns\'>'+
-          '<h3>Your purchase was a success.</h3>'+
-          '<p><b>Here are you voucher details, we have emailed a copy to you.</b></p>'+
-          '<div class=\'small-5 small-centered columns\'>'+
-          '<table width=\'100%\'>'+
-          '<tr>' +
-          '<th>Username</th><th>Password</th>'+
-          '<tr ng-repeat=\'voucher in vouchers\'>' +
-          '<td>{{voucher.username}}</td>'+
-          '<td>{{voucher.password}}</td>'+
-          '</tr>'+
-          '</table>' +
-          '</div>' +
-          '<button ng-click=\'loginNow()\' ng-disabled=\'loggingIn\'><span ng-if=\'!loggingIn\'>Login Now</span> <span ng-if=\'loggingIn\'>Logging In <i class="fa fa-cog fa-spin"></i></span></button>' +
-          '</div>' +
-          '</div>';
+          '<display-order></display-order>';
         var templateObj = $compile(template)(scope);
         element.html(templateObj);
       }
@@ -140,6 +124,45 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
     };
   }
 ]);
+
+app.directive('displayOrder', ['$compile', '$rootScope',
+  function($compile,$rootScope) {
+
+    function link(scope,element) {
+
+      scope.init = function() {
+        $rootScope.banneralert = 'banner-alert alert-box success';
+        $rootScope.error = 'Your purchase was a success';
+        var template =
+          '<div>'+
+          '<div class=\'small-12 medium-8 small-centered columns\'>'+
+          // '<div class=\'alert-box success\'>Your purchase was a success.</div>'+
+          '<p><b>Here are you voucher details, we have emailed a copy to you.</b></p>'+
+          '<div class=\'small-5 small-centered columns\'>'+
+          '<table width=\'100%\'>'+
+          '<tr>' +
+          '<th>Username</th><th>Password</th>'+
+          '<tr ng-repeat=\'voucher in vouchers\'>' +
+          '<td>{{voucher.username}}</td>'+
+          '<td>{{voucher.password}}</td>'+
+          '</tr>'+
+          '</table>' +
+          '</div>' +
+          '<button ng-click=\'loginNow()\' ng-disabled=\'loggingIn\'><span ng-if=\'!loggingIn\'>Login Now</span> <span ng-if=\'loggingIn\'>Logging In <i class="fa fa-cog fa-spin"></i></span></button>' +
+          '</div>' +
+          '</div>';
+        var templateObj = $compile(template)(scope);
+        element.html(templateObj);
+      };
+
+      scope.init();
+    }
+
+    return {
+      link: link
+    };
+
+}]);
 
 app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$window', 'CT',
   function($q, $cookies, $rootScope, $compile, $window, CT) {

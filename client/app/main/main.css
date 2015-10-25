@@ -197,3 +197,11 @@ input, textarea {
 input.has-error {
   border-bottom: 1px solid #c00!important;
 }
+
+#credit_card_form {
+  text-align: left;
+  margin: 0 auto;
+  max-width: 320px;
+  width: 100%;
+  border: 1px solid red;
+}

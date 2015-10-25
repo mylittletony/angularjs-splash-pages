@@ -1,11 +1,11 @@
 'use strict';
 
 var app = angular.module('ctLoginsApp', [
+  'ngStorage',
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ngStorage',
   'ctLoginsApp.controllers',
   'ctLoginsApp.services',
   'ctLoginsApp.directives',
