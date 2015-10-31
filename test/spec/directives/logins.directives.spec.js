@@ -572,6 +572,7 @@ describe('logins init', function () {
       $scope.products = [{ value: 100, description: 'Simon', _id: '999' }]
       $scope.store = { store_id: 12312312 }
       $scope.state = {};
+      $scope.cart = { cart: {} };
       element = angular.element('<display-store id="{{store.store_id}}" products="{{products}}"></display-store>');
       $compile(element)($rootScope)
       element.scope().$apply();
@@ -622,10 +623,12 @@ describe('logins init', function () {
       deferred.resolve(cart);
       $scope.$apply()
 
+      $scope.stripePayment()
+      expect($scope.cart.state).toBe('processing')
+      expect($scope.showcart).toBe(undefined)
+
       var token = { id: 123, email: 'simon@ps.com' }
       $scope.stripeProcess(token)
-      expect($scope.cart.state).toBe('processing')
-
       var order = {response: [{username: "feeling-7214", password: "letter"}]}
 
       // Client details //
@@ -648,10 +651,12 @@ describe('logins init', function () {
       deferred.resolve(cart);
       $scope.$apply()
 
+      $scope.stripePayment()
+      expect($scope.cart.state).toBe('processing')
+      expect($scope.showcart).toBe(undefined)
+
       var token = { id: 123, email: 'simon@ps.com' }
       $scope.stripeProcess(token)
-      expect($scope.cart.state).toBe('processing')
-
 
       // Client details //
       deferred.resolve({message: 123})

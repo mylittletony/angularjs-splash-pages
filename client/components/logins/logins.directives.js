@@ -515,12 +515,14 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
 
     scope.stripePayment = function() {
       $rootScope.banneralert = undefined;
-      handler.open({
-        name: 'Cucumber WiFi',
-        description: '2 widgets',
-        currency: scope.cart.store.currency || 'gbp',
-        amount: scope.cart.cart.total
-      });
+      if (handler) {
+        handler.open({
+          name: 'Cucumber WiFi',
+          description: '2 widgets',
+          currency: scope.cart.store.currency || 'gbp',
+          amount: scope.cart.cart.total
+        });
+      }
       scope.cart.state = 'processing';
       scope.showcart = undefined;
     };
