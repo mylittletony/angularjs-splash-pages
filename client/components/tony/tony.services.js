@@ -392,6 +392,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         signature:          loginDetails.signature,
         signatureVersion:   loginDetails.signature_version,
         signatureOrder:     loginDetails.signature_order,
+        uamip:              client.uamip,
         data:               JSON.stringify(loginDetails.data)
       }).$promise.then(function(res) {
         if (res.error) {
@@ -574,7 +575,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         uamip = $routeParams.uamip;
         uamport = $routeParams.uamport;
       } else if ($rootScope.deviceId === '7') {
-        uamip = $routeParams.sip;
+        uamip = $routeParams.nbiIP;
         clientMac = $routeParams.client_mac;
         clientIp = $routeParams.uip;
         apMac = $routeParams.mac;

@@ -20,6 +20,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
         clientMac: client.clientMac,
         clientIp: client.clientIp,
         apMac: client.apMac,
+        uamip: client.uamip,
         tags: client.apTags
       };
 
