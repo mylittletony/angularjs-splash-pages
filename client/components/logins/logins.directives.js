@@ -517,8 +517,8 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       $rootScope.banneralert = undefined;
       if (handler) {
         handler.open({
-          name: 'Cucumber WiFi',
-          description: '2 widgets',
+          name: 'WiFi Access',
+          description: scope.cart.products.length + ' Internet voucher',
           currency: scope.cart.store.currency || 'gbp',
           amount: scope.cart.cart.total
         });
