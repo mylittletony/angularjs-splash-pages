@@ -90,7 +90,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.newsletter      = (attrs.newsletter === 'true') || scope.email_required;
         scope.reqreg          = (attrs.reqreg === 'true');
         scope.btn_text        = (attrs.btntext || 'Submit');
-        scope.terms           = (attrs.terms === 'true');
+        
+        if (attrs.terms !== 'true') {
+          scope.show_terms = true;
+        }
 
       }, function(err) {
         scope.state.status = undefined;
