@@ -20,9 +20,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           scope.fields = custom_data.fields;
         }
         CT.login({
-          username: scope.username,
-          password: scope.password,
-          email: scope.email,
+          email:      scope.email,
+          username:   scope.username,
+          password:   scope.password,
+          logincode:  scope.logincode,
           newsletter: scope.newsletter,
           data: scope.fields
         }).then(onSuccess, onFail);
@@ -80,6 +81,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       scope.state.status      = undefined;
       scope.password          = undefined;
       scope.username          = undefined;
+      scope.logincode         = undefined;
       scope.error             = undefined;
     };
 
@@ -90,9 +92,13 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.newsletter      = (attrs.newsletter === 'true') || scope.email_required;
         scope.reqreg          = (attrs.reqreg === 'true');
         scope.btn_text        = (attrs.btntext || 'Submit');
-        
+
         if (attrs.terms !== 'true') {
           scope.show_terms = true;
+        }
+
+        if (attrs.unified === 'true') {
+          scope.show_unified = true;
         }
 
       }, function(err) {
