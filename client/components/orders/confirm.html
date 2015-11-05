@@ -11,21 +11,21 @@
     <div class='inner_container'>
       <div class='row' ng-show="state.order == 'loading'">
         <div class='small-12 medium-6 columns medium-centered'>
-        <br>
-        <br>
-        <h1>Processing, please hold tight</h1>
-        <p>Don't refresh the page, we'll send you on your way soon.</p>
+          <br>
+          <br>
+          <h1>Processing, please hold tight</h1>
+          <p>Don't refresh the page, we'll send you on your way soon.</p>
         </div>
       </div>
       <div class='row' ng-show="state.order == undefined">
         <div class='small-12 columns'>
           <h1>Your order is {{ order.state || 'processing...'}}</h1>
-          <span ng-show="order.state == 'pending'">
+          <div ng-show="order.state == 'pending'">
             <h3>Let's finish things up, <b>you have not been charged yet</b>.</h3>
-          </span>
-          <span ng-show="order.state == 'complete'">
+          </div>
+          <div ng-show="order.state == 'complete'">
             <h2>Hey, that's awesome! We've charged your PayPal account and you can now login. Yay.</h2>
-          </span>
+          </div>
           <!-- <hr> -->
           <finalise-order state="order.state">
             <guest-login reg="{{ splash.allow_registration }}"></guest-login>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="row footer">
-      <div id="" class="small-12 medium-6 columns">
+      <div class="small-12 medium-6 columns">
         <a class="left" href="{{ splash.copyright }}">Powered by PolkaSpots</a>
       </div>
       <div id="footer-right" class="small-12 medium-6 columns">

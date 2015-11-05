@@ -13,7 +13,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params.splash_id = $routeParams.splash_id;
       getLogins(params).then(function(results) {
         if (results.error) {
-          console.log(results)
           genericError(results);
           deferred.reject(results);
         } else {
@@ -74,12 +73,10 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
         'body {\n'+
         '\tmargin: 40px 0;\n'+
-        // '\tfont-family: {{ splash.font_family }}!important;\n' +
         '}\n\n' +
 
         'h1, h2, h3, p {\n'+
         '\tcolor: {{ splash.heading_text_colour || \'#F0F9FF\' }};\n'+
-        // '\tfont-family: {{ splash.font_family }}!important;\n' +
         '}\n\n' +
 
         '.splash-container {\n'+

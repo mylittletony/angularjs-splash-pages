@@ -16,7 +16,7 @@ if [[ $TRAVIS_PULL_REQUEST == "false" && ($TRAVIS_BRANCH == "master") || ( $TRAV
     heroku keys:clear
     rm -rf /home/travis/.ssh/id_rsa
     echo yes | heroku keys:add
-    grunt build
+    grunt build -v
     echo yes | grunt buildcontrol:heroku
     heroku keys:clear
 fi
