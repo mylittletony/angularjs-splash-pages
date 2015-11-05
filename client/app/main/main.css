@@ -55,8 +55,8 @@ body.login-layout {
 }
 
 .error {
-  color: #404040;
-  margin-top: 80px;
+  /* color: #404040; */
+  /* margin-top: 80px; */
   text-align: center;
 }
 

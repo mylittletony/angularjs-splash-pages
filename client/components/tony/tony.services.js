@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.tony.services', ['ngResource']);
 
-app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'API_END_POINT', '$sce',
-  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, API_END_POINT, $sce) {
+app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'API_END_POINT', '$sce', '$compile',
+  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, API_END_POINT, $sce, $compile) {
 
     var auth, client, loginDetails = {};
 
@@ -13,8 +13,9 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params.splash_id = $routeParams.splash_id;
       getLogins(params).then(function(results) {
         if (results.error) {
-          genericError(results.message);
-          deferred.reject(results.message);
+          console.log(results)
+          genericError(results);
+          deferred.reject(results);
         } else {
           if (results.archived === true) {
             archivedLocation();
@@ -55,10 +56,55 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       clearUp();
       var message = (msg.message === '' || msg.message === null || msg.message === undefined) ? msg : msg.message;
       $rootScope.state.errors = '<h1>' + message + '</h1>';
-      $rootScope.bodylayout = 'login-error' ;
-      // $timeout(function() {
-      //   $window.location.href = 'http://bbc.co.uk/';
-      // },1500);
+      $rootScope.splash = msg.splash;
+
+      var head = angular.element('head');
+      var template;
+
+      template =
+
+        'html {' +
+        '\tbackground: url({{ splash.background_image_name }}) no-repeat center center fixed;\n' +
+        '\t-webkit-background-size: cover;\n' +
+        '\t-moz-background-size: cover;\n' +
+        '\t-o-background-size: cover;\n'+
+        '\tbackground-size: cover;\n'+
+        '\tbackground-color: {{splash.background_image_name ? \'transparent\' : splash.body_background_colour || \'#32373A\'}}!important;\n'+
+        '}\n\n'+
+
+        'body {\n'+
+        '\tmargin: 40px 0;\n'+
+        // '\tfont-family: {{ splash.font_family }}!important;\n' +
+        '}\n\n' +
+
+        'h1, h2, h3, p {\n'+
+        '\tcolor: {{ splash.heading_text_colour || \'#F0F9FF\' }};\n'+
+        // '\tfont-family: {{ splash.font_family }}!important;\n' +
+        '}\n\n' +
+
+        '.splash-container {\n'+
+        '\ttext-align: center!important;\n'+
+        '\tpadding: 0px 0 0 0;\n'+
+        '\tmargin: 0 auto;\n'+
+        '\tmax-width: 600px;\n'+
+        '\twidth: 98%;\n'+
+        '}\n\n'+
+
+        '.inner_container {\n'+
+        '\ttext-align: {{ splash.container_text_align }};\n'+
+        '\tborder: 1px solid {{ splash.border_colour || \'#32373A\' }};\n'+
+        '\tbackground-color: {{ splash.container_colour || \'#32373A\' }}!important;\n'+
+        '\topacity: {{ splash.container_transparency }};\n'+
+        '\twidth: 100%!important;\n'+
+        '\tmax-width: 600px!important;\n'+
+        '\tmin-height: 100px;\n'+
+        '\tdisplay: block;\n'+
+        '\tpadding: 20px;\n'+
+        '}\n\n';
+
+
+      head.append($compile('<style>' + template + '</style>')($rootScope));
+
     };
 
     var clearUp = function() {

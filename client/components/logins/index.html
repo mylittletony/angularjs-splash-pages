@@ -1,7 +1,11 @@
 <build-page></build-page>
 
 <div ng-show="state.errors" ng-cloak>
-  <div class='error'><span ng-bind-html="state.errors"></span></div>
+  <!-- <div class="splash-container"> -->
+    <div class="inner_container">
+      <div class='error'><span ng-bind-html="state.errors"></span></div>
+    </div>
+  <!-- </div> -->
 </div>
 
 <div ng-hide="state.errors" ng-cloak>
