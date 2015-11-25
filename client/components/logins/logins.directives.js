@@ -25,6 +25,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           password:   scope.password,
           logincode:  scope.logincode,
           newsletter: scope.newsletter,
+          splash_id:  $routeParams.splash_id,
           data: scope.fields
         }).then(onSuccess, onFail);
       }

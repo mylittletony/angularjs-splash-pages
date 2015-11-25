@@ -147,6 +147,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.guestId            = params.guestId;
       loginDetails.userId             = params.userId;
       loginDetails.memberId           = params.memberId;
+      loginDetails.splash_id          = params.splash_id;
       loginDetails.signature          = params.signature;
       loginDetails.signature_order    = params.signature_order;
       loginDetails.signature_version  = params.signature_version;
@@ -421,6 +422,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         password:           loginDetails.password,
         logincode:          loginDetails.logincode,
         guestId:            loginDetails.guestId,
+        splash_id:          loginDetails.splash_id,
         challenge:          challenge,
         request_uri:        client.requestUri,
         clientMac:          client.clientMac,
