@@ -337,7 +337,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         };
         $http({
           method: 'patch',
-          url: API_END_POINT + '/guests/update_password',
+          url: API_END_POINT + '/logins/password',
           params: data
         }).
         success(function(guest) {
@@ -400,7 +400,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       };
       $http({
         method: 'post',
-        url: API_END_POINT + '/store_orders/remind',
+        url: API_END_POINT + '/logins/remind',
         params: data
       }).
       success(function() {
