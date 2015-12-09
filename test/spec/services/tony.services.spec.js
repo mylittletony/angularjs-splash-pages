@@ -189,7 +189,7 @@ describe("Tony Unit Tests", function() {
       var email = 's@p.com';
       var splash_id = '123';
 
-      httpBackend.whenPOST('http://mywifi.dev:8080/api/v1/store_orders/remind?email='+ email + '&splash_id=' + splash_id).respond(200, {});
+      httpBackend.whenPOST('http://mywifi.dev:8080/api/v1/logins/remind?email='+ email + '&splash_id=' + splash_id).respond(200, {});
       CTService.remind(email,splash_id).then(function(a) {
         expect(a).toEqual(email);
       });

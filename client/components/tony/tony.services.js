@@ -336,7 +336,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           // }
         };
         $http({
-          method: 'patch',
+          method: 'post',
           url: API_END_POINT + '/logins/password',
           params: data
         }).

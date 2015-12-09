@@ -682,7 +682,7 @@ describe('logins init', function () {
       $httpBackend = $injector.get('$httpBackend');
       timeout = _$timeout_
 
-      $httpBackend.when('POST', 'http://mywifi.dev:8080/api/v1/store_orders/remind?email=s@ps.com&splash_id=123')
+      $httpBackend.when('POST', 'http://mywifi.dev:8080/api/v1/logins/remind?email=s@ps.com&splash_id=123')
       .respond(200, {});
 
       $scope = $rootScope;

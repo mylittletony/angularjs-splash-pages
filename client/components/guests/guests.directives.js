@@ -39,7 +39,8 @@ app.directive('guestReset', ['$q', '$rootScope', '$routeParams', '$compile', 'CT
         '<div>' +
         '<div ng-show=\'reset\'>' +
         '<hr>'+
-        '<div class=\'alert-box success\'>A password reset has been initiated. Good things will happen soon.</div><p>If the token has expired, you will need to request another one.</p>'+
+        '<div class=\'\'><p><b>A password reset has been initiated.</b></p></div><br />'+
+        '<a href=\'http://bbc.co.uk\' class=\'button default\'>Login Now</a>'+
         '</div>'+
         '<div ng-hide=\'loading || reset\'>' +
         '<form ng-submit=\'submit(guest.password)\' name=\'myForm\'>'+

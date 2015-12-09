@@ -302,6 +302,8 @@ app.directive('forgotPassword', ['$timeout', '$location', '$compile', 'CT', func
       CT.remind(email, splash_id).then(function(res) {
         scope.reminded = true;
         $timeout(function() {
+          scope.reminding = undefined;
+          scope.reminded  = undefined;
           scope.init();
         },2000);
       }, function() {
@@ -330,7 +332,7 @@ app.directive('forgotPassword', ['$timeout', '$location', '$compile', 'CT', func
         '<label>Enter the email you signed-up with</label>'+
         '<input type=\'email\' ng-model=\'email\' placeholder=\'Enter the email you signed-up with\' autofocus required></input>'+
         '<br>'+
-        '<button ng-disabled=\'myForm.$invalid || myForm.$pristine\' class=\'button small success\'>Remind me <span ng-if=\'reminding\'><i class="fa fa-spinner fa-spin"></i></span></button>'+
+        '<button ng-disabled=\'myForm.$invalid || myForm.$pristine\' class=\'button btn small default\'>Remind me <span ng-if=\'reminding\'><i class="fa fa-cog fa-spin"></i></span></button>'+
         '<p><a href=\'\' ng-click=\'init()\'>Cancel</a></p>'+
         '</form>'+
         '</div>'+
@@ -674,7 +676,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
 
         'button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus, button:hover, button:focus, .button:hover, .button:focus {\n'+
         '\tbackground-color: {{splash.button_colour}}!important;\n'+
-        '\tborder-color: {{ splash.button_border_colour }};\n'+
+        '\tborder: 1px solid {{ splash.button_border_colour || \'#000\'}};\n'+
         '\topacity: 0.9;\n'+
         '}\n\n'+
 
