@@ -23,7 +23,7 @@ app.directive('linkedin', ['$window', '$compile', '$q', '$rootScope', '$timeout'
         } else {
           msg =
             '<div>' +
-            '<a href=\'\' ng-click=\'ctLogin()\' class=\'button linkedin\' >Linkedin <span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
+            '<a href=\'\' ng-click=\'ctLogin()\' class=\'social linkedin\' >Linkedin <span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
             '</div>';
           compileTemplate(msg);
         }
@@ -76,7 +76,7 @@ app.directive('linkedin', ['$window', '$compile', '$q', '$rootScope', '$timeout'
           scope.authorise();
         } else {
           var msg =
-            '<p><a href=\'\' ng-click=\'authoriseNewUser()\' class=\'button linkedin\'>LinkedIn</a></p>';
+            '<p><a href=\'\' ng-click=\'authoriseNewUser()\' class=\'social linkedin\'>LinkedIn</a></p>';
           compileTemplate(msg);
         }
         scope.liLoaded = true;
