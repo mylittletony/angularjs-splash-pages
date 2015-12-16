@@ -636,6 +636,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         'label {\n'+
         '\tfont-size: {{ splash.body_font_size }}!important;\n'+
         '\tcolor: {{ splash.body_text_colour }};\n'+
+        '\tmargin-bottom: 10px!important;\n'+
         '}\n\n'+
 
         'a {\n'+
