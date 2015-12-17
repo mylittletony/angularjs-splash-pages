@@ -10,17 +10,21 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
 
       var cartId  = $cookies.get('cartId');
       var guestId = $cookies.get('guestId');
+      var email   = $cookies.get('email');
 
       scope.finalise = function(guest) {
+
         scope.finalising = true;
         guest = guest || {};
+        var token = $routeParams.token || $routeParams.crypt;
+
         loadingTemplate();
 
         Order.finalise({
           guest_id: guestId,
-          email: guest.email,
+          email: email || guest.email,
           id: $routeParams.orderId,
-          token: $routeParams.token,
+          token: token,
           payerId: $routeParams.PayerID,
           cart_id: cartId
         }).$promise.then(function(results) {
@@ -31,11 +35,13 @@ app.directive('finaliseOrder', ['$q', '$rootScope', '$cookies', '$compile', '$ro
           }
           scope.state = 'complete!';
           $cookies.remove('cartId');
+          $cookies.remove('email');
         }, function() {
           scope.finalising = undefined;
           scope.finalised = undefined;
           scope.errors = true;
           $cookies.remove('cartId');
+          $cookies.remove('email');
         });
 
       };
@@ -138,7 +144,7 @@ app.directive('displayOrder', ['$compile', '$rootScope',
           '<div class=\'small-12 medium-8 small-centered columns\'>'+
           // '<div class=\'alert-box success\'>Your purchase was a success.</div>'+
           '<p><b>Here are you voucher details, we have emailed a copy to you.</b></p>'+
-          '<div class=\'small-5 small-centered columns\'>'+
+          '<div class=\'small-12 medium-12 small-centered columns\'>'+
           '<table width=\'100%\'>'+
           '<tr>' +
           '<th>Username</th><th>Password</th>'+
@@ -169,12 +175,15 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
 
     function link(scope,element,attrs,controller) {
 
+      scope.email      = $cookies.get('email');
       scope.guestLogin = function(guest) {
 
         scope.loading = true;
+        var email = scope.email || guest.email;
+
         clearScope();
 
-        CT.guestLogin({email: guest.email, password: guest.password}).then(function(resp) {
+        CT.guestLogin({email: email, password: guest.password}).then(function(resp) {
           scope.error = undefined;
           scope.loggedIn = true;
           $cookies.put('guestId', resp.guestId);
@@ -296,10 +305,15 @@ app.directive('guestLogin', ['$q', '$cookies', '$rootScope', '$compile', '$windo
           '<div class=\'small-11 small-centered columns\'>' +
           '<form name=\'myForm\' ng-submit=\'finaliseOrder(guest)\'>' +
           '<fieldset>'+
+          '<div ng-show=\'email\'>'+
+          '<p>Click finalise to complete your order. Your vouchers will appear here and a copy emailed to you.</p>'+
+          '</div>'+
+          '<div ng-hide=\'email\'>'+
           '<label for=\'email\'>Enter an email to validate the purchase.</label>'+
-          '<input type=\'email\' ng-model=\'guest.email\' placeholder=\'Email address\' name=\'email\' required></input>' +
+          '<input type=\'email\' ng-model=\'guest.email\' placeholder=\'Email address\' name=\'email\' ng-required=\'!email\'></input>' +
           '<br>'+
-          '<button ng-disabled="myForm.$invalid || myForm.$pristine" class="button" id="update">Finalise</button>'+
+          '</div>'+
+          '<button ng-disabled="myForm.$invalid" class="button btn" id="update">Finalise</button>'+
           '</fieldset>'+
           '</form>' +
           '</div>';

@@ -382,6 +382,8 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
 
   var link = function(scope, element, attrs) {
 
+    scope.customer = {};
+
     attrs.$observe('id', function(val){
       if (val !== '' ) {
         loadShop();
@@ -539,6 +541,25 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       scope.showcart = undefined;
     };
 
+    scope.saveSage = function() {
+      scope.redirecting = true;
+      Client.details().then(function(client) {
+        var return_url = $location.protocol() + '://' + $location.host() + '/confirm';
+        $cookies.put('email', scope.customer.email);
+        Order.create({clientMac: client.clientMac, return_url: return_url, cart_id: scope.cart.cart.cart_id, customer: scope.customer}).$promise.then(function(results) {
+          $localStorage.searchParams = JSON.stringify(client);
+          window.location.href = results.response;
+        }, function(err) {
+          console.log(err,123);
+          // $rootScope.banneralert = 'banner-alert alert-box alert';
+          // $rootScope.error = 'Your card was declined, please try again';
+          // scope.cart.state = 'declined';
+          // scope.cart.error = err.message;
+          // scope.showcart   = true;
+        });
+      });
+    };
+
     scope.loginNow = function() {
       scope.loggingIn = true;
       guestLogin().then(function(a) {
@@ -636,7 +657,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         'label {\n'+
         '\tfont-size: {{ splash.body_font_size }}!important;\n'+
         '\tcolor: {{ splash.body_text_colour }};\n'+
-        '\tmargin-bottom: 10px!important;\n'+
+        // '\tmargin-bottom: 10px!important;\n'+
         '}\n\n'+
 
         'a {\n'+
@@ -757,8 +778,8 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n' +
 
         '.columns {\n' +
-        '\tpadding-left: 0px!important;\n'+
-        '\tpadding-right: 0px!important;\n'+
+        // '\tpadding-left: 5px!important;\n'+
+        // '\tpadding-right: 5px!important;\n'+
         '}\n\n'+
 
         'p.required {\n'+
@@ -776,7 +797,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tbackground-color: {{ splash.input_background }}!important;\n'+
         '\tborder-width: {{ splash.input_border_width }}!important;\n'+
         '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
-        '\tmargin: 0 0 1rem -5px!important;\n'+
+        '\tmargin: 0 0 0.5rem -5px!important;\n'+
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 

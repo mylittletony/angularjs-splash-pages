@@ -223,6 +223,10 @@ a.social:hover {
   font-size: 15px!important;
 }
 
+.text-error {
+  color: #870000;
+}
+
 .store .text-danger {
   color: #870000;
 }
@@ -238,3 +242,4 @@ input.has-error {
   width: 100%;
   border: 1px solid red;
 }
+

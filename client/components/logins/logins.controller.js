@@ -92,7 +92,7 @@ app.controller('LoginsShopController', ['$q', '$cookies', '$rootScope', '$scope'
       var deferred = $q.defer();
 
       var orderId = $routeParams.orderId;
-      var token = $routeParams.token;
+      var token = $routeParams.token || $routeParams.crypt;
       var payerId = $routeParams.PayerID;
 
       Order.update({cart_id: cartId, id: orderId, token: token, payerId: payerId }).$promise.then(function(results) {

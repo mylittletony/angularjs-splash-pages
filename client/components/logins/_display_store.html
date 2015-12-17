@@ -4,7 +4,7 @@
     <div class="row">
       <div class="small-12 medium-8 columns medium-centered">
         <div class="panel">
-          <h1>{{ cart.products[0].value / 100 | currency: store.currency }} {{ cart.products[0].description }}</h1>
+          <h3>{{ cart.products[0].value / 100 | currency: store.currency }} {{ cart.products[0].description }}</h3>
         </div>
       </div>
     </div>
@@ -14,10 +14,70 @@
         <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">
       </a>
     </span>
+
+    <span ng-show="cart.store.merchant_type == 'sagepay'">
+      <div ng-hide="redirecting == true">
+        <form name="myForm" ng-submit="saveSage()">
+          <div class="row">
+            <div class="small-12 medium-8 large-6 medium-centered columns">
+              <h3>Fill in your details to purchase your voucher</h3>
+              <div class="row">
+                <div class="large-12 columns">
+                  <label>Enter your Email</label>
+                  <input type="email" name="email" ng-model="customer.email" placeholder="Enter your email" required><br>
+                  <span class="text-error" ng-show='myForm.email.$error.required'><small>Email is required.</small><br>
+                  <span class="text-error" ng-show='myForm.email.$error.email'><small>Email is invalid.</small></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="large-6 columns">
+                  <label>First Name
+                  </label>
+                    <input type="text" name="firstn" ng-model="customer.first_name" placeholder="First name" required>
+                </div>
+                <div class="large-6 columns">
+                  <label>Last Name</label>
+                  <input type="text" name="lastn" ng-model="customer.last_name" placeholder="Last name" required>
+                </div>
+                <span class="text-error" ng-show='myForm.firstn.$error.required || myFrom.lastn.$error.required'><small>First name and surname are required.</small><br>
+              </div>
+              <div class="row">
+                <div class="large-6 columns">
+                  <label>Address 1</label>
+                  <input type="text" name="address" ng-model="customer.address1" placeholder="Your first name" required>
+                </div>
+                <div class="large-6 columns">
+                  <label>Address 2</label>
+                  <input type="text" ng-model="customer.address2" placeholder="Your surname">
+                </div>
+                <span class="text-error" ng-show='myForm.address.$error.required'><small>An address is required.</small><br>
+              </div>
+              <div class="row">
+                <div class="large-6 columns">
+                  <label>City
+                  </label>
+                  <input type="text" name="city" ng-model="customer.city" placeholder="City or town" required>
+                </div>
+                <div class="large-6 columns">
+                  <label>Postcode
+                  </label>
+                  <input type="text" name="zip" ng-model="customer.zip" placeholder="Postal / Zip code" require>
+                </div>
+                <span class="text-error" ng-show='myForm.city.$error.required || myForm.zip.$error.required'><small>A city and postcode are required.</small><br>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <button ng-disabled="myForm.$invalid || myForm.$pristine" class="button btn">Purchase</button>
+          <p>You'll be redirected to Sage to enter your card details securely</p>
+        </form>
+      </div>
+    </span>
+
   </div>
   <div ng-if="redirecting">
     <br>
-    <h1>Redirecting you to PayPal, please hold tight</h1>
+    <h1>Redirecting you to {{ cart.store.merchant_type == 'paypal' ? "PayPal" : "Sage" }}, please hold tight</h1>
     <p>Don't refresh the page, we'll send you on your way soon.</p>
   </div>
 <!-- <hr> -->
