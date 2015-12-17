@@ -777,6 +777,10 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tpadding-top: 15px;\n'+
         '}\n\n' +
 
+        '.btn {\n' +
+        '\tmargin-top: 10px!important;\n'+
+        '}\n\n'+
+
         '.columns {\n' +
         // '\tpadding-left: 5px!important;\n'+
         // '\tpadding-right: 5px!important;\n'+
