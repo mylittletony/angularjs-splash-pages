@@ -81,6 +81,7 @@ app.constant('DEVICES', {
   xirrus: '6',
   vsz: '7',
   microtik: '8',
+  cisco: '9',
   preview: '500',
   unknown: '999'
 });
@@ -116,6 +117,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
             $rootScope.deviceId = DEVICES.ruckus;
           } else if ( $routeParams.mac_client !== undefined && $routeParams.device !== undefined ) {
             $rootScope.deviceId = DEVICES.microtik;
+          } else if ( $routeParams.switch_url !== undefined && $routeParams.redirect !== undefined ) {
+            $rootScope.deviceId = DEVICES.cisco;
           } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
             // $location.path('/hello');
           }

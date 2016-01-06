@@ -633,6 +633,9 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientIp = $routeParams.ip;
         apMac = $routeParams.mac;
         device = 'routerOS';
+      } else if ($rootScope.deviceId === '9') {
+        clientMac = $routeParams.client_mac;
+        apMac = $routeParams.ap_mac;
       }
       obj = {
         clientMac: clientMac,

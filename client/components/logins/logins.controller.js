@@ -29,22 +29,41 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
         if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
           $scope.goHome();
         }
-        $scope.store      = results.store;
-        $scope.cart       = { cart_id: null, products: null };
-        $scope.custom_url = results.splash.custom_url;
-        $scope.custom_css = results.splash.custom_css;
-        $scope.splash     = results.splash;
-        $scope.form       = results.form.body;
-        $scope.redirects  = results.redirects;
-        if (results.splash.registration === true && results.form && results.form.body && results.form.body.fields ) {
-          $scope.registration = true;
-          console.log('Displaying a registration page');
-        } else if (results.splash.registration === true) {
-          console.log('Welcome back, looks like you\'ve been here before.');
-        } 
+        if (results && results.splash) {
+          $scope.store      = results.store;
+          $scope.cart       = { cart_id: null, products: null };
+          $scope.custom_url = results.splash.custom_url;
+          $scope.custom_css = results.splash.custom_css;
+          $scope.splash     = results.splash;
+          $scope.form       = results.form.body;
+          $scope.redirects  = results.redirects;
+          if (results.splash.registration === true && results.form && results.form.body && results.form.body.fields ) {
+            $scope.registration = true;
+            console.log('Displaying a registration page');
+          } else if (results.splash.registration === true) {
+            console.log('Welcome back, looks like you\'ve been here before.');
+        }
+        } else {
+          genericError();
+
+
+        }
       }, function(err) {
 
       });
+
+    };
+
+    var genericError = function() {
+
+      var message = 'Incompatible device, please contact support';
+      $rootScope.state.errors = '<br><h1>' + message + '</h1>';
+
+      $rootScope.bodylayout = undefined;
+      $rootScope.hidden = undefined;
+
+      $rootScope.state.hidden = undefined;
+      $rootScope.state.status = undefined;
 
     };
 
