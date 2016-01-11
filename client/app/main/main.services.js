@@ -2,6 +2,7 @@
 
 var app = angular.module('ctLoginsApp.services', [
   'ctLoginsApp.aruba.services',
+  'ctLoginsApp.cisco.services',
   'ctLoginsApp.coova.services',
   'ctLoginsApp.logins.services',
   'ctLoginsApp.microtik.services',
