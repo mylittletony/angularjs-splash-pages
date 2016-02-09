@@ -1,3 +1,12 @@
+<div ng-show="debug == true">
+  Debugger
+  <ul class="no-bullet" ng-repeat="msg in messages">
+    <li>
+      {{ msg }}
+    </li>
+  </ul>
+</div>
+
 <build-page></build-page>
 
 <div ng-show="state.errors" ng-cloak>

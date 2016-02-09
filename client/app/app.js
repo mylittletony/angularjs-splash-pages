@@ -94,6 +94,14 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
         return response;
       },
 
+      responseError: function(rejection) {
+        if($routeParams.debug === 'true') {
+          // window.location = "noresponse.html";
+          console.log(rejection)
+        }
+        return $q.reject(rejection);
+      },
+
       request: function(config) {
         if ($routeParams.debug) {
           console.log($routeParams);
@@ -132,9 +140,9 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
         return config;
       },
 
-      responseError: function(response) {
-        return $q.reject(response);
-      }
+      // responseError: function(response) {
+      //   return $q.reject(response);
+      // }
     };
   }
 ]);

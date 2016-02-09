@@ -25,11 +25,15 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       };
 
       CT.init(params).then(function(results) {
+
         $scope.products = results.products;
         if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
           $scope.goHome();
         }
         if (results && results.splash) {
+          if (results.splash.display_console) {
+            debugging();
+          }
           $scope.store      = results.store;
           $scope.cart       = { cart_id: null, products: null };
           $scope.custom_url = results.splash.custom_url;
@@ -42,14 +46,16 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
             console.log('Displaying a registration page');
           } else if (results.splash.registration === true) {
             console.log('Welcome back, looks like you\'ve been here before.');
-        }
+          }
         } else {
           genericError();
-
-
         }
       }, function(err) {
-
+        if (true) {
+          debugging();
+          // throw new Error(err);
+          console.log(err);
+        }
       });
 
     };
@@ -65,6 +71,46 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       $rootScope.state.hidden = undefined;
       $rootScope.state.status = undefined;
 
+    };
+
+    var debugging = function () {
+
+      $scope.debug = true;
+      $scope.messages = [];
+      var c = 0;
+
+      var methods, generateNewMethod, i, j, cur, old, addEvent;
+
+      if ('console' in window) {
+        methods = [
+          'log', 'assert', 'clear', 'count"',
+          'debug', 'dir', 'dirxml', 'error',
+          'exception', 'group', 'groupCollapsed',
+          'groupEnd', 'info', 'profile', 'profileEnd',
+          'table', 'time', 'timeEnd', 'timeStamp',
+          'trace', 'warn'
+        ];
+
+        generateNewMethod = function (oldCallback, methodName) {
+          return function () {
+            var args;
+            c++;
+            var msg = c + ': called console.' + methodName + ', with ' + arguments.length + ' argument(s)' + arguments[0];
+            $scope.messages.push(msg);
+            if(!$scope.$$phase) {
+              $scope.$digest();
+            }
+          };
+        };
+
+        for (i = 0, j = methods.length; i < j; i++) {
+          cur = methods[i];
+          if (cur in console) {
+            old = console[cur];
+            console[cur] = generateNewMethod(old, cur);
+          }
+        }
+      }
     };
 
     $scope.$on('$routeChangeSuccess', function () {
