@@ -51,7 +51,9 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           genericError();
         }
       }, function(err) {
-        doDebug(err);
+        if (err.splash.display_console === true || DebugMe.active === true) {
+          doDebug();
+        }
       });
 
     };
