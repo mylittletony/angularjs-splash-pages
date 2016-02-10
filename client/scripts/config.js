@@ -6,4 +6,6 @@
 
 .constant('API_URL', 'http://mywifi.dev:8080')
 
+.constant('ENVIRONMENT', 'development')
+
 ;

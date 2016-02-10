@@ -243,3 +243,22 @@ input.has-error {
   border: 1px solid red;
 }
 
+.debugger {
+  background-color: #ccc;
+  min-height: 100px;
+  margin: -25px -10px 10px -10px;
+  padding: 20px;
+  font-family: courier!important;
+}
+
+.debugger h2 {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.debugger ul {
+  margin-bottom: 10px;
+}
+.debugger li {
+  font-size: 10px;
+}

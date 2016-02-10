@@ -13,13 +13,15 @@ var app = angular.module('ctLoginsApp', [
   'config'
 ]);
 
-app.config(function ($routeProvider, $locationProvider, $httpProvider) {
+app.config(function ($routeProvider, $locationProvider, $httpProvider, ENVIRONMENT) {
 
   $httpProvider.interceptors.push('apInterceptor');
 
-  // console.log('%cI do it with Tony everyday.', 'font: 3em sans-serif; color: red;');
-  // console.log('%cFrom time to time, we\'ll need some information from this console. This will help us debug problems you\'re having, we hope it\'s not too much bother.', 'font: 1.4em sans-serif; color: black; line-height: 1.4em;');
-  // console.log('%cThank you for for helping us build the awesome.', 'font: 1em sans-serif; color: black; line-height: 4em; border-bottom: 1px solid black;');
+  if (ENVIRONMENT === 'production') {
+    console.log('%cI\'m Cucumber, pleased to meet you.', 'font: 3em sans-serif; color: red;');
+    console.log('%cFrom time to time, we\'ll need some information from this console. This will help us debug problems you\'re having, we hope it\'s not too much bother. If you need even logs or want your customers to debug things a little easier, you can enable console debugging in your splash page settings. That\'s going turn the volume up to 11.', 'font: 1.4em sans-serif; color: black; line-height: 1.4em;');
+    console.log('%cThank you for for helping us build the awesome.', 'font: 1em sans-serif; color: black; line-height: 4em; border-bottom: 1px solid black;');
+  }
 
   $httpProvider.defaults.useXDomain = true;
   delete $httpProvider.defaults.headers.commonXRequestedWith;
@@ -86,63 +88,72 @@ app.constant('DEVICES', {
   unknown: '999'
 });
 
-app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', 'DEVICES',
-  function($q, $location, $rootScope, $routeParams, DEVICES) {
-    return {
+app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', 'DEVICES', 'CTDebugger',
+  function($q, $location, $rootScope, $routeParams, DEVICES, CTDebugger) {
 
-      response: function (response) {
-        return response;
-      },
+    var debug = function() {
+      if ($routeParams.debug  === 'true' || window.location.hostname === 'debug.my-wifi.co' || window.location.hostname === 'debug.my-wifi.dev') {
+        return true;
+      }
+    };
 
-      responseError: function(rejection) {
-        if($routeParams.debug === 'true') {
-          // window.location = "noresponse.html";
-          console.log(rejection)
+    var debugging;
+    var debuggingTool = function(err) {
+      if ( debug() ) {
+        if ( debugging === undefined) {
+          CTDebugger.debug();
+          debugging = true;
         }
-        return $q.reject(rejection);
-      },
+        console.log(err);
+      }
+    };
 
-      request: function(config) {
-        if ($routeParams.debug) {
-          console.log($routeParams);
+    var response = function (response) {
+      return response;
+    };
+
+    var request = function(config) {
+      var setDevice = function() {
+        if ($routeParams.preview === 'true') {
+          $rootScope.deviceId = DEVICES.preview;
+        } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
+          $rootScope.deviceId = DEVICES.ct;
+        } else if ( $routeParams.switchip !== undefined && $routeParams.cmd !== undefined ) {
+          $rootScope.deviceId = DEVICES.aruba;
+        } else if ( $routeParams['Called-Station-Id'] !== undefined && $routeParams['NAS-ID'] !== undefined) {
+          $rootScope.deviceId = DEVICES.aerohive;
+        } else if ( $routeParams.login_url !== undefined && $routeParams.ap_tags !== undefined) {
+          $rootScope.deviceId = DEVICES.meraki;
+        } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
+          $rootScope.deviceId = DEVICES.xirrus;
+        } else if ( $routeParams.sip !== undefined && $routeParams.nbiIP !== undefined) {
+          $rootScope.deviceId = DEVICES.vsz;
+        } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined && $routeParams.nbiIp === undefined) {
+          $rootScope.deviceId = DEVICES.ruckus;
+        } else if ( $routeParams.mac_client !== undefined && $routeParams.device !== undefined ) {
+          $rootScope.deviceId = DEVICES.microtik;
+        } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
+          // $location.path('/hello');
         }
-        var setDevice = function() {
-          if ($routeParams.preview === 'true') {
-            $rootScope.deviceId = DEVICES.preview;
-          } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
-            $rootScope.deviceId = DEVICES.ct;
-          } else if ( $routeParams.switchip !== undefined && $routeParams.cmd !== undefined ) {
-            $rootScope.deviceId = DEVICES.aruba;
-          } else if ( $routeParams['Called-Station-Id'] !== undefined && $routeParams['NAS-ID'] !== undefined) {
-            $rootScope.deviceId = DEVICES.aerohive;
-          } else if ( $routeParams.login_url !== undefined && $routeParams.ap_tags !== undefined) {
-            $rootScope.deviceId = DEVICES.meraki;
-          } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.apmac !== undefined) {
-            $rootScope.deviceId = DEVICES.xirrus;
-          } else if ( $routeParams.sip !== undefined && $routeParams.nbiIP !== undefined) {
-            $rootScope.deviceId = DEVICES.vsz;
-          } else if ( $routeParams.sip !== undefined && $routeParams.uip !== undefined && $routeParams.nbiIp === undefined) {
-            $rootScope.deviceId = DEVICES.ruckus;
-          } else if ( $routeParams.mac_client !== undefined && $routeParams.device !== undefined ) {
-            $rootScope.deviceId = DEVICES.microtik;
-          } else if ( $routeParams.switch_url !== undefined && $routeParams.redirect !== undefined ) {
-            $rootScope.deviceId = DEVICES.cisco;
-          } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
-            // $location.path('/hello');
-          }
-        };
+      };
 
-        $rootScope.$on('$routeChangeSuccess', function () {
-          if ($rootScope.deviceId === undefined) {
-            setDevice();
-          }
-        });
-        return config;
-      },
+      $rootScope.$on('$routeChangeSuccess', function () {
+        if ($rootScope.deviceId === undefined) {
+          setDevice();
+        }
+      });
+      return config;
+    };
 
-      // responseError: function(response) {
-      //   return $q.reject(response);
-      // }
+    var responseError = function(response) {
+      debuggingTool(response);
+      return $q.reject(response);
+    };
+
+    return { 
+      responseError: responseError,
+      response: response,
+      request: request
     };
   }
 ]);

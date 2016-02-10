@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.tony.services', ['ngResource']);
 
-app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'Cisco', 'API_END_POINT', '$sce', '$compile',
-  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, Cisco, API_END_POINT, $sce, $compile) {
+app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'API_END_POINT', '$sce', '$compile',
+  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, API_END_POINT, $sce, $compile) {
 
     var auth, client, loginDetails = {};
 
@@ -330,10 +330,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     function guestUpdatePassword(params) {
       var deferred = $q.defer();
         var data = {
-          // guest: {
-            token: params.token,
-            password: params.password,
-          // }
+          token: params.token,
+          password: params.password,
         };
         $http({
           method: 'post',
@@ -732,6 +730,107 @@ app.factory('Tony', ['$resource', 'API_END_POINT',
 
   });
 
+}]);
+
+app.factory('Ping', ['$http', '$q',
+
+  function($http, $q){
+
+    var ct = function(params) {
+
+      $http.defaults.headers.common = {};
+      $http.defaults.headers.post = {};
+
+      var d = Date.now();
+
+      var request = $http({
+        method: 'GET',
+        timeout: 3000,
+        // url: 'http://127.0.0.1:8080/api/v1/ping.json',
+        url: 'http://api.ctapp.io/api/v1/ping.json',
+        params: {
+          q: d
+        }
+      });
+
+      return( request.then( handleSuccess, handleError ) );
+    };
+
+    var handleError = function(err) {
+      console.log(err);
+      return( err );
+    };
+
+    var handleSuccess = function(response) {
+      console.log(response);
+      return( response );
+    };
+
+    return {
+      ct: ct
+    };
+
+}]);
+
+app.factory('CTDebug', [function() {
+  return { active: false, messages: [], count: 0 };
+}]);
+
+app.factory('CTDebugger', ['CTDebug', '$rootScope', '$routeParams', '$cookies', function(CTDebug, $scope, $routeParams, $cookies) {
+
+  var debugging = function () {
+
+    var methods, generateNewMethod, i, j, cur, old, addEvent;
+
+    if ('console' in window) {
+      methods = [
+        'log', 'assert', 'clear', 'count"',
+        'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed',
+        'groupEnd', 'info', 'profile', 'profileEnd',
+        'table', 'time', 'timeEnd', 'timeStamp',
+        'trace', 'warn'
+      ];
+
+      generateNewMethod = function (oldCallback, methodName) {
+        return function () {
+          var c = $scope.debug.count++;
+          var args = JSON.stringify(arguments[0]);
+          if ( args !== JSON.stringify({}) ) {
+            var msg = Date.now() + '-' + c + ': ' + args;
+            $scope.debug.messages.push(msg);
+            if(!$scope.$$phase) {
+              $scope.$digest();
+            }
+          }
+        };
+      };
+
+      for (i = 0, j = methods.length; i < j; i++) {
+        cur = methods[i];
+        if (cur in console) {
+          old = console[cur];
+          console[cur] = generateNewMethod(old, cur);
+        }
+      }
+    }
+  };
+
+  var debug = function() {
+
+    $scope.debug = CTDebug;
+    if ($scope.debug.active !== true) {
+      $scope.debug.active = true;
+      debugging($scope.debug);
+      console.log(navigator.platform + ' ' + navigator.userAgent);
+      console.log($routeParams);
+      console.log($cookies.getAll());
+    }
+  };
+
+  return {
+    debug: debug
+  };
 
 }]);
 

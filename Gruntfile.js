@@ -40,7 +40,8 @@ module.exports = function (grunt) {
         },
         constants: {
           API_END_POINT: 'http://mywifi.dev:8080/api/v1',
-          API_URL: 'http://mywifi.dev:8080'
+          API_URL: 'http://mywifi.dev:8080',
+          ENVIRONMENT: 'development'
           // API_END_POINT: 'https://api.polkaspots.com/api/v1',
           // API_URL: 'https://api.polkaspots.com'
         }
@@ -50,10 +51,9 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/scripts/config.js',
         },
         constants: {
-          // API_END_POINT: 'https://c7e5c5a6.ngrok.io/api/v1',
           API_END_POINT: 'https://api.ctapp.io/api/v1',
-          API_URL: 'https://api.ctapp.io'
-          // API_URL: 'https://c7e5c5a6.ngrok.io'
+          API_URL: 'https://api.ctapp.io',
+          ENVIRONMENT: 'production'
         }
       }
     },

@@ -8,8 +8,6 @@ app.factory('Ruckus', ['$http', '$q',
 
     var login = function(params) {
 
-      console.log(params,555555555555555555555555555555);
-
       $http.defaults.headers.common = {};
       $http.defaults.headers.post = {};
 

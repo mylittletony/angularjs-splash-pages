@@ -2,9 +2,9 @@
 
 var app = angular.module('ctLoginsApp.logins.controller', []);
 
-app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client',
+app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client', 'CTDebugger', 'Ping',
 
-  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client) {
+  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client, CTDebugger, Ping) {
 
     $rootScope.bodylayout = 'login-layout';
 
@@ -32,7 +32,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
         }
         if (results && results.splash) {
           if (results.splash.display_console) {
-            debugging();
+            doDebug();
           }
           $scope.store      = results.store;
           $scope.cart       = { cart_id: null, products: null };
@@ -51,17 +51,17 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           genericError();
         }
       }, function(err) {
-        if (true) {
-          debugging();
-          // throw new Error(err);
-          console.log(err);
-        }
+        doDebug(err);
       });
 
     };
 
-    var genericError = function() {
+    var doDebug = function(msg) {
+      CTDebugger.debug(msg);
+      Ping.ct();
+    };
 
+    var genericError = function() {
       var message = 'Incompatible device, please contact support';
       $rootScope.state.errors = '<br><h1>' + message + '</h1>';
 
@@ -70,47 +70,6 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
 
       $rootScope.state.hidden = undefined;
       $rootScope.state.status = undefined;
-
-    };
-
-    var debugging = function () {
-
-      $scope.debug = true;
-      $scope.messages = [];
-      var c = 0;
-
-      var methods, generateNewMethod, i, j, cur, old, addEvent;
-
-      if ('console' in window) {
-        methods = [
-          'log', 'assert', 'clear', 'count"',
-          'debug', 'dir', 'dirxml', 'error',
-          'exception', 'group', 'groupCollapsed',
-          'groupEnd', 'info', 'profile', 'profileEnd',
-          'table', 'time', 'timeEnd', 'timeStamp',
-          'trace', 'warn'
-        ];
-
-        generateNewMethod = function (oldCallback, methodName) {
-          return function () {
-            var args;
-            c++;
-            var msg = c + ': called console.' + methodName + ', with ' + arguments.length + ' argument(s)' + arguments[0];
-            $scope.messages.push(msg);
-            if(!$scope.$$phase) {
-              $scope.$digest();
-            }
-          };
-        };
-
-        for (i = 0, j = methods.length; i < j; i++) {
-          cur = methods[i];
-          if (cur in console) {
-            old = console[cur];
-            console[cur] = generateNewMethod(old, cur);
-          }
-        }
-      }
     };
 
     $scope.$on('$routeChangeSuccess', function () {
