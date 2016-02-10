@@ -676,7 +676,7 @@ describe('logins init', function () {
   describe('forgot passy link / template', function () {
 
     var timeout;
-    
+
     beforeEach(inject(function($compile, $rootScope, $q, $routeParams, $location, $httpBackend, $cookies, $injector, _$timeout_) {
 
       $httpBackend = $injector.get('$httpBackend');
