@@ -249,6 +249,7 @@ input.has-error {
   margin: -25px -10px 10px -10px;
   padding: 20px;
   font-family: courier!important;
+  overflow-wrap: break-word;
 }
 
 .debugger h2 {
