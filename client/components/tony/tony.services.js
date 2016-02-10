@@ -746,8 +746,7 @@ app.factory('Ping', ['$http', '$q',
       var request = $http({
         method: 'GET',
         timeout: 3000,
-        // url: 'http://127.0.0.1:8080/api/v1/ping.json',
-        url: 'http://api.ctapp.io/api/v1/ping.json',
+        url: 'https://api.ctapp.io/api/v1/ping.json',
         params: {
           q: d
         }
@@ -757,7 +756,7 @@ app.factory('Ping', ['$http', '$q',
     };
 
     var handleError = function(err) {
-      console.log(err);
+      // console.log(err);
       return( err );
     };
 
@@ -774,6 +773,17 @@ app.factory('Ping', ['$http', '$q',
 
 app.factory('CTDebug', [function() {
   return { active: false, messages: [], count: 0 };
+}]);
+
+app.factory('DebugMe', ['$routeParams', function($routeParams) {
+
+  var active = function() {
+    if ($routeParams.debug  === 'true' || window.location.hostname === 'debug.my-wifi.co' || window.location.hostname === 'debug.my-wifi.dev') {
+      return true;
+    }
+  };
+
+  return { active: active() };
 }]);
 
 app.factory('CTDebugger', ['CTDebug', '$rootScope', '$routeParams', '$cookies', function(CTDebug, $scope, $routeParams, $cookies) {

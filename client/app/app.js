@@ -150,7 +150,7 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
       return $q.reject(response);
     };
 
-    return { 
+    return {
       responseError: responseError,
       response: response,
       request: request

@@ -2,9 +2,9 @@
 
 var app = angular.module('ctLoginsApp.logins.controller', []);
 
-app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client', 'CTDebugger', 'Ping',
+app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client', 'CTDebugger', 'Ping', 'DebugMe',
 
-  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client, CTDebugger, Ping) {
+  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client, CTDebugger, Ping, DebugMe) {
 
     $rootScope.bodylayout = 'login-layout';
 
@@ -31,7 +31,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           $scope.goHome();
         }
         if (results && results.splash) {
-          if (results.splash.display_console) {
+          if (results.splash.display_console === true || DebugMe.active === true) {
             doDebug();
           }
           $scope.store      = results.store;
