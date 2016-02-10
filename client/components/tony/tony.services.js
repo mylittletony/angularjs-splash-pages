@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.tony.services', ['ngResource']);
 
-app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'API_END_POINT', '$sce', '$compile',
-  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, API_END_POINT, $sce, $compile) {
+app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'Cisco', 'API_END_POINT', '$sce', '$compile',
+  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, Cisco, API_END_POINT, $sce, $compile) {
 
     var auth, client, loginDetails = {};
 
@@ -756,7 +756,6 @@ app.factory('Ping', ['$http', '$q',
     };
 
     var handleError = function(err) {
-      // console.log(err);
       return( err );
     };
 
