@@ -851,5 +851,39 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
 
 }]);
 
+app.directive('googleAnalytics', ['$compile', function($compile) {
+
+  var link = function(scope,element,attrs) {
+    var init = function(id) {
+      var template = 
+        '<script>'+
+        '(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){'+
+        '  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),'+
+        '    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)'+
+        '})(window,document,"script","//www.google-analytics.com/analytics.js","ga");'+
+        'ga("create", "' + id + '", "auto");'+
+        'ga("send", "pageview");'+
+        '</script>';
+
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+
+    attrs.$observe('id', function(val){
+      if (val !== '') {
+        init(attrs.id);
+      }
+    });
+  };
+
+  return {
+    link: link,
+    scope: {
+      id: '@'
+    }
+  };
+}]);
+
+
 
 
