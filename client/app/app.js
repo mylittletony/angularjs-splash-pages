@@ -120,7 +120,7 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
           $rootScope.deviceId = DEVICES.ct;
         } else if ( $routeParams.switch_url !== undefined && $routeParams.wlan !== undefined ) {
           $rootScope.deviceId = DEVICES.cisco;
-        } else if ( $routeParams.switchip !== undefined && $routeParams.cmd !== undefined ) {
+        } else if ( $routeParams.apname !== undefined && $routeParams.cmd !== undefined ) {
           $rootScope.deviceId = DEVICES.aruba;
         } else if ( $routeParams['Called-Station-Id'] !== undefined && $routeParams['NAS-ID'] !== undefined) {
           $rootScope.deviceId = DEVICES.aerohive;
