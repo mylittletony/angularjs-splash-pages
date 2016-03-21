@@ -39,9 +39,9 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           $scope.custom_url = results.splash.custom_url;
           $scope.custom_css = results.splash.custom_css;
           $scope.splash     = results.splash;
-          
+
           $rootScope.gaid   = results.splash.google_analytics_id;
-          
+
           if (results.form) {
             $scope.form       = results.form.body;
           }
@@ -56,7 +56,8 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           genericError();
         }
       }, function(err) {
-        if (err.splash.display_console === true || DebugMe.active === true) {
+        console.log('Connection error msg:', err);
+        if (err && err.splash && err.splash.display_console === true || DebugMe.active === true) {
           doDebug();
         }
       });
