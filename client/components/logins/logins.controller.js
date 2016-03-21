@@ -56,7 +56,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           genericError();
         }
       }, function(err) {
-        console.log('Connection error msg:', err);
+        console.log('Cannot connect to the Internet:', err);
         if (err && err.splash && err.splash.display_console === true || DebugMe.active === true) {
           doDebug();
         }
