@@ -372,7 +372,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     function status() {
       var deferred = $q.defer();
       if ($rootScope.deviceId === '1') {
-        Coova.status({}).$promise.then(function(res) {
+        Coova.status().then(function(res) {
           if (res.clientState === 0) {
             deferred.resolve(res);
           } else {
@@ -380,7 +380,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
             deferred.reject(msg);
           }
         }, function(err) {
-          var msg = '<h1>Connection Error </h1><p>You can\'t view the splash pages unless you\'re attached to the hotspot.<br>Reconnect to the Public Wi-Fi and try again.</p>';
+          var msg = '<h1>Connection Error </h1><p>Ensure you\'re connected to a hotspot. Unable to communicate with access point.</p>';
           deferred.reject(msg);
         });
       } else {
@@ -492,7 +492,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         uamSsl: client.uamSsl,
         username: auth.username,
         response: auth.password
-      }).$promise.then(function(res) {
+      }).then(function(res) {
         if (res.clientState === 1) {
           deferred.resolve();
         } else {

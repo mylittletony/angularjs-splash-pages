@@ -395,7 +395,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     function loadShop() {
       scope.cartId = $cookies.get('cartId');
       if (scope.cartId === undefined) {
-        scope.showstore = true;
+        scope.showcart = true;
       } else {
         scope.getCart();
       }
@@ -410,6 +410,8 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
           loadStripe();
         }
         sliceProducts(scope.cart.products[0]._id);
+      }, function() {
+        scope.showcart = true;
       });
     };
 
@@ -459,7 +461,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
       $rootScope.banneralert = 'banner-alert alert-box success';
       $rootScope.error = 'That\'s gone well. We\'ve emptied your cart.';
       scope.cart = undefined;
-      scope.showcart = undefined;
+      scope.showcart = true;
     }
 
     scope.emptyCart = function() {
@@ -495,6 +497,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
         // image: '/img/documentation/checkout/marketplace.png',
         locale: 'auto',
         token: function(token) {
+          scope.stripe = true;
           scope.stripeProcess(token);
         },
         closed: function() {
@@ -507,22 +510,24 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     };
 
     scope.stripeProcess = function(token) {
-      scope.$digest();
       createOrder(token);
     };
 
     var createOrder = function(token) {
       Client.details().then(function(client) {
         Order.create({clientMac: client.clientMac, cart_id: scope.cart.cart.cart_id, email: token.email, card: token.id }).$promise.then(function(results) {
+          scope.showcart = undefined;
+          scope.stripe = undefined;
           scope.vouchers = results.response;
           scope.cart.state = 'complete';
           $cookies.remove('cartId');
         }, function(err) {
+          console.log('Order creation error:', err);
+          scope.stripe = undefined;
           $rootScope.banneralert = 'banner-alert alert-box alert';
-          $rootScope.error = 'Your card was declined, please try again';
-          scope.cart.state = 'declined';
-          scope.cart.error = err.message;
-          scope.showcart   = true;
+          $rootScope.error = 'There was a problem processing your order.';
+          scope.cart.state = undefined;
+          $cookies.remove('cartId');
         });
       });
     };
@@ -550,7 +555,7 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
           $localStorage.searchParams = JSON.stringify(client);
           window.location.href = results.response;
         }, function(err) {
-          console.log(err,123);
+          console.log(err);
           // $rootScope.banneralert = 'banner-alert alert-box alert';
           // $rootScope.error = 'Your card was declined, please try again';
           // scope.cart.state = 'declined';
@@ -588,12 +593,10 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
 
 
     var cleanUp = function() {
-
       $rootScope.bodylayout = undefined;
       scope.state.hidden = undefined;
       scope.state.status = undefined;
       scope.error = undefined;
-
     };
 
   };
@@ -855,7 +858,7 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
 
   var link = function(scope,element,attrs) {
     var init = function(id) {
-      var template = 
+      var template =
         '<script>'+
         '(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){'+
         '  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),'+

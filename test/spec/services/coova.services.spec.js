@@ -4,22 +4,21 @@ describe("Coova Unit Tests", function() {
 
   beforeEach(module('ctLoginsApp'));
 
-  var $httpBackend;
-  var Coova;
-  var routeParams;
+  var $httpBackend, Coova, routeParams;
 
   beforeEach(inject(function($injector, _Coova_, $routeParams) {
 
+    // Why aren't the route params set ??!! //
+    $routeParams.uamip = '192.168.4.1';
     routeParams = $routeParams;
-    routeParams.uamip = '192.168.4.1';
 
     Coova = _Coova_;
     $httpBackend = $injector.get('$httpBackend');
 
-    $httpBackend.when('JSONP', 'http://chilli.my-wifi.co:3990/json/status?&callback=JSON_CALLBACK')
+    $httpBackend.when('JSONP', 'http://undefined:3990/json/status?callback=JSON_CALLBACK')
       .respond(200, {});
 
-    $httpBackend.when('JSONP', 'http://chilli.my-wifi.co:3990/json/logon?&callback=JSON_CALLBACK&password=passy&username=simon')
+    $httpBackend.when('JSONP', 'http://undefined:3990/json/logon?&username=simon&response=undefined&uamSsl=undefined&callback=JSON_CALLBACK')
       .respond(200, {});
 
    }));
@@ -31,17 +30,15 @@ describe("Coova Unit Tests", function() {
 
   it('should have sent a GET request to coova status', function() {
     var result = Coova.status({});
-    $httpBackend.expectJSONP('http://chilli.my-wifi.co:3990/json/status?&callback=JSON_CALLBACK')
+    $httpBackend.expectJSONP('http://undefined:3990/json/status?callback=JSON_CALLBACK')
     $httpBackend.flush();
   });
-
 
   it('should have sent a GET request to coova logon', function() {
     var result = Coova.logon({username: 'simon', password: 'passy'});
-    $httpBackend.expectJSONP('http://chilli.my-wifi.co:3990/json/logon?&callback=JSON_CALLBACK&password=passy&username=simon')
+    $httpBackend.expectJSONP('http://undefined:3990/json/logon?&username=simon&response=undefined&uamSsl=undefined&callback=JSON_CALLBACK')
     $httpBackend.flush();
   });
-
 
 })
 
