@@ -9,11 +9,11 @@ app.factory('Coova', ['$http', '$q', '$location', '$routeParams',
     var host, port;
     if ( $location.protocol() === 'https' ) {
       host = 'chilli.my-wifi.co';
-      port = 4990;
+      port = $routeParams.uamport || 4990;
     }
     else {
       host = $routeParams.uamip;
-      port = 3990;
+      port = $routeParams.uamport || 3990;
     }
 
     var status = function(params) {
