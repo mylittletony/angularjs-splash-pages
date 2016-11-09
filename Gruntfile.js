@@ -421,7 +421,7 @@ module.exports = function (grunt) {
       },
       heroku: {
         options: {
-          // remote: 'git@heroku.com:secure-mesa-9387.git',
+          // remote: 'git@heroku.com:lit-reef-11568.git',
           remote: 'git@heroku.com:salty-shore-3757.git',
           branch: 'master'
         }
