@@ -1,6 +1,9 @@
 <div id='container-c1' ng-class="splash.design_id === 2 ? 'small-12 medium-6 columns' : 'skinny-c1'">
   <h1>{{ splash.header_text }}</h1>
   <h2>{{ splash.info }}</h2>
+  <h3 ng-show="!splash.location_image_name && splash.info_two ">
+    {{ splash.info_two }}
+  </h3>
   <span ng-if="products.length && splash.design_id == 1">
     <h2 class="shop"><a href="" ng-click="goShop()" class="ct-buy-access">{{ splash.store_buy_link_text || "Buy Voucher Now" }}</a></h2>
     <p>Buy time and get online</p>
