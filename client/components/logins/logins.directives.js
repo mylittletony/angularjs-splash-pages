@@ -8,6 +8,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
   var link = function(scope,element,attrs) {
 
     scope.submit = function(custom_data) {
+      if (scope.loggingIn) {
+        return;
+      }
+      scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
       } else {
@@ -221,17 +225,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       terms: '@',
       btntext: '@'
     },
-    // template:
-    //   '<div>'+
-    //   '{{ fields }}'+
-    //   '<form name="loginForm" novalidate>'+
-    //   '<div ng-form="sF_{{$index}}" ng-repeat="name in fields | orderBy: \'order\' ">' +
-    //   '<input type="{{ name.field_type }}" ng-model="name.value" name="input_{{$index}}_0" ng-required="name.required" placeholder=\'Enter your {{ name.name }}\'></input>' +
-    //   '<p class="text-danger" ng-show="loginForm.sF_{{$index}}.input_{{$index}}_0.$error.required">{{ name.name }} required</p>'+
-    //   '</div>' +
-    //   '<button ng-click="oh()">OH</button>' +
-    //   '</form>' +
-    //   '</div>'
   };
 
 }]);
