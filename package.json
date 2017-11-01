@@ -19,7 +19,7 @@
     "serve-favicon": "~2.0.1"
   },
   "devDependencies": {
-    "cli-color": "^1.1.0",
+    "cli-color": "^1.2.0",
     "connect-livereload": "~0.4.0",
     "grunt": "~0.4.4",
     "grunt-angular-templates": "^0.5.4",
@@ -46,7 +46,7 @@
     "grunt-newer": "~0.7.0",
     "grunt-ng-annotate": "^0.2.3",
     "grunt-ng-constant": "^1.0.0",
-    "grunt-node-inspector": ">=0.2.0",
+    "grunt-node-inspector": "^1.0.0",
     "grunt-nodemon": "~0.2.0",
     "grunt-open": "~0.2.3",
     "grunt-protractor-runner": "^1.1.0",
@@ -80,7 +80,7 @@
     "time-grunt": "~0.3.1"
   },
   "engines": {
-    "node": "~5.1.0"
+    "node": "^6.11.5"
   },
   "scripts": {
     "start": "node server/app.js",
