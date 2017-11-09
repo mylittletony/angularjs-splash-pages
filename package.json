@@ -19,6 +19,7 @@
     "serve-favicon": "~2.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.10.4",
     "cli-color": "^1.2.0",
     "connect-livereload": "~0.4.0",
     "grunt": "~0.4.4",
