@@ -421,13 +421,20 @@ module.exports = function (grunt) {
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
       },
-      heroku: {
+      beta: {
         options: {
-          // remote: 'git@heroku.com:lit-reef-11568.git',
-          remote: 'git@heroku.com:salty-shore-3757.git',
-          branch: 'master'
+          remote: 'git@heroku.com:beta-login-pages.git',
+          branch: 'master',
+          force: true
         }
       },
+        heroku: {
+          options: {
+            remote: 'git@heroku.com:salty-shore-3757.git',
+            branch: 'master',
+            force: true
+          }
+        },
       openshift: {
         options: {
           remote: 'openshift',

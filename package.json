@@ -75,9 +75,6 @@
     "supertest": "~0.11.0",
     "time-grunt": "~0.3.1"
   },
-  "engines": {
-    "node": "~5.1.0"
-  },
   "scripts": {
     "start": "node server/app.js",
     "test": "grunt test",
