@@ -61,8 +61,8 @@ jobs:
           command: npm install && bower install && npm install grunt-contrib-sass --save
 
       - run: |
-          grunt build
-          git config --global user.email "simon@polkaspots.com"\
+          grunt build -v \
+          && git config --global user.email "simon@polkaspots.com"\
           && git config --global user.name "Simon Morley"
 
       - run: |
