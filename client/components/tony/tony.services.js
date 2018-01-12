@@ -153,38 +153,38 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.signature_version  = params.signature_version;
 
       Client.details()
-      .then(function(resp) {
-        client = resp;
-        status()
-        .then(function(coovaResp) {
-          loginDetails.authResp = coovaResp;
-          createLogin()
-          .then(function(response) {
-            //////////////////////////////////////////////////
-            // Meraki login if state is present in response /////////
-            // Is now also for VSG users or other server side auth ///
-            // ///////////////////////////////////////////////
-            if (response.state !== undefined) {
-              if (response.state === 1) {
-                deferred.resolve();
-              } else {
-                deferred.reject(response);
-              }
-            } else {
-              finaliseLogin(response)
-              .then(function() {
-                deferred.resolve(auth);
-              }, function(err) {
-                deferred.reject(err);
-              });
-            }
-          }, function(err) {
-            deferred.reject(err);
-          });
+        .then(function(resp) {
+          client = resp;
+          status()
+            .then(function(coovaResp) {
+              loginDetails.authResp = coovaResp;
+              createLogin()
+                .then(function(response) {
+                  //////////////////////////////////////////////////
+                  // Meraki login if state is present in response /////////
+                  // Is now also for VSG users or other server side auth ///
+                  // ///////////////////////////////////////////////
+                  if (response.state !== undefined) {
+                    if (response.state === 1) {
+                      deferred.resolve();
+                    } else {
+                      deferred.reject(response);
+                    }
+                  } else {
+                    finaliseLogin(response)
+                      .then(function() {
+                        deferred.resolve(auth);
+                      }, function(err) {
+                        deferred.reject(err);
+                      });
+                  }
+                }, function(err) {
+                  deferred.reject(err);
+                });
+            });
+        }, function(err) {
+          deferred.reject(err);
         });
-      }, function(err) {
-        deferred.reject(err);
-      });
       return deferred.promise;
     }
 
@@ -445,7 +445,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-          console.log('Auth OK for', res.username);
+          console.log('Auth OK for', res.username || 'unknown user');
           deferred.resolve(options);
         }
       }, function(err) {
@@ -482,6 +482,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         return microtikLogin();
       } else if ($rootScope.deviceId === '9') {
         return ciscoLogin();
+      } else if ($rootScope.deviceId === '10') {
+        return unifiLogin();
       }
       return deferred.promise;
     };
@@ -545,6 +547,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       });
     };
 
+    var unifiLogin = function() {
+      var deferred = $q.defer();
+      auth.type = 'unifi';
+      deferred.resolve();
+      return deferred.promise;
+    };
+
     var ruckusLogin = function() {
       var deferred = $q.defer();
       auth.type = 'ruckus';
@@ -586,7 +595,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid;
     var obj;
 
     var details = function() {
@@ -647,6 +656,10 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientMac = $routeParams.client_mac;
         apMac = $routeParams.ap_mac;
         uamip = $routeParams.switch_url;
+      } else if ($rootScope.deviceId === '10') {
+        clientMac = $routeParams.id;
+        apMac = $routeParams.ap;
+        ssid = $routeParams.ssid;
       }
       obj = {
         clientMac: clientMac,
@@ -661,7 +674,8 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         requestUri: $location.host(),
         challenge: challenge,
         uamSsl: uamSsl,
-        device: device
+        device: device,
+        ssid: ssid,
       };
 
       if (obj.clientMac === undefined) {

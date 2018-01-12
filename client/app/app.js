@@ -67,6 +67,11 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider, ENVIRONME
       reloadOnSearch: false,
       controller: 'LoginsController'
     })
+    .when('/guest/s/:zone', {
+      templateUrl: 'components/logins/index.html',
+      reloadOnSearch: false,
+      controller: 'LoginsController'
+    })
     .otherwise({
       redirectTo: '/'
     });
@@ -84,6 +89,7 @@ app.constant('DEVICES', {
   vsz: '7',
   microtik: '8',
   cisco: '9',
+  unifi: '10',
   preview: '500',
   unknown: '999'
 });
@@ -134,6 +140,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
           $rootScope.deviceId = DEVICES.ruckus;
         } else if ( $routeParams.mac_client !== undefined && $routeParams.device !== undefined ) {
           $rootScope.deviceId = DEVICES.microtik;
+        } else if ( $routeParams.id !== undefined && $routeParams.ap !== undefined ) {
+          $rootScope.deviceId = DEVICES.unifi;
         } else if ( $location.path() !== '/confirm' && $location.path() !== '/reset') {
           // $location.path('/hello');
         }

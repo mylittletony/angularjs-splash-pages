@@ -47,6 +47,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var onFail = function(err) {
+      scope.loggingIn = undefined;
       // Insert a CT service error handler //
       cleanUp();
       $rootScope.banneralert = 'banner-alert alert-box alert';
@@ -57,7 +58,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var finishLogin = function() {
       cleanUp();
       scope.success = true;
-      CT.reporter().then(redirectUser);
+      redirectUser();
     };
 
     var loginRuckus = function(auth) {
