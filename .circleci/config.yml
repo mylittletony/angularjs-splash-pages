@@ -78,7 +78,7 @@ jobs:
           then
             rm -rf dist/.git && grunt buildcontrol:beta && echo 'Done!'
           else
-            echo 'Not updating beta branch...'
+            echo 'Not updating beta branch.'
           fi
 
 workflows:
