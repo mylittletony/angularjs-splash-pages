@@ -616,6 +616,7 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         uamSsl = $routeParams.ssl;
       } else if ($rootScope.deviceId === '11') {
         clientMac = $routeParams.mac;
+        challenge = $routeParams.challenge;
         apMac = $routeParams.called;
         redirectUri = $routeParams.userurl;
         uamip = $routeParams.uamip;
