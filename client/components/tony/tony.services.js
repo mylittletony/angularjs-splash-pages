@@ -485,13 +485,40 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       } else if ($rootScope.deviceId === '10') {
         return unifiLogin();
       } else if ($rootScope.deviceId === '11') {
-        // return cloudtraxLogin();
-        coovaLogin().then(function() {
+        cloudtraxLogin().then(function() {
           deferred.resolve();
         }, function(err) {
           deferred.reject(err);
         });
       }
+      return deferred.promise;
+    };
+
+    var cloudtraxLogin = function() {
+      var deferred = $q.defer();
+      Coova.cloudtrax({
+        username: auth.username,
+        password: auth.password
+      }).then(function(res) {
+        if (res.clientState === 1) {
+          deferred.resolve();
+        } else {
+          var msg = res.message || 'Unable to log you in.';
+          deferred.reject(msg); // {msg: msg, res: auth});
+        }
+      }, function(err) {
+        var msg;
+        if (err.status === 0 || err.status === -1) {
+          msg = 'Connection failure, check your firewall settings. Ref: #9862';
+        } else if (err.status === 404) {
+          // Currently get this when the radius returns a response //
+          // Chilli is formatting the JSON strangely and we get into the weirdness //
+          msg = 'There was a problem logging you in. Please try again';
+        } else {
+          msg = err;
+        }
+        deferred.reject(msg);
+      });
       return deferred.promise;
     };
 

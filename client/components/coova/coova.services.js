@@ -34,6 +34,17 @@ app.factory('Coova', ['$http', '$q', '$location', '$routeParams',
       return( request.then( handleSuccess, handleError ) );
     };
 
+    // Old skool chilli
+    var cloudtrax = function(params) {
+      console.log(params)
+      var request = $http({
+        method: 'GET',
+        timeout: 3000,
+        url: $location.protocol() + '://' + host + ':' + port + '/json/logon?&username='+ params.username+'&password='+params.password,
+      });
+      return( request.then( handleSuccess, handleError ) );
+    };
+
     var handleError = function(response) {
       return(response);
     };
@@ -44,7 +55,8 @@ app.factory('Coova', ['$http', '$q', '$location', '$routeParams',
 
     return {
       status: status,
-      logon: logon
+      logon: logon,
+      cloudtrax: cloudtrax
     };
 
 }]);
