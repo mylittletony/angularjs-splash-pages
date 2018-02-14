@@ -484,6 +484,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         return ciscoLogin();
       } else if ($rootScope.deviceId === '10') {
         return unifiLogin();
+      } else if ($rootScope.deviceId === '11') {
+        // return cloudtraxLogin();
+        coovaLogin().then(function() {
+          deferred.resolve();
+        }, function(err) {
+          deferred.reject(err);
+        });
       }
       return deferred.promise;
     };
@@ -589,13 +596,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     };
 
   }
-]);
+])
 
 app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localStorage',
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid, type;
     var obj;
 
     var details = function() {
@@ -607,6 +614,14 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         uamip = $routeParams.uamip;
         uamport = $routeParams.uamport;
         uamSsl = $routeParams.ssl;
+      } else if ($rootScope.deviceId === '11') {
+        clientMac = $routeParams.mac;
+        apMac = $routeParams.called;
+        redirectUri = $routeParams.userurl;
+        uamip = $routeParams.uamip;
+        uamport = $routeParams.uamport;
+        uamSsl = $routeParams.ssl;
+        type = 'ctx';
       } else if ($rootScope.deviceId === '2') {
         clientMac = $routeParams.mac;
         if ( $routeParams.apname !== undefined ) {

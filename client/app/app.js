@@ -57,6 +57,11 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider, ENVIRONME
     .when('/hello', {
       templateUrl: 'components/logins/hello.html',
     })
+    .when('/ctx', {
+      templateUrl: 'components/logins/index.html',
+      reloadOnSearch: false,
+      controller: 'LoginsController'
+    })
     .when('/:splash_id', {
       templateUrl: 'components/logins/index.html',
       reloadOnSearch: false,
@@ -90,6 +95,7 @@ app.constant('DEVICES', {
   microtik: '8',
   cisco: '9',
   unifi: '10',
+  cloudtrax: '11',
   preview: '500',
   unknown: '999'
 });
@@ -122,6 +128,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
       var setDevice = function() {
         if ($routeParams.preview === 'true') {
           $rootScope.deviceId = DEVICES.preview;
+        } else if ($location.path() === '/ctx' && $routeParams.uamip !== undefined) {
+          $rootScope.deviceId = DEVICES.cloudtrax;
         } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
           $rootScope.deviceId = DEVICES.ct;
         } else if ( $routeParams.switch_url !== undefined && $routeParams.wlan !== undefined ) {
