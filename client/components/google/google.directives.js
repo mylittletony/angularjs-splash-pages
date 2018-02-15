@@ -87,7 +87,7 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
     function buildTemplate() {
       var msg =
         '<div>'+
-        '<a href=\'\' ng-click=\'checkState()\' class=\'social google\' >Google+ <span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
+        '<a href=\'\' ng-click=\'checkState()\' class=\'social google\' >Continue with Google<span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
         '</div>';
         compileTemplate(msg);
     }
@@ -123,4 +123,3 @@ app.directive('google', ['$window', '$compile', '$q', '$rootScope', '$timeout', 
   };
 
 }]);
-
