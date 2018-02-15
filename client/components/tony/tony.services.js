@@ -230,6 +230,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         access_token: params.accessToken,
         message: params.message
       };
+
       fbCheckin(options).then(function(msg) {
         deferred.resolve(msg);
       }, function(err) {
@@ -245,12 +246,12 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         url: 'https://graph.facebook.com/me/feed',
         params: options
       }).
-      success(function(msg) {
-        deferred.resolve(msg);
-      }).
-      error(function(err) {
-        deferred.reject(err.error);
-      });
+        success(function(msg) {
+          deferred.resolve(msg);
+        }).
+        error(function(err) {
+          deferred.reject(err.error);
+        });
       return deferred.promise;
     };
 
@@ -415,7 +416,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var deferred = $q.defer();
       var challenge = (loginDetails.authResp && loginDetails.authResp.challenge ) ? loginDetails.authResp.challenge : client.challenge;
       var gid = $cookies.get('_ga');
-      console.log('gid', gid);
 
       Tony.create({
         username:           loginDetails.username,

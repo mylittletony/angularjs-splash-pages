@@ -46,9 +46,9 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
     function failOne() {
     }
 
-    function loginHandler (params) {
+    function loginHandler () {
       if (attrs.fbCheckin === 'true'){
-        addCheckinForm(params);
+        addCheckinForm();
       } else {
         redirect();
       }
@@ -64,7 +64,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
 
       var msg =
         '<div class=\'small-12 medium-8 medium-centered columns\'>'+
-        '<label for=\'checkin\'>Hey, ' + user.first_name + ', <b> you just logged in!</b> Please checkin in and leave a note on your Facebook page.</label>'+
+        '<label for=\'checkin\'>Hey, ' + user.name + ', <b> you just logged in!</b> Please checkin in and leave a note on your Facebook page.</label>'+
         '<textarea ng-model=\'message\' rows=3 placeholder=\'Please type a message, this will be posted on your wall.\'></textarea>'+
         '<p><button ng-disabled=\'checkin\' ng-click=\'doCheckin()\'><span ng-hide=\'checkin\'>Checkin</span> <span ng-if=\'checkin\'>Checking in <i class="fa fa-spinner fa-pulse"></i></span> </button></p>' +
         '<p><small><a ng-disabled=\'checkin\' href="' + redirectUrl() + '">Or click here to get online.</a></small></p>' +
