@@ -125,10 +125,16 @@ input, textarea {
 .email_access {
   background-color: #FFF;
   border: 1px solid #CCC;
-  color: #696969;
+  color: #000;
   min-width: 150px;
   max-width: 280px;
   width: 100%;
+  margin: 10px;
+  border-radius: 4px;
+}
+
+.btn.email_access:hover,.btn.email-access:focus {
+  background-color: #EEE;
 }
 
 .social {
