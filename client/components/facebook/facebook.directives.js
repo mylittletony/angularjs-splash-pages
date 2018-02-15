@@ -107,7 +107,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
         controller.setSocialName(user.first_name);
         msg =
           '<div>' +
-          '<a href=\'\' ng-click=\'ctLogin()\' class=\'social facebook\' >Facebook <span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
+          '<a href=\'\' ng-click=\'ctLogin()\' class=\'social facebook\' >Continue with Facebook<span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
           '</div>'
         ;
         compileTemplate(msg);
@@ -197,4 +197,3 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
   };
 
 }]);
-

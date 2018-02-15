@@ -132,47 +132,78 @@ input, textarea {
 }
 
 .social {
-    border-style: solid;
-    border-width: 0px;
-    cursor: pointer;
-    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-    font-weight: normal;
-    line-height: normal;
-    margin: 0 0 1.25rem;
-    position: relative;
-    text-decoration: none;
-    text-align: center;
-    -webkit-appearance: none;
-    border-radius: 0;
-    display: inline-block;
-    padding-top: 1rem;
-    padding-right: 2rem;
-    padding-bottom: 1.0625rem;
-    padding-left: 2rem;
-    font-size: 1rem;
-    /* background-color: #008CBA; */
-    border-color: #007095;
-    color: #FFFFFF;
-    transition: background-color 300ms ease-out;
+  border-style: solid;
+  border-width: 0px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0 0 1.25rem;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  -webkit-appearance: none;
+  border-radius: 4px;
+  display: inline-block;
+  padding-top: 1rem;
+  padding-right: 2rem;
+  padding-bottom: 1.0625rem;
+  padding-left: 4rem;
+  font-size: 1rem;
+  /* background-color: #008CBA; */
+  border-color: #007095;
+  color: #FFFFFF;
+  transition: background-color 300ms ease-out;
 }
 
 a.social:hover {
-    color: #FFF;
+  color: #FFF;
+}
+
+a.social:focus {
+  color: #FFF;
 }
 
 .facebook {
-  background-color: #3b5998;
+  background-color: #4267B2;
   min-width: 150px;
   max-width: 280px;
   width: 100%;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+  background-size: 40px;
+}
+
+.facebook:hover,.facebook:focus {
+  background: #3b5998;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+  background-size: 40px;
 }
 
 .google {
-  background-color: #dd4b39;
+  background-color: #4285f4;
   min-width: 150px;
   max-width: 280px;
   width: 100%;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/1FGFU9fQxK6T7fxp5zwd);
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+  background-size: 40px;
 }
+
+.google:hover,.google:focus {
+  background-color: #2674f2;
+  min-width: 150px;
+  max-width: 280px;
+  width: 100%;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/1FGFU9fQxK6T7fxp5zwd);
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+  background-size: 40px;
+
 
 .linkedin {
   background-color: #007bb6;
