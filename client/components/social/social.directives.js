@@ -6,6 +6,10 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
 
   var link = function(scope, element, attrs) {
 
+    function redirect() {
+      $window.location.href = scope.redirectUrl;
+    }
+
     scope.doCheckin = function() {
       scope.checkin = true;
       var options = {
@@ -19,10 +23,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
         redirect();
       });
     };
-
-    function redirect() {
-      $window.location.href = scope.redirectUrl;
-    }
 
   };
 
@@ -44,8 +44,8 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       }
     };
 
-    this.doCtLogin = function() {
-      formatAuthResponse();
+    this.doCtLogin = function(response) {
+      formatAuthResponse(response);
       var deferred = $q.defer();
       var params = {
         token: auth.accessToken,
@@ -116,7 +116,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       $element.html(templateObj);
     };
 
-
     this.autoLogin = function() {
       var deferred = $q.defer();
       $scope.loggingIn = true;
@@ -127,7 +126,10 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       return deferred.promise;
     };
 
-    var formatAuthResponse = function() {
+    var formatAuthResponse = function(auth) {
+      if (auth) {
+        $scope.authResponse = auth;
+      }
       if ($scope.authResponse.member_id !== undefined) {
         auth.accessToken        = $scope.authResponse.access_token;
         auth.memberId           = $scope.authResponse.member_id;
@@ -149,17 +151,12 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       var templateObj = $compile('<div>' + msg +'</div>')($scope);
       $element.html(templateObj);
     };
-
-    // OAuth.initialize('');
-
-    // $scope.popup = function() {
-    //   OAuth.popup('twitter').done(function(facebook, res) {
-    //   }).fail(function(err) {
-    //   });};
   };
 
   return {
-    scope: true,
+    scope: {
+      loading: '@'
+    },
     transclude: true,
     controller: controller,
     link: link,

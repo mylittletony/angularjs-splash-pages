@@ -2,25 +2,92 @@
 
 var app = angular.module('ctLoginsApp.facebook.directives', ['ngResource']);
 
-app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($window, $compile, $q, $rootScope) {
+app.directive('fbFinished', ['$window', '$compile', '$q', '$routeParams', '$localStorage', 'CT', function($window, $compile, $q, $routeParams, $localStorage, CT) {
+
+  var link = function(scope,el,attrs,controller) {
+    // $rootScope.bodylayout = 'login-layout';
+    // $rootScope.state = { status: 'loading', hidden: true, order: 'loading' };
+
+    var client;
+    var searchParams = $localStorage.searchParams;
+    if (searchParams) {
+      client = JSON.parse($localStorage.searchParams);
+    }
+
+    var init = function() {
+      var deferred = $q.defer();
+      CT.init({request_uri: client.requestUri, clientMac: client.clientMac, apMac: client.apMac, tags: client.apTags}).then(function(results) {
+        deferred.resolve();
+      }, function() {
+
+      });
+      return deferred.promise;
+    };
+
+    var fetch = function() {
+
+    };
+
+    var authResponse = {};
+    authResponse.access_token = $routeParams.code;
+    init().then(controller.doCtLogin(authResponse));
+  };
+
+  return {
+    link: link,
+    require: '^social'
+  };
+
+}]);
+
+
+app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localStorage', 'Client', function($window, $compile, $q, $rootScope, $localStorage, Client) {
 
   var link = function(scope,element,attrs,controller) {
 
     var user, authResponse;
 
-    scope.login = function() {
-      login()
-      .then(function(response) {
-        validateAuth(response)
-        .then(function() {
-          fetchUser()
-          .then(function() {
-            autoLogin(response);
-          });
-        }, function(err) {
-          errorMsg(err);
-        });
+    function validateAuth(resp) {
+      var deferred = $q.defer();
+      if (resp.status === 'connected') {
+        deferred.resolve(resp);
+      } else {
+        var msg = 'Looks like you canceled the request, didn\'t fancy it? Please try again';
+        deferred.reject(msg);
+      }
+      return deferred.promise;
+    }
+
+    function fetchUser() {
+      var deferred = $q.defer();
+      FB.api('/me', function(response) {
+        user = response;
+        deferred.resolve();
+      }, function() {
+        deferred.reject('Oh');
       });
+      return deferred.promise;
+    }
+
+    scope.login = function() {
+      Client.details().then(function(client) {
+        // $localStorage.searchParams = JSON.stringify(client);
+        var params = JSON.stringify(client);
+        window.location = 'https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=468282836525087&redirect_uri=http://app.my-wifi.test:9001/auth/facebook&action&oauth_facebook_callback&scope=email&state=' + params;
+      });
+
+      // login()
+      // .then(function(response) {
+      //   validateAuth(response)
+      //   .then(function() {
+      //     fetchUser()
+      //     .then(function() {
+      //       autoLogin(response);
+      //     });
+      //   }, function(err) {
+      //     errorMsg(err);
+      //   });
+      // });
     };
 
     var autoLogin = function(response) {
@@ -73,24 +140,26 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
     }
 
     function login() {
+      Client.details().then(function(client) {
+        $localStorage.searchParams = JSON.stringify(client);
+      });
       var deferred = $q.defer();
-      FB.login(function(response){
-        authResponse = response.authResponse;
-        deferred.resolve(response);
-      },{scope: 'publish_actions,public_profile,email'});
+      deferred.resolve();
+      // FB.login(function(response){
+      //   authResponse = response.authResponse;
+      //   deferred.resolve(response);
+      // },{scope: 'publish_actions,public_profile,email'});
       return deferred.promise;
     }
 
     function redirectUrl() {
       if (attrs.fbPageRedirect === 'true') {
-        return 'https://facebook.com/' + attrs.fbPageId;
-      } else {
-        if (controller.$scope.attrs.ctSuccessUrl !== null && controller.$scope.attrs.ctSuccessUrl !== '') {
-          return controller.$scope.attrs.ctSuccessUrl;
-        } else {
-          return 'https://facebook.com';
-        }
+        return 'https://www.facebook.com/' + attrs.fbPageId;
       }
+      if (controller.$scope.attrs.ctSuccessUrl !== null && controller.$scope.attrs.ctSuccessUrl !== '') {
+        return controller.$scope.attrs.ctSuccessUrl;
+      }
+      return 'https://www.facebook.com';
     }
 
     function redirect() {
@@ -114,30 +183,21 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       }
     }
 
-    function validateAuth(resp) {
-      var deferred = $q.defer();
-      if (resp.status === 'connected') {
-        deferred.resolve(resp);
-      } else {
-        var msg = 'Looks like you canceled the request, didn\'t fancy it? Please try again';
-        deferred.reject(msg);
-      }
-      return deferred.promise;
-    }
-
     function errorMsg(msg) {
       $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = msg;
     }
 
     function statusChangeCallback(response) {
-      if (response.status === 'connected') {
-        authResponse = response.authResponse;
-        fetchUser().then(function() {
-          handleReturningUser();
-        });
+      var a;
+      if (a && response.status === 'connected') {
+        // authResponse = response.authResponse;
+        // fetchUser().then(function() {
+        //   handleReturningUser();
+        // });
       } else {
         var msg = '<a href=\'\' ng-click=\'login()\' class=\'btn facebook\'>Facebook</a>';
+        // var msg = '<a href="https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=468282836525087&redirect_uri=http://app.my-wifi.test:9001/auth/facebook&action&oauth_facebook_callback&scope=email" class=\'btn facebook\'>Facebook</a>';
         compileTemplate(msg);
       }
     }
@@ -147,21 +207,12 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
       element.html(templateObj);
     }
 
-    function fetchUser() {
-      var deferred = $q.defer();
-      FB.api('/me', function(response) {
-        user = response;
-        deferred.resolve();
-      });
-      return deferred.promise;
-    }
-
     window.fbAsyncInit = function() {
       FB.init({
         appId      : attrs.appId,
-        cookie     : true,  // enable cookies to allow the server to access
-        xfbml      : true,  // parse social plugins on this page
-        version    : 'v2.2' // use version 2.1
+        cookie     : false,  // enable cookies to allow the server to access
+        xfbml      : false,  // parse social plugins on this page
+        version    : 'v2.12'
       });
 
       FB.getLoginStatus(function(response) {

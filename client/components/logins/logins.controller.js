@@ -2,9 +2,9 @@
 
 var app = angular.module('ctLoginsApp.logins.controller', []);
 
-app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client', 'CTDebugger', 'Ping', 'DebugMe',
+app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT', '$location', '$compile', '$localStorage', '$timeout', '$window', 'Client', 'CTDebugger', 'Ping', 'DebugMe', '$http', '$cookies',
 
-  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client, CTDebugger, Ping, DebugMe) {
+  function($rootScope, $scope, $routeParams, CT, $location, $compile, $localStorage, $timeout, $window, Client, CTDebugger, Ping, DebugMe, $http, $cookies) {
 
     $rootScope.bodylayout = 'login-layout';
 
@@ -25,28 +25,37 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       };
 
       CT.init(params).then(function(results) {
-
         $scope.products = results.products;
         if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
           $scope.goHome();
+          return;
         }
+
         if (results && results.splash) {
           if (results.splash.display_console === true || DebugMe.active === true) {
             doDebug();
           }
+
+          $scope.custom_css = results.splash.custom_css;
+
+          // if ($location.path() === '/social') {
+          //   return;
+          // }
+
           $scope.store      = results.store;
           $scope.cart       = { cart_id: null, products: null };
           $scope.custom_url = results.splash.custom_url;
-          $scope.custom_css = results.splash.custom_css;
           $scope.splash     = results.splash;
-
           $rootScope.gaid   = results.splash.google_analytics_id;
 
           if (results.form) {
             $scope.form       = results.form.body;
           }
           $scope.redirects  = results.redirects;
-          if (results.splash.registration === true && results.form && results.form.body && results.form.body.fields ) {
+
+          if (results.splash.registration === true &&
+            results.form && results.form.body && results.form.body.fields
+          ) {
             $scope.registration = true;
             console.log('Displaying a registration page');
           } else if (results.splash.registration === true) {

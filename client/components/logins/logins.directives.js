@@ -11,28 +11,76 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (scope.loggingIn) {
         return;
       }
+
       scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
-      } else {
-        scope.error = undefined;
-        $rootScope.banneralert = undefined;
-        $rootScope.error = undefined;
-        scope.state.hidden = true;
-        scope.state.status = 'login';
-        if (custom_data && custom_data.fields) {
-          scope.fields = custom_data.fields;
-        }
-        CT.login({
-          email:      scope.email,
-          username:   scope.username,
-          password:   scope.password,
-          logincode:  scope.logincode,
-          newsletter: scope.newsletter,
-          splash_id:  $routeParams.splash_id,
-          data: scope.fields
-        }).then(onSuccess, onFail);
+        return;
       }
+
+      scope.error = undefined;
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+      scope.state.hidden = true;
+      scope.state.status = 'login';
+      if (custom_data && custom_data.fields) {
+        scope.fields = custom_data.fields;
+      }
+      CT.login({
+        email:      scope.email,
+        username:   scope.username,
+        password:   scope.password,
+        logincode:  scope.logincode,
+        newsletter: scope.newsletter,
+        splash_id:  $routeParams.splash_id,
+        data: scope.fields
+      }).then(onSuccess, onFail);
+    };
+
+    function redirectUrl() {
+      if (attrs.fbPageRedirect === 'true') {
+        return 'https://www.facebook.com/' + attrs.fbPageId;
+      }
+
+      return 'https://www.facebook.com';
+    }
+
+    function redirect() {
+      $window.location.href = redirectUrl();
+    }
+
+    function loginHandler () {
+      if (attrs.fbCheckin === 'true'){
+        addCheckinForm();
+      } else {
+        redirect();
+      }
+    }
+
+    var doSocialLogin = function(response) {
+      var deferred = $q.defer();
+      var params = {
+        token: $routeParams.code,
+        newsletter: attrs.newsletter
+      };
+      CT.login(params).then(function(a) {
+        if (a !== undefined && a.type === 'ruckus') {
+          loginRuckus(a).then(function(b) {
+            deferred.resolve(1);
+          });
+        }
+        else if (a !== undefined && a.type === 'microtik') {
+          loginMicrotik(a).then(function(b) {
+            deferred.resolve(1);
+          });
+        } else {
+          deferred.resolve(1);
+        }
+      }, function(err) {
+        // $scope.loggingIn = undefined;
+        deferred.reject(err);
+      });
+      return deferred.promise;
     };
 
     var onSuccess = function(auth) {
@@ -125,9 +173,42 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
             }
         }
         addReg();
-      } else {
-        addForm();
+        return;
       }
+
+      if ($location.path() === '/social') {
+        addSocialAutoLogin();
+        doSocialLogin().then(function(a) {
+          loginHandler();
+        }, function(err) {
+          $rootScope.banneralert = 'banner-alert alert-box alert';
+          $rootScope.error = err.msg || err || 'Unknown error logging in';
+          scope.processing = undefined;
+        });
+        return;
+      }
+
+      addForm();
+    };
+
+    var addSocialAutoLogin = function() {
+      scope.code = attrs.code;
+      var template =
+        '<div><h2>We\'re logging you in, please wait.</h2></div>';
+
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+      cleanUp();
+    };
+
+    var addSocial = function() {
+      scope.code = attrs.code;
+      var template =
+        '<div></div>';
+
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+      cleanUp();
     };
 
     var addReg = function() {
@@ -358,9 +439,9 @@ app.directive('loginsPartial', ['$location', function($location) {
     scope.partial = function() {
       if ($location.path() === '/shop') {
         return 'components/logins/_shop.html';
-      } else {
-        return 'components/logins/_form.html';
       }
+
+      return 'components/logins/_form.html';
     };
   };
 

@@ -62,6 +62,13 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider, ENVIRONME
       reloadOnSearch: false,
       controller: 'LoginsController'
     })
+    .when('/social', {
+      // templateUrl: 'components/logins/social.html',
+      templateUrl: 'components/logins/index.html',
+      reloadOnSearch: false,
+      controller: 'LoginsController'
+      // controller: 'SocialController'
+    })
     .when('/:splash_id', {
       templateUrl: 'components/logins/index.html',
       reloadOnSearch: false,
