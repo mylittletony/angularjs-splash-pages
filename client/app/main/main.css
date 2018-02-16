@@ -156,7 +156,7 @@ input, textarea {
   padding-top: 1rem;
   padding-right: 2rem;
   padding-bottom: 1.0625rem;
-  padding-left: 4rem;
+  padding-left: 2rem;
   font-size: 1rem;
   /* background-color: #008CBA; */
   border-color: #007095;
@@ -183,6 +183,7 @@ a.social:focus {
   background-position: 5px 5px;
   background-size: 40px;
   border: none;
+  padding-left: 4rem;
 }
 
 .social.facebook:hover,.social.facebook:focus {
@@ -204,6 +205,7 @@ a.social:focus {
   background-position: 5px 5px;
   background-size: 40px;
   border: none;
+  padding-left: 4rem;
 }
 
 .social.google:hover,.social.google:focus {
