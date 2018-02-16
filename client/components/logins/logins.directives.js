@@ -694,7 +694,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         'button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus, button:hover, button:focus, .button:hover, .button:focus {\n'+
-        '\tbackground-color: {{splash.button_colour}}!important;\n'+
+        '\tbackground-color: {{splash.button_colour}};\n'+
         '\tborder: 1px solid {{ splash.button_border_colour || \'#000\'}};\n'+
         '\topacity: 0.9;\n'+
         '}\n\n'+
@@ -880,7 +880,3 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
     }
   };
 }]);
-
-
-
-

@@ -122,8 +122,8 @@ input, textarea {
   display: none !important;
 }
 
-.email_access {
-  background-color: #FFF;
+.button.email_access {
+  background-color: #FFFFFF;
   border: 1px solid #CCC;
   color: #000;
   min-width: 150px;
@@ -133,8 +133,9 @@ input, textarea {
   border-radius: 4px;
 }
 
-.btn.email_access:hover,.btn.email-access:focus {
-  background-color: #EEE;
+.button.email_access:hover,.button.email-access:focus {
+  background-color: #EEEEEE;
+  border: 1px solid #CCC;
 }
 
 .social {
@@ -170,7 +171,7 @@ a.social:focus {
   color: #FFF;
 }
 
-.facebook {
+.btn.social.facebook {
   background-color: #4267B2;
   min-width: 150px;
   max-width: 280px;
@@ -181,7 +182,7 @@ a.social:focus {
   background-size: 40px;
 }
 
-.facebook:hover,.facebook:focus {
+.btn.social.facebook:hover,.btn.social.facebook:focus {
   background: #3b5998;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
   background-repeat: no-repeat;
@@ -189,7 +190,7 @@ a.social:focus {
   background-size: 40px;
 }
 
-.google {
+.btn.social.google {
   background-color: #4285f4;
   min-width: 150px;
   max-width: 280px;
@@ -200,7 +201,7 @@ a.social:focus {
   background-size: 40px;
 }
 
-.google:hover,.google:focus {
+.btn.social.google:hover,.btn.social.google:focus {
   background-color: #2674f2;
   min-width: 150px;
   max-width: 280px;
