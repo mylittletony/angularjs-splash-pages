@@ -128,14 +128,15 @@ input, textarea {
   color: #000;
   min-width: 150px;
   max-width: 280px;
+  max-height: 50px;
   width: 100%;
   margin: 10px;
   border-radius: 4px;
 }
 
-.button.email_access:hover,.button.email-access:focus {
-  background-color: #EEEEEE;
-  border: 1px solid #CCC;
+.button.email_access:hover,.button:focus.email-access:focus {
+  background-color: #EEEEEE!important;
+  border: 1px solid #CCC!important;
 }
 
 .social {
@@ -161,6 +162,7 @@ input, textarea {
   border-color: #007095;
   color: #FFFFFF;
   transition: background-color 300ms ease-out;
+  max-height: 50px;
 }
 
 a.social:hover {
@@ -171,7 +173,7 @@ a.social:focus {
   color: #FFF;
 }
 
-.btn.social.facebook {
+.social.facebook {
   background-color: #4267B2;
   min-width: 150px;
   max-width: 280px;
@@ -180,17 +182,19 @@ a.social:focus {
   background-repeat: no-repeat;
   background-position: 5px 5px;
   background-size: 40px;
+  border: none;
 }
 
-.btn.social.facebook:hover,.btn.social.facebook:focus {
+.social.facebook:hover,.social.facebook:focus {
   background: #3b5998;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
   background-repeat: no-repeat;
   background-position: 5px 5px;
   background-size: 40px;
+  border: none;
 }
 
-.btn.social.google {
+.social.google {
   background-color: #4285f4;
   min-width: 150px;
   max-width: 280px;
@@ -199,9 +203,10 @@ a.social:focus {
   background-repeat: no-repeat;
   background-position: 5px 5px;
   background-size: 40px;
+  border: none;
 }
 
-.btn.social.google:hover,.btn.social.google:focus {
+.social.google:hover,.social.google:focus {
   background-color: #2674f2;
   min-width: 150px;
   max-width: 280px;
@@ -210,14 +215,32 @@ a.social:focus {
   background-repeat: no-repeat;
   background-position: 5px 5px;
   background-size: 40px;
+  border: none;
 }
-
 
 .linkedin {
   background-color: #007bb6;
   min-width: 150px;
   max-width: 280px;
   width: 100%;
+}
+
+.btn.btn-lg.btn-default {
+  background-color: #FFFFFF;
+  border: 1px solid #CCC;
+  color: #000!important;
+  min-width: 150px;
+  max-width: 280px!important;
+  max-height: 50px;
+  width: 100%;
+  margin: 10px;
+  border-radius: 4px!important;
+  font-size: 14px;
+}
+
+.btn.btn-lg.btn-default:hover,.btn.btn-lg.btn-default:focus {
+  background-color: #EEEEEE!important;
+  border: 1px solid #CCC!important;
 }
 
 .reset p {

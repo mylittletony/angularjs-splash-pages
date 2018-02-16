@@ -137,7 +137,10 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', function($
           handleReturningUser();
         });
       } else {
-        var msg = '<a href=\'\' ng-click=\'login()\' class=\'btn facebook\'>Facebook</a>';
+        var msg =
+          '<div>' +
+          '<a href=\'\' ng-click=\'login()\' class=\'social facebook\' >Continue with Facebook<span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
+          '</div>'
         compileTemplate(msg);
       }
     }
