@@ -22,13 +22,17 @@ module.exports = function(app) {
       }
 
       var params = JSON.parse(req.query.state);
+      if (response.statusCode !== 200) {
+        console.warn(response.statusCode);
+      }
+
       if (response.statusCode === 200) {
-        var data = JSON.parse(response.body)//.access_token;
+        var data = JSON.parse(response.body);
         params.code = data.access_token;
       }
-      // params = data.state;
 
       const parsedHash = queryString.stringify(params);
+      console.log(parsedHash);
       res.redirect('/social?' + parsedHash);
     });
   });

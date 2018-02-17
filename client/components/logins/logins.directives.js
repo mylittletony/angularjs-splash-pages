@@ -64,30 +64,17 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       });
     };
 
-    var loginMicrotik = function(auth) {
-      Client.details().then(function(client) {
-        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
-        scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
-        $timeout(function() {
-          finishLogin();
-        },2000);
-      });
-    };
-
     var doSocialLogin = function(response) {
       var deferred = $q.defer();
       var params = {
         token:      $routeParams.code,
-        newsletter: attrs.newsletter
+        newsletter: attrs.newsletter,
+        userId: true // used in backend to identify fb
       };
+
       CT.login(params).then(function(a) {
         if (a !== undefined && a.type === 'ruckus') {
           loginRuckus(a).then(function(b) {
-            deferred.resolve(1);
-          });
-        }
-        else if (a !== undefined && a.type === 'microtik') {
-          loginMicrotik(a).then(function(b) {
             deferred.resolve(1);
           });
         } else {
@@ -141,7 +128,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     function addCheckinForm() {
       var user = {};
       var template =
-        '<div class=\'small-12 medium-8 medium-centered columns\'>'+
+        '<div class=\'small-12 medium-12 large-8 medium-centered columns\'>'+
         '<label for=\'checkin\'><b>Tell Your Friends You\'re Here!</b></label>'+
         '<textarea autofocus ng-model=\'message\' rows=4 placeholder=\'Post an update on your wall.\'></textarea>'+
         '<p>Leave blank if you just want to login.</p>'+
@@ -155,9 +142,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var onSuccess = function(auth) {
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
-      }
-      else if ( auth !== undefined && auth.type === 'microtik' ) {
-        loginMicrotik(auth);
       } else {
         finishLogin();
       }

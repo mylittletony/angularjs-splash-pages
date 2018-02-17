@@ -5,9 +5,6 @@ var app = angular.module('ctLoginsApp.facebook.directives', ['ngResource']);
 app.directive('fbFinished', ['$window', '$compile', '$q', '$routeParams', '$localStorage', 'CT', function($window, $compile, $q, $routeParams, $localStorage, CT) {
 
   var link = function(scope,el,attrs,controller) {
-    // $rootScope.bodylayout = 'login-layout';
-    // $rootScope.state = { status: 'loading', hidden: true, order: 'loading' };
-
     var client;
     var searchParams = $localStorage.searchParams;
     if (searchParams) {
