@@ -63,11 +63,9 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider, ENVIRONME
       controller: 'LoginsController'
     })
     .when('/social', {
-      // templateUrl: 'components/logins/social.html',
       templateUrl: 'components/logins/index.html',
       reloadOnSearch: false,
       controller: 'LoginsController'
-      // controller: 'SocialController'
     })
     .when('/:splash_id', {
       templateUrl: 'components/logins/index.html',
@@ -136,6 +134,8 @@ app.factory('apInterceptor', ['$q', '$location', '$rootScope', '$routeParams', '
         if ($routeParams.preview === 'true') {
           $rootScope.deviceId = DEVICES.preview;
         } else if ($location.path() === '/ctx' && $routeParams.uamip !== undefined) {
+          $rootScope.deviceId = DEVICES.cloudtrax;
+        } else if ($location.path() === '/social' && $routeParams.requestUri !== undefined) {
           $rootScope.deviceId = DEVICES.cloudtrax;
         } else if ($routeParams.uamip !== undefined && $routeParams.uamport !== undefined && $routeParams.called !== undefined) {
           $rootScope.deviceId = DEVICES.ct;

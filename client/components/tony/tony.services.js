@@ -223,22 +223,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     }
 
-    function checkin(params) {
-      var deferred = $q.defer();
-      var options = {
-        place: params.pageId,
-        access_token: params.accessToken,
-        message: params.message
-      };
-
-      fbCheckin(options).then(function(msg) {
-        deferred.resolve(msg);
-      }, function(err) {
-        deferred.reject(err);
-      });
-      return deferred.promise;
-    }
-
     var fbCheckin = function(options) {
       var deferred = $q.defer();
       $http({
@@ -254,6 +238,24 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         });
       return deferred.promise;
     };
+
+    function checkin(params) {
+      var deferred = $q.defer();
+      var options = {
+        place:        params.pageId,
+        access_token: params.token,
+        message:      params.message
+      };
+
+      console.log(options);
+
+      fbCheckin(options).then(function(msg) {
+        deferred.resolve(msg);
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }
 
     function guestLogin(params) {
       var deferred = $q.defer();
@@ -618,27 +620,26 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid, type;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid, type, code;
     var obj;
 
     var details = function() {
       var deferred = $q.defer();
-      if ($rootScope.deviceId === '1') {
-        clientMac = $routeParams.mac;
-        apMac = $routeParams.called;
-        redirectUri = $routeParams.userurl;
-        uamip = $routeParams.uamip;
-        uamport = $routeParams.uamport;
-        uamSsl = $routeParams.ssl;
-      } else if ($rootScope.deviceId === '11') {
-        clientMac = $routeParams.mac;
+      if ($location.path() === '/social') {
+        clientMac = $routeParams.clientMac;
         challenge = $routeParams.challenge;
+        apMac = $routeParams.apMac;
+        redirectUri = $routeParams.redirectUri;
+        uamip = $routeParams.uamip;
+        uamport = $routeParams.uamport;
+        code = $routeParams.code;
+      } else if ($rootScope.deviceId === '1') {
+        clientMac = $routeParams.mac;
         apMac = $routeParams.called;
         redirectUri = $routeParams.userurl;
         uamip = $routeParams.uamip;
         uamport = $routeParams.uamport;
         uamSsl = $routeParams.ssl;
-        type = 'ctx';
       } else if ($rootScope.deviceId === '2') {
         clientMac = $routeParams.mac;
         if ( $routeParams.apname !== undefined ) {
@@ -692,7 +693,17 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientMac = $routeParams.id;
         apMac = $routeParams.ap;
         ssid = $routeParams.ssid;
+      } else if ($rootScope.deviceId === '11') {
+        clientMac = $routeParams.mac;
+        challenge = $routeParams.challenge;
+        apMac = $routeParams.called;
+        redirectUri = $routeParams.userurl;
+        uamip = $routeParams.uamip;
+        uamport = $routeParams.uamport;
+        uamSsl = $routeParams.ssl;
+        type = 'ctx';
       }
+
       obj = {
         clientMac: clientMac,
         clientIp: clientIp,

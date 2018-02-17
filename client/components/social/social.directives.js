@@ -10,19 +10,19 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       $window.location.href = scope.redirectUrl;
     }
 
-    scope.doCheckin = function() {
-      scope.checkin = true;
-      var options = {
-        pageId: scope.fbPageId,
-        accessToken: scope.authResponse.accessToken,
-        message: scope.message
-      };
-      CT.checkin(options).then(function() {
-        redirect();
-      }, function() {
-        redirect();
-      });
-    };
+    // scope.doCheckin = function() {
+    //   scope.checkin = true;
+    //   var options = {
+    //     pageId: scope.fbPageId,
+    //     accessToken: scope.authResponse.accessToken,
+    //     message: scope.message
+    //   };
+    //   CT.checkin(options).then(function() {
+    //     redirect();
+    //   }, function() {
+    //     redirect();
+    //   });
+    // };
 
   };
 
@@ -162,13 +162,11 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
     link: link,
     template:
       '<div>' +
-      '<div ng-show=\'loggingIn\' class=\'small-12 medium-6 medium-centered columns alert-box success\'>Logging you in, please hold tight...</div>' +
+      '<h2 ng-show=\'loggingIn\'><b>Logging you in, please hold tight...</b></h2>' +
       '<div ng-hide=\'loggingIn\'><h2 ng-if=\'socialName\'>Hey {{ socialName }}, nice to see you again.</h2>'+
-      '<h2><b>Please login with one of the following.</b></h2>'+
+      '<h2><b>Please login to use the Internet.</b></h2>'+
       '<div ng-transclude></div></div>' +
       '</div>'
   };
 
 }]);
-
-

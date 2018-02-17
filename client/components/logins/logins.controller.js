@@ -36,12 +36,6 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
             doDebug();
           }
 
-          $scope.custom_css = results.splash.custom_css;
-
-          // if ($location.path() === '/social') {
-          //   return;
-          // }
-
           $scope.store      = results.store;
           $scope.cart       = { cart_id: null, products: null };
           $scope.custom_url = results.splash.custom_url;
@@ -52,6 +46,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
             $scope.form       = results.form.body;
           }
           $scope.redirects  = results.redirects;
+          $scope.custom_css = results.splash.custom_css;
 
           if (results.splash.registration === true &&
             results.form && results.form.body && results.form.body.fields
