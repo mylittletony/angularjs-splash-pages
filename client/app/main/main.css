@@ -122,7 +122,7 @@ input, textarea {
   display: none !important;
 }
 
-.button.email_access {
+.button.email-access, .button.voucher-access, .button.social-access {
   background-color: #FFFFFF;
   border: 1px solid #CCC;
   color: #000;
@@ -132,11 +132,57 @@ input, textarea {
   width: 100%;
   margin: 10px;
   border-radius: 4px;
+  padding-left: 4rem;
 }
 
-.button.email_access:hover,.button:focus.email-access:focus {
+.button.email-access:hover, .button:focus.email-access:focus, .button.voucher-access:hover, .button:focus.voucher-access:focus, .button.social-access:hover, .button.social-access:focus {
   background-color: #EEEEEE!important;
   border: 1px solid #CCC!important;
+}
+
+.button.social-access::after {
+  content: "";
+  background: url(https://d247kqobagyqjh.cloudfront.net/api/file/jwTsGE9nQuqP6PY6qTTl);
+  background-repeat: no-repeat;
+  background-position: 5px 4px;
+  background-size: 40px;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.button.email-access::after {
+  content: "";
+  background: url(https://d247kqobagyqjh.cloudfront.net/api/file/cvKFLmhbRtkSc2FcLYjM);
+  background-repeat: no-repeat;
+  background-position: 5px 4px;
+  background-size: 40px;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.button.voucher-access::after {
+  content: "";
+  background: url(https://d247kqobagyqjh.cloudfront.net/api/file/tDYTNvv6R2mFUBM4yLgj);
+  background-repeat: no-repeat;
+  background-position: 6px 4px;
+  background-size: 40px;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
 }
 
 .social {
@@ -257,7 +303,7 @@ a.social:focus {
   max-width: 280px!important;
   max-height: 50px;
   width: 100%;
-  margin: 10px;
+  margin: 10px!important;
   border-radius: 4px!important;
   font-size: 14px;
 }
@@ -265,6 +311,12 @@ a.social:focus {
 .btn.btn-lg.btn-default:hover,.btn.btn-lg.btn-default:focus {
   background-color: #EEEEEE!important;
   border: 1px solid #CCC!important;
+}
+
+.btn.btn-lg.btn-default:disabled {
+  background-color: #EEEEEE!important;
+  color: #CCC!important;
+  cursor: default!important;
 }
 
 .reset p {
