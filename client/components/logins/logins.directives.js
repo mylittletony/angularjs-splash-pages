@@ -18,11 +18,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     function redirectUrl() {
-      if (attrs.fbPageRedirect === 'true') {
-        return 'https://www.facebook.com/' + attrs.fbPageId;
+      if ($routeParams.type === 'tw') {
+        return 'https://www.twitter.com/' + attrs.twHandle;
       }
 
-      return 'https://www.facebook.com/';
+      return 'https://www.facebook.com/' + attrs.fbPageId;
     }
 
     function redirect() {
@@ -167,6 +167,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (attrs.fbCheckin === 'true') {
         socialCheckin();
         return;
+      }
+
+      if (attrs.twTweet === 'true') {
+        // twitter message
+        return
       }
 
       socialLogin();
@@ -345,7 +350,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       terms: '@',
       btntext: '@',
       fbCheckin: '@',
-      fbPageId: '@'
+      fbPageId: '@',
+      twSendTweet: '@',
+      twHandle: '@'
     },
   };
 

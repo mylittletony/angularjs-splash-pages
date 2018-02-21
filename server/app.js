@@ -9,6 +9,7 @@ var oauth = require('oauth');
 var app = express();
 var server = require('http').createServer(app);
 var session = require('express-session');
+const queryString = require('query-string');
 const callback_url = process.env.TWITTER_CALLBACK || "http://app.my-wifi.test:9001/auth/twitter/callback";
 
 require('./config/express')(app);
@@ -23,6 +24,7 @@ var consumer = new oauth.OAuth(
   (process.env.TWITTER_CONSUMER_KEY || '123'), (process.env.TWITTER_CONSUMER_SECRET || '123'), "1.0A", callback_url, "HMAC-SHA1");
 
 app.get('/auth/twitter', function(req, res) {
+  req.session.state = req.query.state;
   consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
     if (error) {
       res.send("Error getting OAuth request token");
@@ -88,7 +90,17 @@ app.get('/auth/twitter/callback', function(req, res) {
     } else {
       req.session.oauthAccessToken = oauthAccessToken;
       req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
-      res.redirect('/home');
+
+      if (!req.session.state) {
+        res.redirect('/');
+        return;
+      }
+
+      var state = JSON.parse(req.session.state);
+      state.type = 'tw';
+
+      var paramsHash = queryString.stringify(state);
+      res.redirect('/social?' + paramsHash);
     }
   });
 });
