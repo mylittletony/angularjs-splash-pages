@@ -2,7 +2,6 @@
 
 var request = require('request');
 const queryString = require('query-string');
-
 var errors = require('./components/errors');
 
 module.exports = function(app) {
