@@ -7,57 +7,51 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
   var link = function(scope,element,attrs) {
 
-    scope.submit = function(custom_data) {
-      if (scope.loggingIn) {
-        return;
+    var cleanUp = function() {
+      $rootScope.bodylayout   = undefined;
+      scope.state.hidden      = undefined;
+      scope.state.status      = undefined;
+      scope.password          = undefined;
+      scope.username          = undefined;
+      scope.logincode         = undefined;
+      scope.error             = undefined;
+    };
+
+    function redirectUrl() {
+      if (attrs.fbPageRedirect === 'true') {
+        return 'https://www.facebook.com/' + attrs.fbPageId;
       }
-      scope.loggingIn = true;
-      if ($routeParams.preview === 'true') {
-        scope.preview = 'This is just a preview, you cannot actually login.';
-      } else {
-        scope.error = undefined;
-        $rootScope.banneralert = undefined;
-        $rootScope.error = undefined;
-        scope.state.hidden = true;
-        scope.state.status = 'login';
-        if (custom_data && custom_data.fields) {
-          scope.fields = custom_data.fields;
+
+      return 'https://www.facebook.com/';
+    }
+
+    function redirect() {
+      $timeout(function() {
+        $window.location.href = redirectUrl();
+      },1500);
+    }
+
+    var redirectUser = function() {
+      if ( attrs.redirects !== undefined || attrs.redirects !== '') {
+        var redirects = JSON.parse(attrs.redirects);
+        if (redirects.show_welcome ) {
+          $location.path('/welcome');
+        } else {
+          var redirectTo;
+          if ( redirects.success_url !== '' && redirects.success_url !== null) {
+            redirectTo = redirects.success_url;
+          } else {
+            redirectTo = 'http://bbc.co.uk';
+          }
+          $window.location.href = redirectTo;
         }
-        CT.login({
-          email:      scope.email,
-          username:   scope.username,
-          password:   scope.password,
-          logincode:  scope.logincode,
-          newsletter: scope.newsletter,
-          splash_id:  $routeParams.splash_id,
-          data: scope.fields
-        }).then(onSuccess, onFail);
       }
-    };
-
-    var onSuccess = function(auth) {
-      if ( auth !== undefined && auth.type === 'ruckus' ) {
-        loginRuckus(auth);
-      }
-      else if ( auth !== undefined && auth.type === 'microtik' ) {
-        loginMicrotik(auth);
-      } else {
-        finishLogin();
-      }
-    };
-
-    var onFail = function(err) {
-      // Insert a CT service error handler //
-      cleanUp();
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = err;
-      chooseForm();
     };
 
     var finishLogin = function() {
       cleanUp();
       scope.success = true;
-      CT.reporter().then(redirectUser);
+      redirectUser();
     };
 
     var loginRuckus = function(auth) {
@@ -70,24 +64,133 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       });
     };
 
-    var loginMicrotik = function(auth) {
-      Client.details().then(function(client) {
-        var openUrl = client.uamip + '?username='+ auth.username +'&password=' + auth.password;
-        scope.detailFrame =  $sce.trustAsResourceUrl(openUrl);
-        $timeout(function() {
-          finishLogin();
-        },2000);
+    var doSocialLogin = function(response) {
+      var deferred = $q.defer();
+      var params = {
+        token:      $routeParams.code,
+        newsletter: attrs.newsletter,
+        userId: true // used in backend to identify fb
+      };
+
+      CT.login(params).then(function(a) {
+        if (a !== undefined && a.type === 'ruckus') {
+          loginRuckus(a).then(function(b) {
+            deferred.resolve(1);
+          });
+        } else {
+          deferred.resolve(1);
+        }
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    };
+
+    var finaliseSocial = function() {
+      doSocialLogin().then(function(a) {
+        redirect();
+      }, function(err) {
+        $rootScope.banneralert = 'banner-alert alert-box alert';
+        $rootScope.error = err.msg || err || 'Unknown error logging in';
+        scope.processing = undefined;
       });
     };
 
-    var cleanUp = function() {
-      $rootScope.bodylayout   = undefined;
-      scope.state.hidden      = undefined;
-      scope.state.status      = undefined;
-      scope.password          = undefined;
-      scope.username          = undefined;
-      scope.logincode         = undefined;
-      scope.error             = undefined;
+    var socialLoginMsg = function() {
+      var template = '<div class=\'small-12 medium-centered columns alert-box success\'>Logging you in, hold tight...</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+      cleanUp();
+    };
+
+    scope.doCheckin = function(msg) {
+
+      socialLoginMsg();
+
+      if (!msg) {
+        finaliseSocial();
+        return;
+      }
+
+      var params = {};
+      params.pageId = attrs.fbPageId;
+      params.token = $routeParams.code;
+      params.message = msg;
+      CT.checkin(params).then(function() {
+        finaliseSocial();
+      }, function(err) {
+        // Login, even if fail
+        console.log(err);
+        finaliseSocial();
+      });
+    };
+
+    function addCheckinForm() {
+      var user = {};
+      var template =
+        '<div class=\'small-12 medium-12 large-8 medium-centered columns\'>'+
+        '<label for=\'checkin\'><b>Tell Your Friends You\'re Here!</b></label>'+
+        '<textarea autofocus ng-model=\'message\' rows=4 placeholder=\'Post an update on your wall.\'></textarea>'+
+        '<p>Leave blank if you just want to login.</p>'+
+        '<p><button ng-disabled=\'checkin\' ng-click=\'doCheckin(message)\'><span ng-hide=\'checkin\'>Login Now</span> <span ng-if=\'checkin\'>Checking in <i class="fa fa-spinner fa-pulse"></i></span> </button></p>' +
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+      cleanUp();
+    }
+
+    var onSuccess = function(auth) {
+      if ( auth !== undefined && auth.type === 'ruckus' ) {
+        loginRuckus(auth);
+      } else {
+        finishLogin();
+      }
+    };
+
+    var socialCheckin = function() {
+      addCheckinForm();
+    };
+
+    var socialLogin = function() {
+      socialLoginMsg();
+
+      doSocialLogin().then(function(a) {
+        redirect();
+      }, function(err) {
+        $rootScope.banneralert = 'banner-alert alert-box alert';
+        $rootScope.error = err.msg || err || 'Unknown error logging in';
+        scope.processing = undefined;
+      });
+    };
+
+    var addSocialLogin = function() {
+      if (attrs.fbCheckin === 'true') {
+        socialCheckin();
+        return;
+      }
+
+      socialLogin();
+    };
+
+    var chooseForm = function() {
+      if ($location.path() === '/social') {
+        addSocialLogin();
+        return;
+      }
+
+      if (attrs.registration === 'true') {
+        if (attrs.code) {
+            try {
+              scope.data = JSON.parse(attrs.code);
+            } catch(e){
+              scope.data = 'Nothing to be seen';
+            }
+        }
+        addReg();
+        return;
+      }
+
+      addForm();
     };
 
     var init = function() {
@@ -114,20 +217,24 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       });
     };
 
-    var chooseForm = function() {
-      if (attrs.registration === 'true') {
-        if (attrs.code) {
-            try {
-              scope.data = JSON.parse(attrs.code);
-            } catch(e){
-              scope.data = 'Nothing to be seen';
-            }
-        }
-        addReg();
-      } else {
-        addForm();
-      }
+    var onFail = function(err) {
+      scope.loggingIn = undefined;
+      // Insert a CT service error handler //
+      cleanUp();
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = err;
+      chooseForm();
     };
+
+    // var addSocial = function() {
+    //   scope.code = attrs.code;
+    //   var template =
+    //     '<div></div>';
+
+    //   var templateObj = $compile(template)(scope);
+    //   element.html(templateObj);
+    //   cleanUp();
+    // };
 
     var addReg = function() {
       var template =
@@ -187,21 +294,34 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
-    var redirectUser = function() {
-      if ( attrs.redirects !== undefined || attrs.redirects !== '') {
-        var redirects = JSON.parse(attrs.redirects);
-        if (redirects.show_welcome ) {
-          $location.path('/welcome');
-        } else {
-          var redirectTo;
-          if ( redirects.success_url !== '' && redirects.success_url !== null) {
-            redirectTo = redirects.success_url;
-          } else {
-            redirectTo = 'http://bbc.co.uk';
-          }
-          $window.location.href = redirectTo;
-        }
+    scope.submit = function(custom_data) {
+      if (scope.loggingIn) {
+        return;
       }
+
+      scope.loggingIn = true;
+      if ($routeParams.preview === 'true') {
+        scope.preview = 'This is just a preview, you cannot actually login.';
+        return;
+      }
+
+      scope.error = undefined;
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+      scope.state.hidden = true;
+      scope.state.status = 'login';
+      if (custom_data && custom_data.fields) {
+        scope.fields = custom_data.fields;
+      }
+      CT.login({
+        email:      scope.email,
+        username:   scope.username,
+        password:   scope.password,
+        logincode:  scope.logincode,
+        newsletter: scope.newsletter,
+        splash_id:  $routeParams.splash_id,
+        data: scope.fields
+      }).then(onSuccess, onFail);
     };
 
     attrs.$observe('code', function(val){
@@ -223,7 +343,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       registration: '@',
       reqreg: '@',
       terms: '@',
-      btntext: '@'
+      btntext: '@',
+      fbCheckin: '@',
+      fbPageId: '@'
     },
   };
 
@@ -357,9 +479,9 @@ app.directive('loginsPartial', ['$location', function($location) {
     scope.partial = function() {
       if ($location.path() === '/shop') {
         return 'components/logins/_shop.html';
-      } else {
-        return 'components/logins/_form.html';
       }
+
+      return 'components/logins/_form.html';
     };
   };
 
@@ -549,11 +671,6 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
           window.location.href = results.response;
         }, function(err) {
           console.log(err);
-          // $rootScope.banneralert = 'banner-alert alert-box alert';
-          // $rootScope.error = 'Your card was declined, please try again';
-          // scope.cart.state = 'declined';
-          // scope.cart.error = err.message;
-          // scope.showcart   = true;
         });
       });
     };
@@ -693,7 +810,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '}\n\n'+
 
         'button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus, button:hover, button:focus, .button:hover, .button:focus {\n'+
-        '\tbackground-color: {{splash.button_colour}}!important;\n'+
+        '\tbackground-color: {{splash.button_colour}};\n'+
         '\tborder: 1px solid {{ splash.button_border_colour || \'#000\'}};\n'+
         '\topacity: 0.9;\n'+
         '}\n\n'+
@@ -879,7 +996,3 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
     }
   };
 }]);
-
-
-
-

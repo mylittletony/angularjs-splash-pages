@@ -153,38 +153,38 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.signature_version  = params.signature_version;
 
       Client.details()
-      .then(function(resp) {
-        client = resp;
-        status()
-        .then(function(coovaResp) {
-          loginDetails.authResp = coovaResp;
-          createLogin()
-          .then(function(response) {
-            //////////////////////////////////////////////////
-            // Meraki login if state is present in response /////////
-            // Is now also for VSG users or other server side auth ///
-            // ///////////////////////////////////////////////
-            if (response.state !== undefined) {
-              if (response.state === 1) {
-                deferred.resolve();
-              } else {
-                deferred.reject(response);
-              }
-            } else {
-              finaliseLogin(response)
-              .then(function() {
-                deferred.resolve(auth);
-              }, function(err) {
-                deferred.reject(err);
-              });
-            }
-          }, function(err) {
-            deferred.reject(err);
-          });
+        .then(function(resp) {
+          client = resp;
+          status()
+            .then(function(coovaResp) {
+              loginDetails.authResp = coovaResp;
+              createLogin()
+                .then(function(response) {
+                  //////////////////////////////////////////////////
+                  // Meraki login if state is present in response /////////
+                  // Is now also for VSG users or other server side auth ///
+                  // ///////////////////////////////////////////////
+                  if (response.state !== undefined) {
+                    if (response.state === 1) {
+                      deferred.resolve();
+                    } else {
+                      deferred.reject(response);
+                    }
+                  } else {
+                    finaliseLogin(response)
+                      .then(function() {
+                        deferred.resolve(auth);
+                      }, function(err) {
+                        deferred.reject(err);
+                      });
+                  }
+                }, function(err) {
+                  deferred.reject(err);
+                });
+            });
+        }, function(err) {
+          deferred.reject(err);
         });
-      }, function(err) {
-        deferred.reject(err);
-      });
       return deferred.promise;
     }
 
@@ -223,21 +223,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     }
 
-    function checkin(params) {
-      var deferred = $q.defer();
-      var options = {
-        place: params.pageId,
-        access_token: params.accessToken,
-        message: params.message
-      };
-      fbCheckin(options).then(function(msg) {
-        deferred.resolve(msg);
-      }, function(err) {
-        deferred.reject(err);
-      });
-      return deferred.promise;
-    }
-
     var fbCheckin = function(options) {
       var deferred = $q.defer();
       $http({
@@ -245,14 +230,32 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         url: 'https://graph.facebook.com/me/feed',
         params: options
       }).
-      success(function(msg) {
-        deferred.resolve(msg);
-      }).
-      error(function(err) {
-        deferred.reject(err.error);
-      });
+        success(function(msg) {
+          deferred.resolve(msg);
+        }).
+        error(function(err) {
+          deferred.reject(err.error);
+        });
       return deferred.promise;
     };
+
+    function checkin(params) {
+      var deferred = $q.defer();
+      var options = {
+        place:        params.pageId,
+        access_token: params.token,
+        message:      params.message
+      };
+
+      console.log(options);
+
+      fbCheckin(options).then(function(msg) {
+        deferred.resolve(msg);
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }
 
     function guestLogin(params) {
       var deferred = $q.defer();
@@ -414,6 +417,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
 
       var deferred = $q.defer();
       var challenge = (loginDetails.authResp && loginDetails.authResp.challenge ) ? loginDetails.authResp.challenge : client.challenge;
+      var gid = $cookies.get('_ga');
 
       Tony.create({
         username:           loginDetails.username,
@@ -438,6 +442,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         signatureVersion:   loginDetails.signature_version,
         signatureOrder:     loginDetails.signature_order,
         uamip:              client.uamip,
+        gid:                gid,
+
         data:               JSON.stringify(loginDetails.data)
       }).$promise.then(function(res) {
         if (res.error) {
@@ -445,7 +451,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
           deferred.reject(res.message);
         } else {
           var options = {username: res.username, password: res.challengeResp, state: res.clientState};
-          console.log('Auth OK for', res.username);
+          console.log('Auth OK for', res.username || 'unknown user');
           deferred.resolve(options);
         }
       }, function(err) {
@@ -482,7 +488,28 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         return microtikLogin();
       } else if ($rootScope.deviceId === '9') {
         return ciscoLogin();
+      } else if ($rootScope.deviceId === '10') {
+        return unifiLogin();
+      } else if ($rootScope.deviceId === '11') {
+        cloudtraxLogin().then(function() {
+          deferred.resolve();
+        }, function(err) {
+          deferred.reject(err);
+        });
       }
+      return deferred.promise;
+    };
+
+    var cloudtraxLogin = function() {
+      var deferred = $q.defer();
+      Coova.cloudtrax({
+        username: auth.username,
+        password: auth.password
+      }).then(function(res) {
+        deferred.resolve();
+      }, function(err) {
+        deferred.reject(err);
+      });
       return deferred.promise;
     };
 
@@ -545,6 +572,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       });
     };
 
+    var unifiLogin = function() {
+      var deferred = $q.defer();
+      auth.type = 'unifi';
+      deferred.resolve();
+      return deferred.promise;
+    };
+
     var ruckusLogin = function() {
       var deferred = $q.defer();
       auth.type = 'ruckus';
@@ -580,18 +614,26 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     };
 
   }
-]);
+])
 
 app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localStorage',
 
   function($routeParams, $q, $rootScope, $location, $localStorage) {
 
-    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device;
+    var clientMac, clientIp, apMac, redirectUri, loginUri, apTags, requestUri, challenge, uamip, uamport, uamSsl, device, ssid, type, code;
     var obj;
 
     var details = function() {
       var deferred = $q.defer();
-      if ($rootScope.deviceId === '1') {
+      if ($location.path() === '/social') {
+        clientMac = $routeParams.clientMac;
+        challenge = $routeParams.challenge;
+        apMac = $routeParams.apMac;
+        redirectUri = $routeParams.redirectUri;
+        uamip = $routeParams.uamip;
+        uamport = $routeParams.uamport;
+        code = $routeParams.code;
+      } else if ($rootScope.deviceId === '1') {
         clientMac = $routeParams.mac;
         apMac = $routeParams.called;
         redirectUri = $routeParams.userurl;
@@ -647,7 +689,21 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         clientMac = $routeParams.client_mac;
         apMac = $routeParams.ap_mac;
         uamip = $routeParams.switch_url;
+      } else if ($rootScope.deviceId === '10') {
+        clientMac = $routeParams.id;
+        apMac = $routeParams.ap;
+        ssid = $routeParams.ssid;
+      } else if ($rootScope.deviceId === '11') {
+        clientMac = $routeParams.mac;
+        challenge = $routeParams.challenge;
+        apMac = $routeParams.called;
+        redirectUri = $routeParams.userurl;
+        uamip = $routeParams.uamip;
+        uamport = $routeParams.uamport;
+        uamSsl = $routeParams.ssl;
+        type = 'ctx';
       }
+
       obj = {
         clientMac: clientMac,
         clientIp: clientIp,
@@ -661,7 +717,8 @@ app.factory('Client', ['$routeParams', '$q', '$rootScope', '$location', '$localS
         requestUri: $location.host(),
         challenge: challenge,
         uamSsl: uamSsl,
-        device: device
+        device: device,
+        ssid: ssid,
       };
 
       if (obj.clientMac === undefined) {
