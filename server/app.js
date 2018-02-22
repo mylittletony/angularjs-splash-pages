@@ -53,39 +53,19 @@ app.get('/tweet', function(req, res){
   // });
 });
 
-// app.get('/tweet', function(req, res){
-//   console.log(req.session)
-//   consumer.post("https://api.twitter.com/1.1/statuses/update.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, {"status":"Tweet me!"}, function (error, data) {
-//     if (error) {
-//       console.log(error, req.session);
-//       res.send('You are signed in: ');
-//       // res.redirect('/auth/twitter');
-//     } else {
-//       // var parsedData = JSON.parse(data);
-//       // console.log(parsedData);
-//       res.send('You are signed in: ');
-//     }
-//   });
-// });
-
-app.get('/home', function(req, res){
+function validate(req, res, cb) {
   consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true&include_email=true", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
     if (error) {
-      // console.log(error, req.session);
-      res.redirect('/auth/twitter');
-    } else {
-      var parsedData = JSON.parse(data);
-      // console.log(parsedData);
-      res.redirect('/tweet');
-      // res.send('You are signed in: ' + parsedData.screen_name);
+      return cb();
     }
+    var parsedData = JSON.parse(data);
+    return cb(parsedData);
   });
-});
+}
 
 app.get('/auth/twitter/callback', function(req, res) {
   consumer.getOAuthAccessToken(req.session.oauthRequestToken, req.session.oauthRequestTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
     if (error) {
-      // console.log(error);
       res.send("Error getting OAuth access token");
     } else {
       req.session.oauthAccessToken = oauthAccessToken;
@@ -96,11 +76,16 @@ app.get('/auth/twitter/callback', function(req, res) {
         return;
       }
 
-      var state = JSON.parse(req.session.state);
-      state.type = 'tw';
+      validate(req, res, function(data) {
 
-      var paramsHash = queryString.stringify(state);
-      res.redirect('/social?' + paramsHash);
+        var state = JSON.parse(req.session.state);
+        state.type        = 'tw';
+        state.screen_name = data.screen_name;
+        state.email       = data.email
+
+        var paramsHash = queryString.stringify(state);
+        res.redirect('/social?' + paramsHash);
+      });
     }
   });
 });

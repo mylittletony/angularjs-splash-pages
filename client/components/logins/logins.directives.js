@@ -67,9 +67,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var doSocialLogin = function(response) {
       var deferred = $q.defer();
       var params = {
-        token:      $routeParams.code,
-        newsletter: attrs.newsletter,
-        userId: true // used in backend to identify fb
+        token:          $routeParams.code,
+        newsletter:     attrs.newsletter,
+        email:          $routeParams.email,
+        screen_name:    $routeParams.screen_name,
+        type:           $routeParams.type
       };
 
       CT.login(params).then(function(a) {

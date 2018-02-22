@@ -42,7 +42,8 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
 
   var link = function(scope,element,attrs,controller) {
 
-    var user, authResponse;
+    var user, authResponse, appId;
+    var mimo = ['app.mimo.com', 's.oh-mimo.com', 'splash.oh-mimo.com', 'app.my-wifi.test'];
 
     function errorMsg(msg) {
       $rootScope.banneralert = 'banner-alert alert-box alert';
@@ -55,6 +56,16 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
     }
 
     function statusChangeCallback(response) {
+      if (attrs.appId === '' || attrs.appId === null) {
+        appId = '468282836525087'; // ct
+      }
+
+      if (mimo.indexOf(window.location.hostname) >= 0) {
+        appId = '177303432997780';
+      }
+
+      console.log('Using APP ID:', appId);
+
       var msg =
         '<div>' +
         '<a href=\'\' ng-click=\'login()\' class=\'social facebook\' >Continue with Facebook<span ng-if=\'processing\'><i class="fa fa-spinner fa-pulse"></i></span></a>'+
@@ -63,10 +74,11 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
     }
 
     scope.login = function() {
+
       Client.details().then(function(client) {
         var host = window.location.host;
         var params = JSON.stringify(client);
-        window.location = 'https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=' + attrs.appId + '&redirect_uri=http://' + host + '/auth/facebook&action&oauth_facebook_callback&scope=email&state=' + params;
+        window.location = 'https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=' + appId + '&redirect_uri=http://' + host + '/auth/facebook&action&oauth_facebook_callback&scope=email&state=' + params;
       });
     };
 
