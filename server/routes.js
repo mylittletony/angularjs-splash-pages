@@ -25,13 +25,18 @@ module.exports = function(app) {
         console.warn(response.statusCode);
       }
 
+      params.type = 'fb';
+
+      if (response.statusCode !== 200) {
+        console.log(response.body, response.statusCode);
+      }
+
       if (response.statusCode === 200) {
         var data = JSON.parse(response.body);
         params.code = data.access_token;
       }
 
       const parsedHash = queryString.stringify(params);
-      console.log(parsedHash);
       res.redirect('/social?' + parsedHash);
     });
   });

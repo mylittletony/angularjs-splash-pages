@@ -145,12 +145,10 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.token              = params.token;
       loginDetails.expires            = params.expires;
       loginDetails.guestId            = params.guestId;
-      loginDetails.userId             = params.userId;
       loginDetails.memberId           = params.memberId;
       loginDetails.splash_id          = params.splash_id;
-      loginDetails.signature          = params.signature;
-      loginDetails.signature_order    = params.signature_order;
-      loginDetails.signature_version  = params.signature_version;
+      loginDetails.type               = params.type;
+      loginDetails.screen_name        = params.screen_name;
 
       Client.details()
         .then(function(resp) {
@@ -246,8 +244,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         access_token: params.token,
         message:      params.message
       };
-
-      console.log(options);
 
       fbCheckin(options).then(function(msg) {
         deferred.resolve(msg);
@@ -433,18 +429,16 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         loginUri:           client.loginUri,
         device:             client.device,
         token:              loginDetails.token,
-        userId:             loginDetails.userId,
         memberId:           loginDetails.memberId,
         expires:            loginDetails.expires,
         email:              loginDetails.email,
         newsletter:         loginDetails.newsletter,
-        signature:          loginDetails.signature,
-        signatureVersion:   loginDetails.signature_version,
-        signatureOrder:     loginDetails.signature_order,
         uamip:              client.uamip,
         gid:                gid,
-
+        screen_name:        loginDetails.screen_name,
+        social_type:        loginDetails.type,
         data:               JSON.stringify(loginDetails.data)
+
       }).$promise.then(function(res) {
         if (res.error) {
           console.log('Auth rejected:', res);

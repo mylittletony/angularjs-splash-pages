@@ -18,11 +18,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     function redirectUrl() {
-      if (attrs.fbPageRedirect === 'true') {
-        return 'https://www.facebook.com/' + attrs.fbPageId;
+      if ($routeParams.type === 'tw') {
+        return 'https://www.twitter.com/' + attrs.twHandle;
       }
 
-      return 'https://www.facebook.com/';
+      return 'https://www.facebook.com/' + attrs.fbPageId;
     }
 
     function redirect() {
@@ -67,9 +67,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var doSocialLogin = function(response) {
       var deferred = $q.defer();
       var params = {
-        token:      $routeParams.code,
-        newsletter: attrs.newsletter,
-        userId: true // used in backend to identify fb
+        token:          $routeParams.code,
+        newsletter:     attrs.newsletter,
+        email:          $routeParams.email,
+        screen_name:    $routeParams.screen_name,
+        type:           $routeParams.type
       };
 
       CT.login(params).then(function(a) {
@@ -167,6 +169,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (attrs.fbCheckin === 'true') {
         socialCheckin();
         return;
+      }
+
+      if (attrs.twTweet === 'true') {
+        // twitter message
+        return
       }
 
       socialLogin();
@@ -345,7 +352,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       terms: '@',
       btntext: '@',
       fbCheckin: '@',
-      fbPageId: '@'
+      fbPageId: '@',
+      twSendTweet: '@',
+      twHandle: '@'
     },
   };
 
