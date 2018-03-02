@@ -923,13 +923,26 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tbackground-color: {{ splash.input_background }}!important;\n'+
         '\tborder-width: {{ splash.input_border_width }}!important;\n'+
         '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
-        '\tmargin: 0 0 0.5rem -5px!important;\n'+
+        '\tmargin: 0 0 0.5rem 0px!important;\n'+
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 
-        'input[type=text], textarea {\n'+
-        '\theight: {{ splash.input_height || \'40px\' }}!important;\n'+
-        '\tline-height: {{ splash.input_height || \'40px\' }}!important;\n'+
+        'input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+        'input::-moz-placeholder, textarea::-moz-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+        'input:-ms-input-placeholder, textarea:-ms-input-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+
+        'input[type=text], input[type=password], input[type=email], textarea {\n'+
+        '\theight: {{ splash.input_height }}!important;\n'+
+        '\tline-height: {{ splash.input_height }}!important;\n'+
         '}\n\n' +
 
         'textarea {\n'+

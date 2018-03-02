@@ -138,6 +138,10 @@ input, textarea {
   display: inline!important;
 }
 
+input[type=text], input[type=password], input[type=email], textarea {
+  width: 95%!important;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -149,7 +153,7 @@ input, textarea {
   min-width: 150px;
   max-width: 400px;
   max-height: 50px;
-  width: 100%;
+  width: 95%;
   margin: 10px 0px 10px 0px;
   border-radius: 4px;
   padding-left: 4rem;
@@ -205,6 +209,12 @@ input, textarea {
   z-index: 1;
 }
 
+.btn, button {
+  min-width: 150px;
+  max-width: 400px;
+  width: 95%;
+}
+
 .social {
   border-style: solid;
   border-width: 0px;
@@ -231,7 +241,7 @@ input, textarea {
   max-height: 50px;
   min-width: 150px;
   max-width: 400px;
-  width: 100%;
+  width: 95%;
 }
 
 a.social:hover {
