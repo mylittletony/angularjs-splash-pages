@@ -164,7 +164,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       '<div>' +
       '<h2 ng-show=\'loggingIn\'><b>Logging you in, please hold tight...</b></h2>' +
       '<div ng-hide=\'loggingIn\'><h2 ng-if=\'socialName\'>Hey {{ socialName }}, nice to see you again.</h2>'+
-      '<h2><b>Please login to use the Internet.</b></h2>'+
       '<div ng-transclude></div></div>' +
       '</div>'
   };
