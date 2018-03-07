@@ -958,6 +958,14 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\tline-height: 12px!important;\n'+
         '}\n\n'+
 
+        '#popup_container {\n'+
+        '\tbackground: {{ splash.popup_background_colour }};\n'+
+        '}\n\n'+
+
+        '#popup_ad .button {\n'+
+        '\tborder-radius: {{ splash.button_radius }};\n'+
+        '}\n\n'+
+
         '{{ splash.custom_css }}';
 
       head.append($compile('<style>' + template + '</style>')(scope));
@@ -984,6 +992,40 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
     link: link
   };
 
+}]);
+
+
+app.directive('popupAdvert', ['$location', '$compile', '$window', '$rootScope', '$timeout', function($location, $compile, $window, $rootScope, $timeout) {
+  var link = function(scope, element, attrs) {
+    var init = function(data) {
+      var template =
+        '<div id=\'popup_container\'>'+
+        '<div id="popup_ad">'+
+        '<div class="row">'+
+        '<div class="small-12">'+
+        '<img src="{{ splash.popup_image }}">'+
+        '</div>'+
+        '</div>'+
+        '<div class="row">'+
+        '<div class="small-12 text-center">'+
+        '<span id="popupCounter">'+
+        '<a class="btn button" id="countDown">5 sec</a>'+
+        '</span>'+
+        '<span>'+
+        '<a class="btn button" id="popupBoxClose">Close</a>'+
+        '</span>'+
+        '</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+    init();
+  };
+  return {
+    link: link,
+  };
 }]);
 
 app.directive('googleAnalytics', ['$compile', function($compile) {

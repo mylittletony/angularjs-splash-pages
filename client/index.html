@@ -43,6 +43,9 @@
         <div ng-include="'components/layouts/loading.html'"></div>
       </div>
       <div class="{{ banneralert || 'hidden' }}">{{ error }}</div>
+
+      <popup-advert></popup-advert>
+
       <div class='container'>
         <div class='splash-container' ng-class="state.hidden ? 'hidden' : ''">
           <div ng-view=""></div>
