@@ -999,7 +999,7 @@ app.directive('popupAdvert', ['$location', '$compile', '$window', '$rootScope', 
   var link = function(scope, element, attrs) {
     var init = function(data) {
       var template =
-        '<div id=\'popup_container\'>'+
+        '<div id="popup_container">'+
         '<div id="popup_ad">'+
         '<div class="row">'+
         '<div class="small-12">'+
