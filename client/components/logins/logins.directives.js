@@ -958,7 +958,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\tline-height: 12px!important;\n'+
         '}\n\n'+
 
-        '#popup_container {\n'+
+        '#popup_ad {\n'+
         '\tbackground: {{ splash.popup_background_colour }};\n'+
         '}\n\n'+
 
