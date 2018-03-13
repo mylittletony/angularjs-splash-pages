@@ -923,13 +923,26 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tbackground-color: {{ splash.input_background }}!important;\n'+
         '\tborder-width: {{ splash.input_border_width }}!important;\n'+
         '\tborder-color: {{ splash.input_border_colour }}!important;\n'+
-        '\tmargin: 0 0 0.5rem -5px!important;\n'+
+        '\tmargin: 0 0 0.5rem 0px!important;\n'+
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 
-        'input[type=text], textarea {\n'+
-        '\theight: {{ splash.input_height || \'40px\' }}!important;\n'+
-        '\tline-height: {{ splash.input_height || \'40px\' }}!important;\n'+
+        'input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+        'input::-moz-placeholder, textarea::-moz-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+        'input:-ms-input-placeholder, textarea:-ms-input-placeholder {\n'+
+        '\tcolor: {{ splash.input_text_colour }}!important;\n'+
+        '}\n\n' +
+
+
+        'input[type=text], input[type=password], input[type=email], textarea {\n'+
+        '\theight: {{ splash.input_height }}!important;\n'+
+        '\tline-height: {{ splash.input_height }}!important;\n'+
         '}\n\n' +
 
         'textarea {\n'+
@@ -943,6 +956,14 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\tmargin: {{ splash.container_inner_padding }};\n'+
         // '\theight: 12px!important;\n'+
         // '\tline-height: 12px!important;\n'+
+        '}\n\n'+
+
+        '#popup_ad {\n'+
+        '\tbackground: {{ splash.popup_background_colour }};\n'+
+        '}\n\n'+
+
+        '#popup_ad .button {\n'+
+        '\tborder-radius: {{ splash.button_radius }};\n'+
         '}\n\n'+
 
         '{{ splash.custom_css }}';
@@ -971,6 +992,40 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
     link: link
   };
 
+}]);
+
+
+app.directive('popupAdvert', ['$location', '$compile', '$window', '$rootScope', '$timeout', function($location, $compile, $window, $rootScope, $timeout) {
+  var link = function(scope, element, attrs) {
+    var init = function(data) {
+      var template =
+        '<div id="popup_container">'+
+        '<div id="popup_ad">'+
+        '<div class="row">'+
+        '<div class="small-12">'+
+        '<img src="{{ splash.popup_image }}">'+
+        '</div>'+
+        '</div>'+
+        '<div class="row">'+
+        '<div class="small-12 text-center">'+
+        '<span id="popupCounter">'+
+        '<a class="btn button" id="countDown">5 sec</a>'+
+        '</span>'+
+        '<span>'+
+        '<a class="btn button" id="popupBoxClose">Close</a>'+
+        '</span>'+
+        '</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+    init();
+  };
+  return {
+    link: link,
+  };
 }]);
 
 app.directive('googleAnalytics', ['$compile', function($compile) {
