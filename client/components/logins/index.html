@@ -33,7 +33,7 @@ $(document).ready( function() {
   }
 });
 </script>
-<popup-advert ng-show="splash.popup_image" ng-hide="splash.popup_ad == false"></popup-advert>
+<popup-advert ng-show="splash.popup_image" ng-hide="splash.popup_ad == false || state.errors"></popup-advert>
 <build-page></build-page>
 
 <div ng-show="state.errors" ng-cloak>
