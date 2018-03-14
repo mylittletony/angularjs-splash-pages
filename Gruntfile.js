@@ -39,8 +39,10 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/scripts/config.js',
         },
         constants: {
-          API_END_POINT: 'http://api.ctapp.dev:8080/api/v1',
-          API_URL: 'http://api.ctapp.dev:8080',
+          // API_END_POINT: 'https://api.ctapp.io/api/v1',
+          // API_URL: 'https://api.ctapp.io',
+          API_END_POINT: 'http://mywifi.test:8080/api/v1',
+          API_URL: 'http://mywifi.test:8080',
           ENVIRONMENT: 'development'
           // API_END_POINT: 'https://api.polkaspots.com/api/v1',
           // API_URL: 'https://api.polkaspots.com'
@@ -112,16 +114,16 @@ module.exports = function (grunt) {
         ],
         tasks: ['newer:jshint:all', 'karma']
       },
-      injectSass: {
-        files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['injector:sass']
-      },
-      sass: {
-        files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['sass', 'autoprefixer']
-      },
+      // injectSass: {
+      //   files: [
+      //     '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+      //   tasks: ['injector:sass']
+      // },
+      // sass: {
+      //   files: [
+      //     '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+      //   tasks: ['sass', 'autoprefixer']
+      // },
       gruntfile: {
         files: ['Gruntfile.js']
       },
@@ -303,16 +305,16 @@ module.exports = function (grunt) {
     },
 
     // The following *-min tasks produce minified files in the dist folder
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.client %>/assets/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/public/assets/images'
-        }]
-      }
-    },
+    // imagemin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.client %>/assets/images',
+    //       src: '{,*/}*.{png,jpg,jpeg,gif}',
+    //       dest: '<%= yeoman.dist %>/public/assets/images'
+    //     }]
+    //   }
+    // },
 
     svgmin: {
       dist: {
@@ -419,13 +421,20 @@ module.exports = function (grunt) {
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
       },
-      heroku: {
+      beta: {
         options: {
-          // remote: 'git@heroku.com:lit-reef-11568.git',
-          remote: 'git@heroku.com:salty-shore-3757.git',
-          branch: 'master'
+          remote: 'git@heroku.com:beta-login-pages.git',
+          branch: 'master',
+          force: true
         }
       },
+        heroku: {
+          options: {
+            remote: 'git@heroku.com:salty-shore-3757.git',
+            branch: 'master',
+            force: true
+          }
+        },
       openshift: {
         options: {
           remote: 'openshift',
@@ -437,10 +446,10 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'sass',
+        // 'sass',
       ],
       test: [
-        'sass',
+        // 'sass',
       ],
       debug: {
         tasks: [
@@ -452,8 +461,8 @@ module.exports = function (grunt) {
         }
       },
       dist: [
-        'sass',
-        'imagemin',
+        // 'sass',
+        // 'imagemin',
         'svgmin'
       ]
     },
@@ -497,21 +506,21 @@ module.exports = function (grunt) {
     },
 
     // Compiles Sass to CSS
-    sass: {
-      server: {
-        options: {
-          loadPath: [
-            '<%= yeoman.client %>/bower_components',
-            '<%= yeoman.client %>/app',
-            '<%= yeoman.client %>/components'
-          ],
-          compass: false
-        },
-        files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
-        }
-      }
-    },
+    // sass: {
+    //   server: {
+    //     options: {
+    //       loadPath: [
+    //         '<%= yeoman.client %>/bower_components',
+    //         '<%= yeoman.client %>/app',
+    //         '<%= yeoman.client %>/components'
+    //       ],
+    //       compass: false
+    //     },
+    //     files: {
+    //       '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
+    //     }
+    //   }
+    // },
 
     injector: {
       options: {
@@ -539,23 +548,23 @@ module.exports = function (grunt) {
       },
 
       // Inject component scss into app.scss
-      sass: {
-        options: {
-          transform: function(filePath) {
-            filePath = filePath.replace('/client/app/', '');
-            filePath = filePath.replace('/client/components/', '');
-            return '@import \'' + filePath + '\';';
-          },
-          starttag: '// injector',
-          endtag: '// endinjector'
-        },
-        files: {
-          '<%= yeoman.client %>/app/app.scss': [
-            '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}',
-            '!<%= yeoman.client %>/app/app.{scss,sass}'
-          ]
-        }
-      },
+      // sass: {
+      //   options: {
+      //     transform: function(filePath) {
+      //       filePath = filePath.replace('/client/app/', '');
+      //       filePath = filePath.replace('/client/components/', '');
+      //       return '@import \'' + filePath + '\';';
+      //     },
+      //     starttag: '// injector',
+      //     endtag: '// endinjector'
+      //   },
+      //   files: {
+      //     '<%= yeoman.client %>/app/app.scss': [
+      //       '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}',
+      //       '!<%= yeoman.client %>/app/app.{scss,sass}'
+      //     ]
+      //   }
+      // },
 
       // Inject component css into index.html
       css: {
@@ -602,7 +611,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass',
+        // 'injector:sass',
         'concurrent:server',
         'injector',
         'wiredep',
@@ -615,7 +624,7 @@ module.exports = function (grunt) {
       'clean:server',
       'ngconstant:development',
       'env:all',
-      'injector:sass',
+      // 'injector:sass',
       'concurrent:server',
       'injector',
       'wiredep',
@@ -645,7 +654,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass',
+        // 'injector:sass',
         'concurrent:test',
         'injector',
         'autoprefixer',
@@ -658,7 +667,7 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'env:test',
-        'injector:sass',
+        // 'injector:sass',
         'concurrent:test',
         'injector',
         'wiredep',
@@ -678,7 +687,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'ngconstant:production',
-    'injector:sass',
+    // 'injector:sass',
     'concurrent:dist',
     'injector',
     'wiredep',

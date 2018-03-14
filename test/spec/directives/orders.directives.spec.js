@@ -293,12 +293,12 @@ describe('logins init', function () {
 
       expect(loginScope.isolateScope().guest.email).toBe(email);
 
-      loginScope.isolateScope().finaliseOrder(loginScope.isolateScope().guest)
-      $scope.$digest()
+      loginScope.isolateScope().finaliseOrder(loginScope.isolateScope().guest);
+      $scope.$digest();
       // expect(loginScope.isolateScope().loading).toBe(true);
 
-      deferred.resolve(results)
-      $scope.$digest()
+      deferred.resolve(results);
+      $scope.$digest();
       expect(element.isolateScope().finalised).toBe(true);
       expect(element.isolateScope().vouchers[0].username).toBe(123);
       expect(cookies.cartId).toBe(undefined)

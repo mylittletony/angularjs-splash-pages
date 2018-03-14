@@ -6,23 +6,23 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
 
   var link = function(scope, element, attrs) {
 
-    scope.doCheckin = function() {
-      scope.checkin = true;
-      var options = {
-        pageId: scope.fbPageId,
-        accessToken: scope.authResponse.accessToken,
-        message: scope.message
-      };
-      CT.checkin(options).then(function() {
-        redirect();
-      }, function() {
-        redirect();
-      });
-    };
-
     function redirect() {
       $window.location.href = scope.redirectUrl;
     }
+
+    // scope.doCheckin = function() {
+    //   scope.checkin = true;
+    //   var options = {
+    //     pageId: scope.fbPageId,
+    //     accessToken: scope.authResponse.accessToken,
+    //     message: scope.message
+    //   };
+    //   CT.checkin(options).then(function() {
+    //     redirect();
+    //   }, function() {
+    //     redirect();
+    //   });
+    // };
 
   };
 
@@ -44,8 +44,8 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       }
     };
 
-    this.doCtLogin = function() {
-      formatAuthResponse();
+    this.doCtLogin = function(response) {
+      formatAuthResponse(response);
       var deferred = $q.defer();
       var params = {
         token: auth.accessToken,
@@ -116,7 +116,6 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       $element.html(templateObj);
     };
 
-
     this.autoLogin = function() {
       var deferred = $q.defer();
       $scope.loggingIn = true;
@@ -127,7 +126,10 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       return deferred.promise;
     };
 
-    var formatAuthResponse = function() {
+    var formatAuthResponse = function(auth) {
+      if (auth) {
+        $scope.authResponse = auth;
+      }
       if ($scope.authResponse.member_id !== undefined) {
         auth.accessToken        = $scope.authResponse.access_token;
         auth.memberId           = $scope.authResponse.member_id;
@@ -149,29 +151,21 @@ app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client'
       var templateObj = $compile('<div>' + msg +'</div>')($scope);
       $element.html(templateObj);
     };
-
-    // OAuth.initialize('');
-
-    // $scope.popup = function() {
-    //   OAuth.popup('twitter').done(function(facebook, res) {
-    //   }).fail(function(err) {
-    //   });};
   };
 
   return {
-    scope: true,
+    scope: {
+      loading: '@'
+    },
     transclude: true,
     controller: controller,
     link: link,
     template:
       '<div>' +
-      '<div ng-show=\'loggingIn\' class=\'small-12 medium-6 medium-centered columns alert-box success\'>Logging you in, please hold tight...</div>' +
+      '<h2 ng-show=\'loggingIn\'><b>Logging you in, please hold tight...</b></h2>' +
       '<div ng-hide=\'loggingIn\'><h2 ng-if=\'socialName\'>Hey {{ socialName }}, nice to see you again.</h2>'+
-      '<h2><b>Please login with one of the following.</b></h2>'+
       '<div ng-transclude></div></div>' +
       '</div>'
   };
 
 }]);
-
-
