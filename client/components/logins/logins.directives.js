@@ -105,6 +105,13 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
+    scope.access = {};
+
+    scope.back = function() {
+      scope.access.sms_access = undefined;
+      scope.access.email_access = undefined;
+    };
+
     scope.doCheckin = function(msg) {
 
       socialLoginMsg();
@@ -173,7 +180,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
       if (attrs.twTweet === 'true') {
         // twitter message
-        return
+        return;
       }
 
       socialLogin();
@@ -301,7 +308,24 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
+    var onSuccessOTP = function() {
+    };
+
+    var onFailOTP = function() {
+      alert('Invalid number!');
+    };
+
+    scope.cc = '+44';
+    scope.otp = function() {
+      var number = scope.cc + scope.number;
+      CT.otp({
+        splash_id:  $routeParams.splash_id,
+        data: { number: number }
+      }).then(onSuccessOTP, onFailOTP);
+    };
+
     scope.submit = function(custom_data) {
+
       if (scope.loggingIn) {
         return;
       }
