@@ -2,10 +2,20 @@
 
 var app = angular.module('ctLoginsApp.logins.directives', []);
 
-app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT',
-  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT) {
+app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT', '$cookies',
+  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT, $cookies) {
 
   var link = function(scope,element,attrs) {
+
+    scope.otp = { cc: '+44' };
+
+    var otpEnabled = function() {
+      var o = $cookies.get('mimo-otp');
+      if (o) {
+        scope.otp.active = true;
+        scope.access.sms_access = true;
+      }
+    };
 
     var cleanUp = function() {
       $rootScope.bodylayout   = undefined;
@@ -110,6 +120,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     scope.back = function() {
       scope.access.sms_access = undefined;
       scope.access.email_access = undefined;
+      scope.otp.active = undefined;
+      $cookies.remove('mimo-otp');
     };
 
     scope.doCheckin = function(msg) {
@@ -149,6 +161,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     }
 
     var onSuccess = function(auth) {
+      scope.otp = { cc: '+44' };
+      $cookies.remove('mimo-otp');
+
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
       } else {
@@ -222,6 +237,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         if (attrs.unified === 'true') {
           scope.show_unified = true;
         }
+
+        otpEnabled();
 
       }, function(err) {
         scope.state.status = undefined;
@@ -309,15 +326,23 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var onSuccessOTP = function() {
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+
+      var expireDate = new Date(new Date().getTime() + 5*60000);
+      $cookies.put('mimo-otp', 1, { expires: expireDate });
+      scope.otp.active = true;
     };
 
     var onFailOTP = function() {
-      alert('Invalid number!');
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = 'Number not recognised, please try again.';
+      scope.otp.number = undefined;
     };
 
-    scope.cc = '+44';
-    scope.otp = function() {
-      var number = scope.cc + scope.number;
+    scope.create_otp = function(myForm) {
+      myForm.$setPristine();
+      var number = scope.otp.cc + scope.otp.number;
       CT.otp({
         splash_id:  $routeParams.splash_id,
         data: { number: number }
@@ -326,14 +351,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
     scope.submit = function(custom_data) {
 
-      if (scope.loggingIn) {
-        return;
-      }
-
       scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
         return;
+      }
+
+      if (scope.otp.password) {
+        scope.password = scope.otp.password;
       }
 
       scope.error = undefined;
@@ -351,7 +376,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data: scope.fields
+        data:       scope.fields
       }).then(onSuccess, onFail);
     };
 

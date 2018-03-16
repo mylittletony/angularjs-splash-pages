@@ -42,7 +42,7 @@
       <div ng-show="state.status == 'loading' || state.status == 'login'" ng-cloak>
         <div ng-include="'components/layouts/loading.html'"></div>
       </div>
-      <div class="{{ banneralert || 'hidden' }}">{{ error }}</div>
+      <div class="{{ banneralert || 'hidden' }}"><b>{{ error }}</b></div>
       <div class='container'>
         <div class='splash-container' ng-class="state.hidden ? 'hidden' : ''">
           <div ng-view=""></div>
