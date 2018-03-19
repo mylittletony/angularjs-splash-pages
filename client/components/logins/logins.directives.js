@@ -160,6 +160,21 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     }
 
+    var onSuccessOTP = function() {
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+
+      var expireDate = new Date(new Date().getTime() + 5*60000);
+      $cookies.put('mimo-otp', 1, { expires: expireDate });
+      scope.otp.active = true;
+    };
+
+    var onFailOTP = function() {
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = 'Number not recognised, please try again.';
+      scope.otp.number = undefined;
+    };
+
     var onSuccess = function(auth) {
       scope.otp = { cc: '+44' };
       $cookies.remove('mimo-otp');
@@ -169,6 +184,16 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       } else {
         finishLogin();
       }
+    };
+
+    var onFail = function(err) {
+      alert(123);
+      scope.loggingIn = undefined;
+      // Insert a CT service error handler //
+      cleanUp();
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = err;
+      chooseForm();
     };
 
     var socialCheckin = function() {
@@ -248,15 +273,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       });
     };
 
-    var onFail = function(err) {
-      scope.loggingIn = undefined;
-      // Insert a CT service error handler //
-      cleanUp();
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = err;
-      chooseForm();
-    };
-
     // var addSocial = function() {
     //   scope.code = attrs.code;
     //   var template =
@@ -325,23 +341,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
-    var onSuccessOTP = function() {
-      $rootScope.banneralert = undefined;
-      $rootScope.error = undefined;
-
-      var expireDate = new Date(new Date().getTime() + 5*60000);
-      $cookies.put('mimo-otp', 1, { expires: expireDate });
-      scope.otp.active = true;
-    };
-
-    var onFailOTP = function() {
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = 'Number not recognised, please try again.';
-      scope.otp.number = undefined;
-    };
-
     scope.create_otp = function(myForm) {
-      myForm.$setPristine();
+      if (myForm) {
+        myForm.$setPristine();
+      }
       var number = scope.otp.cc + scope.otp.number;
       CT.otp({
         splash_id:  $routeParams.splash_id,
