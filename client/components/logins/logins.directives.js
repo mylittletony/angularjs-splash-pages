@@ -2,10 +2,20 @@
 
 var app = angular.module('ctLoginsApp.logins.directives', []);
 
-app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT',
-  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT) {
+app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT', '$cookies',
+  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT, $cookies) {
 
   var link = function(scope,element,attrs) {
+
+    scope.otp = { cc: '+44' };
+
+    var otpEnabled = function() {
+      var o = $cookies.get('mimo-otp');
+      if (o) {
+        scope.otp.active = true;
+        scope.access.sms_access = true;
+      }
+    };
 
     var cleanUp = function() {
       $rootScope.bodylayout   = undefined;
@@ -105,6 +115,15 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
+    scope.access = {};
+
+    scope.back = function() {
+      scope.access.sms_access = undefined;
+      scope.access.email_access = undefined;
+      scope.otp.active = undefined;
+      $cookies.remove('mimo-otp');
+    };
+
     scope.doCheckin = function(msg) {
 
       socialLoginMsg();
@@ -141,12 +160,40 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     }
 
+    var onSuccessOTP = function() {
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+
+      var expireDate = new Date(new Date().getTime() + 5*60000);
+      $cookies.put('mimo-otp', 1, { expires: expireDate });
+      scope.otp.active = true;
+    };
+
+    var onFailOTP = function() {
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = 'Number not recognised, please try again.';
+      scope.otp.number = undefined;
+    };
+
     var onSuccess = function(auth) {
+      scope.otp = { cc: '+44' };
+      $cookies.remove('mimo-otp');
+
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
       } else {
         finishLogin();
       }
+    };
+
+    var onFail = function(err) {
+      alert(123);
+      scope.loggingIn = undefined;
+      // Insert a CT service error handler //
+      cleanUp();
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = err;
+      chooseForm();
     };
 
     var socialCheckin = function() {
@@ -173,7 +220,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
       if (attrs.twTweet === 'true') {
         // twitter message
-        return
+        return;
       }
 
       socialLogin();
@@ -216,21 +263,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           scope.show_unified = true;
         }
 
+        otpEnabled();
+
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
         scope.state.errors = err;
         $rootScope.bodylayout = 'login-error';
       });
-    };
-
-    var onFail = function(err) {
-      scope.loggingIn = undefined;
-      // Insert a CT service error handler //
-      cleanUp();
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = err;
-      chooseForm();
     };
 
     // var addSocial = function() {
@@ -301,15 +341,27 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
-    scope.submit = function(custom_data) {
-      if (scope.loggingIn) {
-        return;
+    scope.create_otp = function(myForm) {
+      if (myForm) {
+        myForm.$setPristine();
       }
+      var number = scope.otp.cc + scope.otp.number;
+      CT.otp({
+        splash_id:  $routeParams.splash_id,
+        data: { number: number }
+      }).then(onSuccessOTP, onFailOTP);
+    };
+
+    scope.submit = function(custom_data) {
 
       scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
         return;
+      }
+
+      if (scope.otp.password) {
+        scope.password = scope.otp.password;
       }
 
       scope.error = undefined;
@@ -327,7 +379,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data: scope.fields
+        data:       scope.fields
       }).then(onSuccess, onFail);
     };
 
