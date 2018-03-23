@@ -227,7 +227,6 @@ input[type=text], input[type=password], input[type=email], textarea {
   text-decoration: none;
   text-align: center;
   -webkit-appearance: none;
-  border-radius: 4px;
   display: inline-block;
   padding-top: 1rem;
   padding-right: 2rem;
