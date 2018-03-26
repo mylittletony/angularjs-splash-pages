@@ -8,6 +8,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
   var link = function(scope,element,attrs) {
 
     scope.otp = { cc: '+44' };
+    scope.user = {};
 
     var otpEnabled = function() {
       var o = $cookies.get('mimo-otp');
@@ -373,7 +374,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.fields = custom_data.fields;
       }
       CT.login({
-        email:      scope.email,
+        email:      scope.email || scope.user.email,
         username:   scope.username,
         password:   scope.password,
         logincode:  scope.logincode,
