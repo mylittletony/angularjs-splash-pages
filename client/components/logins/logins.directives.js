@@ -8,6 +8,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
   var link = function(scope,element,attrs) {
 
     scope.otp = { cc: '+44' };
+    scope.user = {};
 
     var otpEnabled = function() {
       var o = $cookies.get('mimo-otp');
@@ -373,7 +374,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.fields = custom_data.fields;
       }
       CT.login({
-        email:      scope.email,
+        email:      scope.email || scope.user.email,
         username:   scope.username,
         password:   scope.password,
         logincode:  scope.logincode,
@@ -903,6 +904,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tmin-height: 100px;\n'+
         '\tdisplay: block;\n'+
         '\tpadding: {{ splash.container_inner_padding }};\n'+
+        '\tbox-shadow: {{splash.container_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
         '}\n\n'+
 
         '.footer {\n'+
@@ -991,7 +993,6 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 
-
         'input[type=text], input[type=password], input[type=email], textarea {\n'+
         '\theight: {{ splash.input_height }}!important;\n'+
         '\tline-height: {{ splash.input_height }}!important;\n'+
@@ -1017,6 +1018,15 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '#popup_ad .button {\n'+
         '\tborder-radius: {{ splash.button_radius }};\n'+
         '}\n\n'+
+
+        'a.social, a.button, .btn.btn-lg.btn-default {\n'+
+        '\tborder-radius: {{splash.button_radius}}!important;\n'+
+        '\tbox-shadow: {{splash.button_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
+        '}\n\n'+
+
+        '.social.sms-access, .social.sms-access:hover, .social.sms-access:focus, .social.facebook, .social.facebook:hover,.social.facebook:focus, .social.google, .social.google:hover,.social.google:focus, .social.twitter, .social.twitter:hover,.social.twitter:focus, .button.social-access::after, .button.email-access::after, .button.voucher-access::after {\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px!important;\n'+
+        '}\n'+
 
         '{{ splash.custom_css }}';
 
