@@ -3,14 +3,22 @@
 var request = require('request');
 const queryString = require('query-string');
 var errors = require('./components/errors');
+var mimo = ['s.oh-mimo.com'];
 
 module.exports = function(app) {
 
   app.get('/auth/facebook', function(req, res) {
+    var redirect_url = 'http://app.my-wifi.co';
+    if (mimo.indexOf(window.location.hostname) >= 0) {
+      redirect_url = 'http://s.oh-mimo.com';
+    }
+
+    redirect_url = redirect_url + '/auth/facebook';
+
     var query = {};
     query.client_id = process.env.CLIENT_ID;
     query.client_secret = process.env.CLIENT_SECRET;
-    query.redirect_uri = process.env.REDIRECT_URI || 'http://app.my-wifi.test:9001/auth/facebook';
+    query.redirect_uri = redirect_uri;
     query.code = req.query.code;
 
     var url = 'https://graph.facebook.com/v2.12/oauth/access_token';
@@ -45,10 +53,17 @@ module.exports = function(app) {
   });
 
   app.get('/auth/google/callback', function(req, res) {
+    var redirect_url = 'http://app.my-wifi.co';
+    if (mimo.indexOf(window.location.hostname) >= 0) {
+      redirect_url = 'http://s.oh-mimo.com';
+    }
+
+    redirect_url = redirect_url + '/auth/google/callback';
+
     var query = {};
     query.client_id = process.env.GOOGLE_CLIENT_ID;
     query.client_secret = process.env.GOOGLE_CLIENT_SECRET;
-    query.redirect_uri = process.env.REDIRECT_URI || 'http://s.oh-mimo.com/auth/google/callback';
+    query.redirect_uri = redirect_uri;
     query.code = req.query.code;
     query.grant_type = 'authorization_code';
 

@@ -43,7 +43,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
   var link = function(scope,element,attrs,controller) {
 
     var user, authResponse, appId;
-    var mimo = ['app.mimo.com', 's.oh-mimo.com', 'splash.oh-mimo.com'];
+    var mimo = ['s.oh-mimo.com'];
 
     function errorMsg(msg) {
       $rootScope.banneralert = 'banner-alert alert-box alert';
