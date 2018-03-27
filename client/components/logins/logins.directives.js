@@ -28,17 +28,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       scope.error             = undefined;
     };
 
-    function redirectUrl() {
-      if ($routeParams.type === 'tw') {
-        return 'https://www.twitter.com/' + attrs.twHandle;
-      }
-
-      return 'https://www.facebook.com/' + attrs.fbPageId;
-    }
-
     function redirect() {
       $timeout(function() {
-        $window.location.href = redirectUrl();
+        redirectUser()
       },1500);
     }
 
@@ -49,7 +41,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           $location.path('/welcome');
         } else {
           var redirectTo;
-          if ( redirects.success_url !== '' && redirects.success_url !== null) {
+          if (redirects.success_url !== '' && redirects.success_url !== null) {
             redirectTo = redirects.success_url;
           } else {
             redirectTo = 'http://bbc.co.uk';
@@ -84,6 +76,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         screen_name:    $routeParams.screen_name,
         type:           $routeParams.type
       };
+
+      console.log(params)
 
       CT.login(params).then(function(a) {
         if (a !== undefined && a.type === 'ruckus') {
@@ -406,6 +400,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       btntext: '@',
       fbCheckin: '@',
       fbPageId: '@',
+      gPageId: '@',
       twSendTweet: '@',
       twHandle: '@'
     },
@@ -671,7 +666,6 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     var configureStripe = function() {
       handler = StripeCheckout.configure({
         key: scope.cart.store.token_stripe,
-        // image: '/img/documentation/checkout/marketplace.png',
         locale: 'auto',
         token: function(token) {
           scope.stripe = true;

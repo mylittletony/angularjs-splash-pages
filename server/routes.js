@@ -46,9 +46,9 @@ module.exports = function(app) {
 
   app.get('/auth/google/callback', function(req, res) {
     var query = {};
-    query.client_id = process.env.CLIENT_ID;
-    query.client_secret = process.env.CLIENT_SECRET;
-    query.redirect_uri = process.env.REDIRECT_URI || 'http://s.oh-mimo.com:9001/auth/google/callback';
+    query.client_id = process.env.GOOGLE_CLIENT_ID;
+    query.client_secret = process.env.GOOGLE_CLIENT_SECRET;
+    query.redirect_uri = process.env.REDIRECT_URI || 'http://s.oh-mimo.com/auth/google/callback';
     query.code = req.query.code;
     query.grant_type = 'authorization_code';
 
@@ -73,11 +73,12 @@ module.exports = function(app) {
         console.log(response.body, response.statusCode);
       }
 
-      console.log(response.body);
       if (response.statusCode === 200) {
         var data = JSON.parse(response.body);
-        console.log(data);
         params.code = data.access_token;
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+        console.log(params);
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
       }
 
       const parsedHash = queryString.stringify(params);
