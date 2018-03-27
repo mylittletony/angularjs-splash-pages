@@ -146,7 +146,7 @@ input[type=text], input[type=password], input[type=email], textarea {
   display: none !important;
 }
 
-.button.email-access, .button.voucher-access, .button.social-access {
+.button.email-access, .button.voucher-access, .button.social-access, .button.sms-access {
   background-color: #FFFFFF;
   border: 1px solid #CCC;
   color: #000;
@@ -159,7 +159,7 @@ input[type=text], input[type=password], input[type=email], textarea {
   padding-left: 4rem;
 }
 
-.button.email-access:hover, .button:focus.email-access:focus, .button.voucher-access:hover, .button:focus.voucher-access:focus, .button.social-access:hover, .button.social-access:focus {
+.button.email-access:hover, .button:focus.email-access:focus, .button.voucher-access:hover, .button:focus.voucher-access:focus, .button.social-access:hover, .button.social-access:focus, .button.sms-access:hover, .button.sms-access:focus {
   background-color: #EEEEEE!important;
   border: 1px solid #CCC!important;
 }
@@ -168,8 +168,8 @@ input[type=text], input[type=password], input[type=email], textarea {
   content: "";
   background: url(https://d247kqobagyqjh.cloudfront.net/api/file/jwTsGE9nQuqP6PY6qTTl);
   background-repeat: no-repeat;
-  background-position: 5px 4px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   opacity: 0.2;
   top: 0;
   left: 0;
@@ -183,8 +183,8 @@ input[type=text], input[type=password], input[type=email], textarea {
   content: "";
   background: url(https://d247kqobagyqjh.cloudfront.net/api/file/cvKFLmhbRtkSc2FcLYjM);
   background-repeat: no-repeat;
-  background-position: 5px 4px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   opacity: 0.2;
   top: 0;
   left: 0;
@@ -198,8 +198,8 @@ input[type=text], input[type=password], input[type=email], textarea {
   content: "";
   background: url(https://d247kqobagyqjh.cloudfront.net/api/file/tDYTNvv6R2mFUBM4yLgj);
   background-repeat: no-repeat;
-  background-position: 6px 4px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   opacity: 0.2;
   top: 0;
   left: 0;
@@ -227,7 +227,6 @@ input[type=text], input[type=password], input[type=email], textarea {
   text-decoration: none;
   text-align: center;
   -webkit-appearance: none;
-  border-radius: 4px;
   display: inline-block;
   padding-top: 1rem;
   padding-right: 2rem;
@@ -252,12 +251,31 @@ a.social:focus {
   color: #FFF;
 }
 
+.social.sms-access {
+  background-color: #ef5350;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/Twod7nCQemBNJ8lBP8MQ);
+  background-repeat: no-repeat;
+  background-position: 10px 10px;
+  background-size: 30px;
+  border: none;
+  padding-left: 4rem;
+}
+
+.social.sms-access:hover,.social.sms-access:focus {
+  background: #e53935;
+  background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/Twod7nCQemBNJ8lBP8MQ);
+  background-repeat: no-repeat;
+  background-position: 10px 10px;
+  background-size: 30px;
+  border: none;
+}
+
 .social.facebook {
   background-color: #4267B2;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
   background-repeat: no-repeat;
-  background-position: 5px 5px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
   padding-left: 4rem;
 }
@@ -266,8 +284,8 @@ a.social:focus {
   background: #3b5998;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/b2zyjsv5R7ioRZjkywG7);
   background-repeat: no-repeat;
-  background-position: 5px 5px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
 }
 
@@ -275,8 +293,8 @@ a.social:focus {
   background-color: #4285f4;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/1FGFU9fQxK6T7fxp5zwd);
   background-repeat: no-repeat;
-  background-position: 5px 5px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
   padding-left: 4rem;
 }
@@ -285,8 +303,8 @@ a.social:focus {
   background-color: #2674f2;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/1FGFU9fQxK6T7fxp5zwd);
   background-repeat: no-repeat;
-  background-position: 5px 5px;
-  background-size: 40px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
 }
 
@@ -294,8 +312,8 @@ a.social:focus {
   background-color: #1DA1F2;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/GvF246oSHCmO4A4Jqm2w);
   background-repeat: no-repeat;
-  background-position: 8px 8px;
-  background-size: 35px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
   padding-left: 4rem;
 }
@@ -304,8 +322,8 @@ a.social:focus {
   background: #0d8bd9;
   background-image: url(https://d247kqobagyqjh.cloudfront.net/api/file/GvF246oSHCmO4A4Jqm2w);
   background-repeat: no-repeat;
-  background-position: 8px 8px;
-  background-size: 35px;
+  background-position: 10px 10px;
+  background-size: 30px;
   border: none;
 }
 
@@ -321,9 +339,8 @@ a.social:focus {
   border: 1px solid #CCC;
   color: #000!important;
   min-width: 150px;
-  max-width: 280px!important;
   max-height: 50px;
-  width: 100%;
+  width: 95%;
   margin: 10px 0px 10px 0px!important;
   border-radius: 4px!important;
   font-size: 14px;
@@ -421,4 +438,44 @@ input.has-error {
 }
 .debugger li {
   font-size: 10px;
+}
+
+#popup_container {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%)translateX(-50%);
+}
+
+#popup_ad {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  z-index: 100;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  padding: 15px;
+  margin: auto;
+}
+
+#popup_ad img {
+  max-width: 100%;
+  height: auto;
+  max-height: 75vh;
+}
+
+#popup_ad .button {
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+#popupBoxClose {
+  display: none;
 }

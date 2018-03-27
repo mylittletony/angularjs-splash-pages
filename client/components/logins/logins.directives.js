@@ -2,10 +2,21 @@
 
 var app = angular.module('ctLoginsApp.logins.directives', []);
 
-app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT',
-  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT) {
+app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT', '$cookies',
+  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT, $cookies) {
 
   var link = function(scope,element,attrs) {
+
+    scope.otp = { cc: '+44' };
+    scope.user = {};
+
+    var otpEnabled = function() {
+      var o = $cookies.get('mimo-otp');
+      if (o) {
+        scope.otp.active = true;
+        scope.access.sms_access = true;
+      }
+    };
 
     var cleanUp = function() {
       $rootScope.bodylayout   = undefined;
@@ -105,6 +116,15 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
+    scope.access = {};
+
+    scope.back = function() {
+      scope.access.sms_access = undefined;
+      scope.access.email_access = undefined;
+      scope.otp.active = undefined;
+      $cookies.remove('mimo-otp');
+    };
+
     scope.doCheckin = function(msg) {
 
       socialLoginMsg();
@@ -141,12 +161,40 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     }
 
+    var onSuccessOTP = function() {
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+
+      var expireDate = new Date(new Date().getTime() + 5*60000);
+      $cookies.put('mimo-otp', 1, { expires: expireDate });
+      scope.otp.active = true;
+    };
+
+    var onFailOTP = function() {
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = 'Number not recognised, please try again.';
+      scope.otp.number = undefined;
+    };
+
     var onSuccess = function(auth) {
+      scope.otp = { cc: '+44' };
+      $cookies.remove('mimo-otp');
+
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
       } else {
         finishLogin();
       }
+    };
+
+    var onFail = function(err) {
+      alert(123);
+      scope.loggingIn = undefined;
+      // Insert a CT service error handler //
+      cleanUp();
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = err;
+      chooseForm();
     };
 
     var socialCheckin = function() {
@@ -173,7 +221,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
       if (attrs.twTweet === 'true') {
         // twitter message
-        return
+        return;
       }
 
       socialLogin();
@@ -216,21 +264,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           scope.show_unified = true;
         }
 
+        otpEnabled();
+
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
         scope.state.errors = err;
         $rootScope.bodylayout = 'login-error';
       });
-    };
-
-    var onFail = function(err) {
-      scope.loggingIn = undefined;
-      // Insert a CT service error handler //
-      cleanUp();
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = err;
-      chooseForm();
     };
 
     // var addSocial = function() {
@@ -301,15 +342,27 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
-    scope.submit = function(custom_data) {
-      if (scope.loggingIn) {
-        return;
+    scope.create_otp = function(myForm) {
+      if (myForm) {
+        myForm.$setPristine();
       }
+      var number = scope.otp.cc + scope.otp.number;
+      CT.otp({
+        splash_id:  $routeParams.splash_id,
+        data: { number: number }
+      }).then(onSuccessOTP, onFailOTP);
+    };
+
+    scope.submit = function(custom_data) {
 
       scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
         return;
+      }
+
+      if (scope.otp.password) {
+        scope.password = scope.otp.password;
       }
 
       scope.error = undefined;
@@ -321,13 +374,13 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.fields = custom_data.fields;
       }
       CT.login({
-        email:      scope.email,
+        email:      scope.email || scope.user.email,
         username:   scope.username,
         password:   scope.password,
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data: scope.fields
+        data:       scope.fields
       }).then(onSuccess, onFail);
     };
 
@@ -851,6 +904,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tmin-height: 100px;\n'+
         '\tdisplay: block;\n'+
         '\tpadding: {{ splash.container_inner_padding }};\n'+
+        '\tbox-shadow: {{splash.container_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
         '}\n\n'+
 
         '.footer {\n'+
@@ -939,7 +993,6 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 
-
         'input[type=text], input[type=password], input[type=email], textarea {\n'+
         '\theight: {{ splash.input_height }}!important;\n'+
         '\tline-height: {{ splash.input_height }}!important;\n'+
@@ -957,6 +1010,23 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\theight: 12px!important;\n'+
         // '\tline-height: 12px!important;\n'+
         '}\n\n'+
+
+        '#popup_ad {\n'+
+        '\tbackground: {{ splash.popup_background_colour }};\n'+
+        '}\n\n'+
+
+        '#popup_ad .button {\n'+
+        '\tborder-radius: {{ splash.button_radius }};\n'+
+        '}\n\n'+
+
+        'a.social, a.button, .btn.btn-lg.btn-default {\n'+
+        '\tborder-radius: {{splash.button_radius}}!important;\n'+
+        '\tbox-shadow: {{splash.button_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
+        '}\n\n'+
+
+        '.social.sms-access, .social.sms-access:hover, .social.sms-access:focus, .social.facebook, .social.facebook:hover,.social.facebook:focus, .social.google, .social.google:hover,.social.google:focus, .social.twitter, .social.twitter:hover,.social.twitter:focus, .button.social-access::after, .button.email-access::after, .button.voucher-access::after {\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px!important;\n'+
+        '}\n'+
 
         '{{ splash.custom_css }}';
 
@@ -984,6 +1054,40 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
     link: link
   };
 
+}]);
+
+
+app.directive('popupAdvert', ['$location', '$compile', '$window', '$rootScope', '$timeout', function($location, $compile, $window, $rootScope, $timeout) {
+  var link = function(scope, element, attrs) {
+    var init = function(data) {
+      var template =
+        '<div id="popup_container">'+
+        '<div id="popup_ad">'+
+        '<div class="row">'+
+        '<div class="small-12">'+
+        '<img src="{{ splash.popup_image }}">'+
+        '</div>'+
+        '</div>'+
+        '<div class="row">'+
+        '<div class="small-12 text-center">'+
+        '<span id="popupCounter">'+
+        '<a class="btn button" id="countDown">5 sec</a>'+
+        '</span>'+
+        '<span>'+
+        '<a class="btn button" id="popupBoxClose">Close</a>'+
+        '</span>'+
+        '</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+    init();
+  };
+  return {
+    link: link,
+  };
 }]);
 
 app.directive('googleAnalytics', ['$compile', function($compile) {

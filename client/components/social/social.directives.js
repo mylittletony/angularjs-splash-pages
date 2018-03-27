@@ -5,25 +5,9 @@ var app = angular.module('ctLoginsApp.social.directives', ['ngResource']);
 app.directive('social', ['CT', '$q', '$timeout', '$compile', '$window', 'Client', '$sce', function(CT, $q, $timeout, $compile, $window, Client, $sce) {
 
   var link = function(scope, element, attrs) {
-
     function redirect() {
       $window.location.href = scope.redirectUrl;
     }
-
-    // scope.doCheckin = function() {
-    //   scope.checkin = true;
-    //   var options = {
-    //     pageId: scope.fbPageId,
-    //     accessToken: scope.authResponse.accessToken,
-    //     message: scope.message
-    //   };
-    //   CT.checkin(options).then(function() {
-    //     redirect();
-    //   }, function() {
-    //     redirect();
-    //   });
-    // };
-
   };
 
   var controller = function($scope, $element, $attrs) {
