@@ -74,10 +74,9 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
     }
 
     scope.login = function() {
-
       Client.details().then(function(client) {
         var host = window.location.host;
-        var params = JSON.stringify(client);
+        var params = window.btoa(angular.toJson(client));
         window.location = 'https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=' + appId + '&redirect_uri=http://' + host + '/auth/facebook&action&oauth_facebook_callback&scope=email&state=' + params;
       });
     };
