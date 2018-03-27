@@ -208,7 +208,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var addSocialLogin = function() {
-      if (attrs.fbCheckin === 'true') {
+      if (attrs.fbCheckin === 'true' && $routeParams.type === 'fb') {
         socialCheckin();
         return;
       }
