@@ -165,8 +165,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var onFailOTP = function(resp) {
-      var msg = 'Number not recognised, please try again.';
-      if (resp.error && res.message && resp.message !== '' && resp.message !== undefined) {
+      var msg = 'Unknown SMS error, please try again or contact the location.';
+      if (resp.error && resp.message && resp.message !== '' && resp.message !== undefined) {
         msg = resp.message;
       }
       $rootScope.banneralert = 'banner-alert alert-box alert';
