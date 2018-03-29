@@ -479,3 +479,16 @@ input.has-error {
 #popupBoxClose {
   display: none;
 }
+
+.sms-field input.cc {
+  border-top-right-radius: 0px!important;
+  border-bottom-right-radius: 0px!important;
+  max-width: 60px!important;
+  width: 20%!important;
+}
+.sms-field input.pn {
+  max-width: 340px!important;
+  width: 80%!important;
+  border-top-left-radius: 0px!important;
+  border-bottom-left-radius: 0px!important;
+}
