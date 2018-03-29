@@ -137,8 +137,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         client = resp;
         createOTP(params.data.number).then(function(response) {
           if (response.error) {
-            console.log(response)
-            deferred.reject(response.error);
+            deferred.reject(response);
           } else {
             deferred.resolve();
           }
@@ -429,10 +428,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         apMac:              client.apMac,
         number:             number
       }).$promise.then(function(res) {
-        console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnn')
         deferred.resolve(res);
       }, function(err) {
-        console.log('yyyyyyyyyyyyyyyyyyyyyyyyyyy')
         deferred.reject(err);
       });
       return deferred.promise;
