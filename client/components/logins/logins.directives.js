@@ -164,12 +164,13 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       scope.otp.active = true;
     };
 
-    var onFailOTP = function(err) {
-      console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
-      console.log(err);
-      console.log('xxxxxxxxxxxxxxxxxxxxxxxx')
+    var onFailOTP = function(resp) {
+      var msg = 'Number not recognised, please try again.';
+      if (resp.error && res.message && resp.message !== '' && resp.message !== undefined) {
+        msg = resp.message;
+      }
       $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = 'Number not recognised, please try again.';
+      $rootScope.error = msg;
       scope.otp.number = undefined;
     };
 
