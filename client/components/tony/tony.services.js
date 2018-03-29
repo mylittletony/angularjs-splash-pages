@@ -137,6 +137,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         client = resp;
         createOTP(params.data.number).then(function(response) {
           if (response.error) {
+            console.log(response)
             deferred.reject(response.error);
           } else {
             deferred.resolve();
