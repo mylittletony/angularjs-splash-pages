@@ -838,7 +838,6 @@ app.factory('Ping', ['$http', '$q',
     };
 
     var handleSuccess = function(response) {
-      console.log(response);
       return( response );
     };
 

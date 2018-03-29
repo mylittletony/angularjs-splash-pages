@@ -77,8 +77,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         type:           $routeParams.type
       };
 
-      console.log(params)
-
       CT.login(params).then(function(a) {
         if (a !== undefined && a.type === 'ruckus') {
           loginRuckus(a).then(function(b) {
@@ -186,9 +184,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var onFail = function(err) {
-      alert(123);
       scope.loggingIn = undefined;
-      // Insert a CT service error handler //
       cleanUp();
       $rootScope.banneralert = 'banner-alert alert-box alert';
       $rootScope.error = err;
