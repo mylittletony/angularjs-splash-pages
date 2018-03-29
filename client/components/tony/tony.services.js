@@ -428,11 +428,11 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         request_uri:        client.requestUri,
         apMac:              client.apMac,
         number:             number
-        // data:               JSON.stringify({number: number})
-
       }).$promise.then(function(res) {
+        console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnn')
         deferred.resolve(res);
       }, function(err) {
+        console.log('yyyyyyyyyyyyyyyyyyyyyyyyyyy')
         deferred.reject(err);
       });
       return deferred.promise;
