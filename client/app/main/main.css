@@ -501,8 +501,7 @@ input.has-error {
   overflow: hidden;
   transition: all 400ms ease-in-out;
   bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0px;
 }
 
 .gdpr-slider.close {
