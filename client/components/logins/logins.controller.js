@@ -40,7 +40,14 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           $scope.cart       = { cart_id: null, products: null };
           $scope.custom_url = results.splash.custom_url;
           $scope.splash     = results.splash;
-          $rootScope.gaid   = results.splash.google_analytics_id;
+          $rootScope.gaid            = results.splash.google_analytics_id;
+          $rootScope.splash = {
+            location_name: $scope.splash.location_name,
+            terms_url: $scope.splash.terms_url,
+            powered_by_name: $scope.splash.powered_by_name,
+            backup_sms: $scope.splash.backup_sms,
+            backup_email: $scope.splash.backup_email
+          };
 
           if (results.form) {
             $scope.form       = results.form.body;

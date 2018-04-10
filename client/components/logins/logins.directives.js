@@ -1122,6 +1122,9 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
   var link = function(scope, element, attrs) {
 
     var init = function(id) {
+
+      console.log(attrs)
+
       var template =
         '<div class="gdpr-slider">'+
         '<div class="gdpr-tab">'+
@@ -1164,7 +1167,14 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
   };
 
   return {
-    link: link
+    link: link,
+    scope: {
+      locationName: '@',
+      termsUrl: '@',
+      poweredByName: '@',
+      backupSms: '@',
+      backupEmail: '@',
+    }
   };
 
 }]);
