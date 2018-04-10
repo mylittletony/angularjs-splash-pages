@@ -45,7 +45,7 @@
       <div class="{{ banneralert || 'hidden' }}"><b>{{ error }}</b></div>
       <div class='container'>
 
-        <consent-form></consent-form>
+        <consent-form ng-hide="state.errors"></consent-form>
 
         <div class='splash-container' ng-class="state.hidden ? 'hidden' : ''">
           <div ng-view=""></div>
