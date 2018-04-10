@@ -1134,32 +1134,32 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<div class="gdpr-body">'+
         '<div class="row align-center">'+
         '<div class="small-12">'+
-        '<p>Please complete the form below in order to log in.</p>'+
+        '<p>This service is provided by {{locationName}}.<span ng-if="poweredBy == \'true\'"><br> Powered by {{poweredByName}}.</span></p>'+
         '<form id="gdpr-form">'+
         '<fieldset class="gdpr-fields">'+
-        '<legend>You must accept the terms & conditions</legend>'+
+        '<legend>You must accept the terms of service</legend>'+
         '<span ng-if="poweredByName == \'MIMO\'">'+
-        '<p>Read MIMO\'s full terms & conditions <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
-        '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms & conditions</label><br>'+
+        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
+        '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
-        '<p>Read CT\'s full terms & conditions <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
-        '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms & conditions</label><br>'+
+        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
+        '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
-        '<span ng-if="hideTerms == \'false\'">'+
-        '<p>Read {{locationName}}\'s full terms & conditions <a href="{{termsUrl}}" target="_blank">here.</a></p>'+
-        '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms & conditions</label><br>'+
+        '<span ng-if="poweredBy == \'false\'">'+
+        '<p>Read {{locationName}}\'s full terms of service <a href="{{termsUrl}}" target="_blank">here.</a></p>'+
+        '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '</fieldset>'+
         '<span ng-if="newsletterConsent == \'false\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
         '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
-        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">I\'d prefer <b>not</b> to receive updates by Email</label><br></span>'+
-        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">I\'d prefer <b>not</b> to receive updates by SMS</label><br></span>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">I\'d like to receive updates by Email</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">I\'d like to receive updates by SMS</label><br></span>'+
         '</fieldset>'+
         '</span>'+
-        '<span >'+
+        '<span ng-if="newsletterConsent == \'true\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
         '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
