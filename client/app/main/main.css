@@ -510,20 +510,9 @@ input.has-error {
   height: 29px;
 }
 
-/*.gdpr-slider {
-  position: absolute;
-  z-index: 42;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  transition: all 400ms ease-in-out;
-  bottom: 0px;
+.gdpr-tab {
+  min-height: 29px;
 }
-
-.gdpr-slider.close {
-  bottom: 0px;
-  height: 30px;
-}*/
 
 .gdpr-tab img {
   max-height: 30px;

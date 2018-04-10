@@ -1159,7 +1159,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">I\'d prefer <b>not</b> to receive updates by SMS</label><br></span>'+
         '</fieldset>'+
         '</span>'+
-        '<span ng-if="newsletterConsent == \'true\'">'+
+        '<span >'+
         '<fieldset class="gdpr-fields">'+
         '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
         '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
