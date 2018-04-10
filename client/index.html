@@ -45,36 +45,7 @@
       <div class="{{ banneralert || 'hidden' }}"><b>{{ error }}</b></div>
       <div class='container'>
 
-        <div class="gdpr-slider">
-          <div class="gdpr-tab">
-            <img src="https://d247kqobagyqjh.cloudfront.net/api/file/JEo4MjosS1WplV5mkAhC"></img>
-          </div>
-          <div class="gdpr-body">
-            <div class="row align-center">
-              <div class='small-12'>
-                <p>Please complete the form below in order to log in.</p>
-                <form id="gdpr-form">
-                  <fieldset class="gdpr-fields">
-                    <legend>You must accept the terms & conditions</legend>
-                    <p>You can read our full terms & conditions <a href="" target="_blank">here.</a></p>
-                    <input id="checkbox12" type="checkbox" required><label for="checkbox12">I agree to the terms & conditions</label><br>
-                  </fieldset>
-                  <fieldset class="gdpr-fields">
-                    <legend>How would you like to hear from us?</legend>
-                    <p>Occasionally we'd like to give you updates about products & services, promotions, special offers, news & events. Let us know how you'd like to hear from us.</p>
-                    <input id="checkbox12" type="checkbox"><label for="checkbox12">I'd prefer <b>not</b> to receive updates by Email</label><br>
-                    <input id="checkbox22" type="checkbox"><label for="checkbox22">I'd prefer <b>not</b> to receive updates by SMS</label><br>
-                    <input id="checkbox32" type="checkbox"><label for="checkbox32">I'd prefer <b>not</b> to receive updates by Twitter</label>
-                  </fieldset>
-                  <p>You can change your preferences at a later date <a href="" target="_blank">here.</a></p>
-                  <div>
-                    <button class="gdpr-submit">Submit</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        <consent-form></consent-form>
 
         <div class='splash-container' ng-class="state.hidden ? 'hidden' : ''">
           <div ng-view=""></div>
