@@ -63,7 +63,7 @@ $(document).ready( function() {
   <div class="footer">
     <div class="row">
       <div id="" class="small-6 medium-6 columns">
-        <span ng-show="splash.powered_by == true"><a class="left" href="{{ splash.powered_by_name == 'MIMO' ? 'https://goo.gl/kkAdif' : 'https://goo.gl/8H5wZV'}}" target="_blank">Powered by {{ splash.powered_by_name || 'Love'}} 💖 &nbsp</a></span>
+        <span ng-show="splash.powered_by == true"><a class="left" href="{{ splash.powered_by_name == 'MIMO' ? 'https://goo.gl/kkAdif' : 'https://goo.gl/8H5wZV'}}" target="_blank">Powered by {{ splash.powered_by_name || 'Love'}} 💖</a></span>
         <span class="left">{{ splash.id }}</span>
       </div>
       <div id="footer-right" class="small-6 medium-6 columns">
@@ -75,3 +75,9 @@ $(document).ready( function() {
     </div>
   </div>
 </div>
+
+<script>
+$('#gdpr-form').submit(function() {
+  $('.gdpr-slider').toggleClass('close');
+});
+</script>
