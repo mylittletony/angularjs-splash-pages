@@ -1123,8 +1123,6 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
     var init = function(id) {
 
-      console.log(attrs)
-
       var template =
         '<div class="gdpr-slider">'+
         '<div class="gdpr-tab">'+
@@ -1150,7 +1148,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<p>You can change your preferences at a later date <a href="" target="_blank">here.</a></p>'+
         '<div>'+
         '<button class="gdpr-submit">Submit</button>'+
-        '{{ splash.powered_by_name }}'+
+        '{{ poweredByName }}'+
         '</div>'+
         '</form>'+
         '</div>'+
