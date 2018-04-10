@@ -1126,7 +1126,10 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
       var template =
         '<div class="gdpr-slider">'+
         '<div class="gdpr-tab">'+
-        '<img src="https://d247kqobagyqjh.cloudfront.net/api/file/JEo4MjosS1WplV5mkAhC"></img>'+
+        '<span ng-show="poweredBy == \'true\'">'+
+        '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
+        '<img ng-if="poweredByName == \'Cucumber Tony\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/KflR9VnS1KUuKOCOmFAo"></img>'+
+        '</span>'+
         '</div>'+
         '<div class="gdpr-body">'+
         '<div class="row align-center">'+
@@ -1135,20 +1138,38 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<form id="gdpr-form">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>You must accept the terms & conditions</legend>'+
-        '<p>You can read our full terms & conditions <a href="" target="_blank">here.</a></p>'+
-        '<input id="checkbox12" type="checkbox" required><label for="checkbox12">I agree to the terms & conditions</label><br>'+
+        '<span ng-if="poweredByName == \'MIMO\'">'+
+        '<p>Read MIMO\'s full terms & conditions <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
+        '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms & conditions</label><br>'+
+        '</span>'+
+        '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
+        '<p>Read CT\'s full terms & conditions <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
+        '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms & conditions</label><br>'+
+        '</span>'+
+        '<span ng-if="hideTerms == \'false\'">'+
+        '<p>Read {{locationName}}\'s full terms & conditions <a href="{{termsUrl}}" target="_blank">here.</a></p>'+
+        '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms & conditions</label><br>'+
+        '</span>'+
         '</fieldset>'+
+        '<span ng-if="newsletterConsent == \'false\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
-        '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events. Let us know how you\'d like to hear from us.</p>'+
-        '<input id="checkbox12" type="checkbox"><label for="checkbox12">I\'d prefer <b>not</b> to receive updates by Email</label><br>'+
-        '<input id="checkbox22" type="checkbox"><label for="checkbox22">I\'d prefer <b>not</b> to receive updates by SMS</label><br>'+
-        '<input id="checkbox32" type="checkbox"><label for="checkbox32">I\'d prefer <b>not</b> to receive updates by Twitter</label>'+
+        '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">I\'d prefer <b>not</b> to receive updates by Email</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">I\'d prefer <b>not</b> to receive updates by SMS</label><br></span>'+
         '</fieldset>'+
-        '<p>You can change your preferences at a later date <a href="" target="_blank">here.</a></p>'+
+        '</span>'+
+        '<span ng-if="newsletterConsent == \'true\'">'+
+        '<fieldset class="gdpr-fields">'+
+        '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
+        '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox" required><label for="email_consent">I agree to receive updates by Email</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">I agree to receive updates by SMS</label><br></span>'+
+        '</fieldset>'+
+        '</span>'+
+        '<p>You can change your preferences at a later date <a href="https://oh-mimo.com/self-service" target="_blank">here.</a></p>'+
         '<div>'+
         '<button class="gdpr-submit">Submit</button>'+
-        '{{ poweredByName }}'+
         '</div>'+
         '</form>'+
         '</div>'+
@@ -1168,10 +1189,13 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
     link: link,
     scope: {
       locationName: '@',
+      hideTerms: '@',
       termsUrl: '@',
+      poweredBy: '@',
       poweredByName: '@',
       backupSms: '@',
       backupEmail: '@',
+      newsletterConsent: '@',
     }
   };
 

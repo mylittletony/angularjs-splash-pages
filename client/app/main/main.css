@@ -533,8 +533,10 @@ input.has-error {
 .gdpr-body {
   background: white;
   height: 100%;
-  padding: 40px 20px;
+  padding: 20px 20px 40px 20px;
+  border-top: 20px solid white;
   text-align: center;
+  overflow: scroll;
 }
 
 .gdpr-body a {
@@ -559,5 +561,6 @@ fieldset.gdpr-fields {
 
 .gdpr-fields p {
   margin-bottom: 0px;
+  margin-top: 10px;
   font-size: 14px!important;
 }
