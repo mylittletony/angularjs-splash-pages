@@ -49,7 +49,11 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
             powered_by: $scope.splash.powered_by,
             backup_sms: $scope.splash.backup_sms,
             backup_email: $scope.splash.backup_email,
-            newsletter_consent: $scope.splash.newsletter_consent
+            newsletter_consent: $scope.splash.newsletter_consent,
+            gdpr_email_field: $scope.splash.gdpr_email_field,
+            gdpr_sms_field: $scope.splash.gdpr_sms_field,
+            gdpr_contact_message: $scope.splash.gdpr_contact_message,
+            gdpr_form: $scope.splash.gdpr_form
           };
 
           if (results.form) {

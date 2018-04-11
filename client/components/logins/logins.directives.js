@@ -1117,14 +1117,23 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
   };
 }]);
 
-app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', '$timeout', function($location, $compile, $window, $rootScope, $timeout) {
+app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', '$timeout', '$cookies', function($location, $compile, $window, $rootScope, $timeout, $cookies) {
 
   var link = function(scope, element, attrs) {
 
-    var init = function(id) {
+    var cookieName = 'gdpr-20180411'
+    var getCookie = $cookies.get(cookieName);
 
+    scope.gdprSubmit = function() {
+      var expireDate = new Date();
+      expireDate.setMonth(expireDate.getMonth() + 1);
+      $cookies.put(cookieName, true , { expires: expireDate });
+      $('.gdpr-slider').toggleClass('close');
+    };
+
+    var showGdpr = function(id) {
       var template =
-        '<div class="gdpr-slider">'+
+        '<div class="gdpr-slider" ng-show="gdprForm == \'true\'">'+
         '<div class="gdpr-tab">'+
         '<span ng-show="poweredBy == \'true\'">'+
         '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
@@ -1134,8 +1143,8 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<div class="gdpr-body">'+
         '<div class="row align-center">'+
         '<div class="small-12">'+
-        '<p>This service is provided by {{locationName}}.<span ng-if="poweredBy == \'true\'"><br> Powered by {{poweredByName}}.</span></p>'+
-        '<form id="gdpr-form">'+
+        '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'">, and powered by {{poweredByName}}</span>.</p>'+
+        '<form id="gdpr-form" ng-submit="gdprSubmit()">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>You must accept the terms of service</legend>'+
         '<span ng-if="poweredByName == \'MIMO\'">'+
@@ -1154,20 +1163,20 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<span ng-if="newsletterConsent == \'false\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
-        '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
-        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">I\'d like to receive updates by Email</label><br></span>'+
-        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">I\'d like to receive updates by SMS</label><br></span>'+
+        '<p>{{gdprContactMessage}}</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
         '</fieldset>'+
         '</span>'+
         '<span ng-if="newsletterConsent == \'true\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
-        '<p>Occasionally we\'d like to give you updates about products & services, promotions, special offers, news & events.</p>'+
-        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox" required><label for="email_consent">I agree to receive updates by Email</label><br></span>'+
-        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">I agree to receive updates by SMS</label><br></span>'+
+        '<p>{{gdprContactMessage}}</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox" required><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
         '</fieldset>'+
         '</span>'+
-        '<p>You can change your preferences at a later date <a href="https://oh-mimo.com/self-service" target="_blank">here.</a></p>'+
+        // '<p>You can change your preferences at a later date <a href="https://oh-mimo.com/self-service" target="_blank">here.</a></p>'+
         '<div>'+
         '<button class="gdpr-submit">Submit</button>'+
         '</div>'+
@@ -1176,10 +1185,18 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '</div>'+
         '</div>'+
         '</div>';
-
       var templateObj = $compile(template)(scope);
       element.html(templateObj);
     };
+
+    var init = function () {
+      if ( getCookie ) {
+        showGdpr()
+        $('.gdpr-slider').toggleClass('close');
+      } else {
+        showGdpr()
+      }
+    }
 
     init();
 
@@ -1196,6 +1213,10 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
       backupSms: '@',
       backupEmail: '@',
       newsletterConsent: '@',
+      gdprEmailField: '@',
+      gdprSmsField: '@',
+      gdprContactMessage: '@',
+      gdprForm: '@',
     }
   };
 
