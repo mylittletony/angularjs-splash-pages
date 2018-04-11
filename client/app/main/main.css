@@ -552,3 +552,17 @@ fieldset.gdpr-fields {
   margin-top: 10px;
   font-size: 14px!important;
 }
+
+.gdpr-back {
+  /*background-color: rgba(0, 0, 0, 0.7);*/
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  z-index: 10;
+}
+
+.gdpr-back.submitted {
+  display: none;
+}

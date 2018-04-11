@@ -1121,20 +1121,26 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
   var link = function(scope, element, attrs) {
 
-    var cookieName = 'gdpr-20180411'
+    var cookieName = 'gdpr-2018041';
     var getCookie = $cookies.get(cookieName);
+
+    scope.gdprToggle = function() {
+      $('.gdpr-slider').toggleClass('close');
+    };
 
     scope.gdprSubmit = function() {
       var expireDate = new Date();
       expireDate.setMonth(expireDate.getMonth() + 1);
       $cookies.put(cookieName, true , { expires: expireDate });
       $('.gdpr-slider').toggleClass('close');
+      $('.gdpr-back').toggleClass('submitted');
     };
 
     var showGdpr = function(id) {
       var template =
-        '<div class="gdpr-slider" ng-show="gdprForm == \'true\'">'+
-        '<div class="gdpr-tab">'+
+        '<div class="gdpr-back submitted" ng-click="gdprToggle()"></div>'+
+        '<div class="gdpr-slider close" ng-show="gdprForm == \'true\'">'+
+        '<div class="gdpr-tab" ng-click="gdprToggle()">'+
         '<span ng-show="poweredBy == \'true\'">'+
         '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
         '<img ng-if="poweredByName == \'Cucumber Tony\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/KflR9VnS1KUuKOCOmFAo"></img>'+
@@ -1143,6 +1149,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<div class="gdpr-body">'+
         '<div class="row align-center">'+
         '<div class="small-12">'+
+        '<p><b>We need your consent before you can log in.</b></p>'+
         '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'">, and powered by {{poweredByName}}</span>.</p>'+
         '<form id="gdpr-form" ng-submit="gdprSubmit()">'+
         '<fieldset class="gdpr-fields">'+
@@ -1190,11 +1197,13 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
     };
 
     var init = function () {
-      if ( getCookie ) {
-        showGdpr()
-        $('.gdpr-slider').toggleClass('close');
-      } else {
-        showGdpr()
+      showGdpr()
+      if ( getCookie === undefined || getCookie === '' || getCookie === null) {
+        $('.gdpr-back').toggleClass('submitted');
+        $timeout(function() {
+          $('.gdpr-slider').toggleClass('close');
+          $timeout.cancel(timer);
+        },1000);
       }
     }
 
