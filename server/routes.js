@@ -61,7 +61,6 @@ module.exports = function(app) {
     }
 
     redirect_url = redirect_url + '/auth/google/callback';
-    console.log(redirect_url)
 
     var query = {};
     query.client_id = process.env.GOOGLE_CLIENT_ID;
