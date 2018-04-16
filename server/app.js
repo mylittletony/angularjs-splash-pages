@@ -50,7 +50,6 @@ app.get('/auth/twitter/callback', function(req, res) {
       }
 
       validate(req, res, function(data) {
-
         var state = JSON.parse(req.session.state);
         state.type        = 'tw';
         state.screen_name = data.screen_name;
