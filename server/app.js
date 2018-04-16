@@ -23,6 +23,16 @@ var consumer = new oauth.OAuth(
   "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
   (process.env.TWITTER_CONSUMER_KEY || '123'), (process.env.TWITTER_CONSUMER_SECRET || '123'), "1.0A", callback_url, "HMAC-SHA1");
 
+function validate(req, res, cb) {
+  consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true&include_email=true", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
+    if (error) {
+      return cb();
+    }
+    var parsedData = JSON.parse(data);
+    return cb(parsedData);
+  });
+}
+
 app.get('/auth/twitter', function(req, res) {
   req.session.state = req.query.state;
   consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
