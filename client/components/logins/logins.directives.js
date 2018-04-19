@@ -113,6 +113,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     scope.back = function() {
       scope.access.sms_access = undefined;
       scope.access.email_access = undefined;
+      scope.access.password_access = undefined;
+      scope.access.voucher_access = undefined;
+      scope.access.code_access = undefined;
       scope.otp.active = undefined;
       $cookies.remove('mimo-otp');
     };
