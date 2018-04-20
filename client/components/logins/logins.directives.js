@@ -363,6 +363,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.otp_login = true;
       } else if (scope.user.password) {
         scope.password = scope.user.password;
+        if (scope.user.username) {
+          scope.username = scope.user.username;
+        }
       }
 
       scope.error = undefined;
