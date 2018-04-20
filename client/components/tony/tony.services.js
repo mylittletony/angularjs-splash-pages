@@ -153,6 +153,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.data               = params.data;
       loginDetails.username           = params.username;
       loginDetails.password           = params.password;
+      loginDetails.otp                = params.otp;
       loginDetails.logincode          = params.logincode;
       loginDetails.email              = params.email;
       loginDetails.newsletter         = params.newsletter;
@@ -444,6 +445,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       Tony.create({
         username:           loginDetails.username,
         password:           loginDetails.password,
+        otp:                loginDetails.otp,
         logincode:          loginDetails.logincode,
         guestId:            loginDetails.guestId,
         splash_id:          loginDetails.splash_id,
