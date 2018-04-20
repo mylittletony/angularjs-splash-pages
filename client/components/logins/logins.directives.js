@@ -1209,7 +1209,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<div class="row align-center">'+
         '<div class="small-12">'+
         '<p><b>We need your consent before you can log in.</b></p>'+
-        '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'">, and powered by {{poweredByName}}</span>.</p>'+
+        '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'"> and powered by {{poweredByName}}</span>.</p>'+
         '<form id="gdpr-form" ng-submit="gdprSubmit()">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>You must accept the terms of service</legend>'+
@@ -1226,6 +1226,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '</fieldset>'+
+        '<div ng-if="isClickthrough">'+
         '<span ng-if="newsletterConsent == \'false\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
@@ -1242,6 +1243,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
         '</fieldset>'+
         '</span>'+
+        '</div>'+
         // '<p>You can change your preferences at a later date <a href="https://oh-mimo.com/self-service" target="_blank">here.</a></p>'+
         '<div>'+
         '<button class="gdpr-submit">Submit</button>'+
@@ -1274,6 +1276,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
     link: link,
     scope: {
       locationName: '@',
+      isClickthrough: '@',
       hideTerms: '@',
       termsUrl: '@',
       poweredBy: '@',
