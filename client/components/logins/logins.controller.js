@@ -43,6 +43,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
           $rootScope.gaid            = results.splash.google_analytics_id;
           $rootScope.splash = {
             location_name: $scope.splash.location_name,
+            is_clickthrough: $scope.splash.is_clickthrough,
             terms_url: $scope.splash.terms_url,
             powered_by_name: $scope.splash.powered_by_name,
             backup_sms: $scope.splash.backup_sms,
