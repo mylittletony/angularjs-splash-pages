@@ -146,24 +146,6 @@ input[type=text], input[type=password], input[type=email], textarea {
   display: none !important;
 }
 
-.button.email-access, .button.voucher-access, .button.social-access, .button.sms-access {
-  background-color: #FFFFFF;
-  border: 1px solid #CCC;
-  color: #000;
-  min-width: 150px;
-  max-width: 400px;
-  max-height: 50px;
-  width: 95%;
-  margin: 10px 0px 10px 0px;
-  border-radius: 4px;
-  padding-left: 4rem;
-}
-
-.button.email-access:hover, .button:focus.email-access:focus, .button.voucher-access:hover, .button:focus.voucher-access:focus, .button.social-access:hover, .button.social-access:focus, .button.sms-access:hover, .button.sms-access:focus {
-  background-color: #EEEEEE!important;
-  border: 1px solid #CCC!important;
-}
-
 .button.social-access::after {
   content: "";
   background: url(https://d247kqobagyqjh.cloudfront.net/api/file/jwTsGE9nQuqP6PY6qTTl);
@@ -327,28 +309,22 @@ a.social:focus {
   border: none;
 }
 
+.social.voucher-access, .social.password-access, .social.code-access, .social.email-access {
+  background-repeat: no-repeat;
+  background-size: 30px;
+  padding-left: 4rem;
+}
+
+.social.voucher-access:hover, .social.voucher-access:focus, .social.password-access:hover, .social.password-access:focus, .social.code-access:hover, .social.code-access:focus,  .social.email-access:focus, .social.email-access:hover {
+  background-repeat: no-repeat;
+  background-size: 30px;
+}
+
 .linkedin {
   background-color: #007bb6;
   min-width: 150px;
   max-width: 280px;
   width: 100%;
-}
-
-.btn.btn-lg.btn-default {
-  background-color: #FFFFFF;
-  border: 1px solid #CCC;
-  color: #000!important;
-  min-width: 150px;
-  max-height: 50px;
-  width: 95%;
-  margin: 10px 0px 10px 0px!important;
-  border-radius: 4px!important;
-  font-size: 14px;
-}
-
-.btn.btn-lg.btn-default:hover,.btn.btn-lg.btn-default:focus {
-  background-color: #EEEEEE!important;
-  border: 1px solid #CCC!important;
 }
 
 .btn.btn-lg.btn-default:disabled {
@@ -501,8 +477,7 @@ input.has-error {
   overflow: hidden;
   transition: all 400ms ease-in-out;
   bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0px;
 }
 
 .gdpr-slider.close {
@@ -510,20 +485,9 @@ input.has-error {
   height: 29px;
 }
 
-/*.gdpr-slider {
-  position: absolute;
-  z-index: 42;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  transition: all 400ms ease-in-out;
-  bottom: 0px;
+.gdpr-tab {
+  min-height: 29px;
 }
-
-.gdpr-slider.close {
-  bottom: 0px;
-  height: 30px;
-}*/
 
 .gdpr-tab img {
   max-height: 30px;
@@ -533,8 +497,10 @@ input.has-error {
 .gdpr-body {
   background: white;
   height: 100%;
-  padding: 40px 20px;
+  padding: 20px 20px 40px 20px;
+  border-top: 20px solid white;
   text-align: center;
+  overflow: scroll;
 }
 
 .gdpr-body a {
@@ -559,5 +525,20 @@ fieldset.gdpr-fields {
 
 .gdpr-fields p {
   margin-bottom: 0px;
+  margin-top: 10px;
   font-size: 14px!important;
+}
+
+.gdpr-back {
+  /*background-color: rgba(0, 0, 0, 0.7);*/
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  z-index: 10;
+}
+
+.gdpr-back.submitted {
+  display: none;
 }
