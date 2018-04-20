@@ -1226,7 +1226,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '</fieldset>'+
-        '<div ng-if="isClickthrough == \'true\'">'+
+        '<div ng-if="isClickthrough == \'false\'">'+
         '<span ng-if="newsletterConsent == \'false\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
