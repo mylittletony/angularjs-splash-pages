@@ -2,10 +2,21 @@
 
 var app = angular.module('ctLoginsApp.logins.directives', []);
 
-app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT',
-  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT) {
+app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '$location', '$window', '$compile', '$localStorage', '$rootScope', 'CT', '$cookies',
+  function($q, $sce, $timeout, Client, $routeParams, $location, $window, $compile, $localStorage, $rootScope, CT, $cookies) {
 
   var link = function(scope,element,attrs) {
+
+    scope.otp = { cc: '+44' };
+    scope.user = {};
+
+    var otpEnabled = function() {
+      var o = $cookies.get('mimo-otp');
+      if (o) {
+        scope.otp.active = true;
+        scope.access.sms_access = true;
+      }
+    };
 
     var cleanUp = function() {
       $rootScope.bodylayout   = undefined;
@@ -17,17 +28,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       scope.error             = undefined;
     };
 
-    function redirectUrl() {
-      if ($routeParams.type === 'tw') {
-        return 'https://www.twitter.com/' + attrs.twHandle;
-      }
-
-      return 'https://www.facebook.com/' + attrs.fbPageId;
-    }
-
     function redirect() {
       $timeout(function() {
-        $window.location.href = redirectUrl();
+        redirectUser()
       },1500);
     }
 
@@ -38,7 +41,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           $location.path('/welcome');
         } else {
           var redirectTo;
-          if ( redirects.success_url !== '' && redirects.success_url !== null) {
+          if (redirects.success_url !== '' && redirects.success_url !== null) {
             redirectTo = redirects.success_url;
           } else {
             redirectTo = 'http://bbc.co.uk';
@@ -105,6 +108,18 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
+    scope.access = {};
+
+    scope.back = function() {
+      scope.access.sms_access = undefined;
+      scope.access.email_access = undefined;
+      scope.access.password_access = undefined;
+      scope.access.voucher_access = undefined;
+      scope.access.code_access = undefined;
+      scope.otp.active = undefined;
+      $cookies.remove('mimo-otp');
+    };
+
     scope.doCheckin = function(msg) {
 
       socialLoginMsg();
@@ -141,12 +156,42 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     }
 
+    var onSuccessOTP = function() {
+      $rootScope.banneralert = undefined;
+      $rootScope.error = undefined;
+
+      var expireDate = new Date(new Date().getTime() + 5*60000);
+      $cookies.put('mimo-otp', 1, { expires: expireDate });
+      scope.otp.active = true;
+    };
+
+    var onFailOTP = function(resp) {
+      var msg = 'Unknown SMS error, please try again or contact the location.';
+      if (resp.error && resp.message && resp.message !== '' && resp.message !== undefined) {
+        msg = resp.message;
+      }
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = msg;
+      scope.otp.number = undefined;
+    };
+
     var onSuccess = function(auth) {
+      scope.otp = { cc: '+44' };
+      $cookies.remove('mimo-otp');
+
       if ( auth !== undefined && auth.type === 'ruckus' ) {
         loginRuckus(auth);
       } else {
         finishLogin();
       }
+    };
+
+    var onFail = function(err) {
+      scope.loggingIn = undefined;
+      cleanUp();
+      $rootScope.banneralert = 'banner-alert alert-box alert';
+      $rootScope.error = err;
+      chooseForm();
     };
 
     var socialCheckin = function() {
@@ -166,14 +211,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     };
 
     var addSocialLogin = function() {
-      if (attrs.fbCheckin === 'true') {
+      if (attrs.fbCheckin === 'true' && $routeParams.type === 'fb') {
         socialCheckin();
         return;
       }
 
       if (attrs.twTweet === 'true') {
         // twitter message
-        return
+        return;
       }
 
       socialLogin();
@@ -216,21 +261,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           scope.show_unified = true;
         }
 
+        otpEnabled();
+
       }, function(err) {
         scope.state.status = undefined;
         scope.state.hidden = undefined;
         scope.state.errors = err;
         $rootScope.bodylayout = 'login-error';
       });
-    };
-
-    var onFail = function(err) {
-      scope.loggingIn = undefined;
-      // Insert a CT service error handler //
-      cleanUp();
-      $rootScope.banneralert = 'banner-alert alert-box alert';
-      $rootScope.error = err;
-      chooseForm();
     };
 
     // var addSocial = function() {
@@ -301,15 +339,33 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       cleanUp();
     };
 
-    scope.submit = function(custom_data) {
-      if (scope.loggingIn) {
-        return;
+    scope.create_otp = function(myForm) {
+      if (myForm) {
+        myForm.$setPristine();
       }
+      var number = scope.otp.cc + scope.otp.number;
+      CT.otp({
+        splash_id:  $routeParams.splash_id,
+        data: { number: number }
+      }).then(onSuccessOTP, onFailOTP);
+    };
+
+    scope.submit = function(custom_data) {
 
       scope.loggingIn = true;
       if ($routeParams.preview === 'true') {
         scope.preview = 'This is just a preview, you cannot actually login.';
         return;
+      }
+
+      if (scope.otp.password) {
+        scope.password = scope.otp.password;
+        scope.otp_login = true;
+      } else if (scope.user.password) {
+        scope.password = scope.user.password;
+        if (scope.user.username) {
+          scope.username = scope.user.username;
+        }
       }
 
       scope.error = undefined;
@@ -321,13 +377,14 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         scope.fields = custom_data.fields;
       }
       CT.login({
-        email:      scope.email,
+        email:      scope.email || scope.user.email,
         username:   scope.username,
         password:   scope.password,
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data: scope.fields
+        data:       scope.fields,
+        otp:        scope.otp_login
       }).then(onSuccess, onFail);
     };
 
@@ -353,6 +410,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       btntext: '@',
       fbCheckin: '@',
       fbPageId: '@',
+      gPageId: '@',
       twSendTweet: '@',
       twHandle: '@'
     },
@@ -618,7 +676,6 @@ app.directive('displayStore', ['CT', '$cookies', '$rootScope', '$location', '$wi
     var configureStripe = function() {
       handler = StripeCheckout.configure({
         key: scope.cart.store.token_stripe,
-        // image: '/img/documentation/checkout/marketplace.png',
         locale: 'auto',
         token: function(token) {
           scope.stripe = true;
@@ -851,6 +908,7 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tmin-height: 100px;\n'+
         '\tdisplay: block;\n'+
         '\tpadding: {{ splash.container_inner_padding }};\n'+
+        '\tbox-shadow: {{splash.container_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
         '}\n\n'+
 
         '.footer {\n'+
@@ -939,7 +997,6 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '\tcolor: {{ splash.input_text_colour }}!important;\n'+
         '}\n\n' +
 
-
         'input[type=text], input[type=password], input[type=email], textarea {\n'+
         '\theight: {{ splash.input_height }}!important;\n'+
         '\tline-height: {{ splash.input_height }}!important;\n'+
@@ -956,6 +1013,79 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         // '\tmargin: {{ splash.container_inner_padding }};\n'+
         // '\theight: 12px!important;\n'+
         // '\tline-height: 12px!important;\n'+
+        '}\n\n'+
+
+        '#popup_ad {\n'+
+        '\tbackground: {{ splash.popup_background_colour }};\n'+
+        '}\n\n'+
+
+        '#popup_ad .button {\n'+
+        '\tborder-radius: {{ splash.button_radius }};\n'+
+        '}\n\n'+
+
+        'a.social, a.button, .btn.btn-lg.btn-default {\n'+
+        '\tborder-radius: {{splash.button_radius}}!important;\n'+
+        '\tbox-shadow: {{splash.button_shadow ? \'0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\' : \'0 0px 0px rgba(0,0,0,0.0)\'}};\n'+
+        '}\n\n'+
+
+        '.social.sms-access, .social.sms-access:hover, .social.sms-access:focus, .social.facebook, .social.facebook:hover,.social.facebook:focus, .social.google, .social.google:hover,.social.google:focus, .social.twitter, .social.twitter:hover,.social.twitter:focus, .button.social-access::after, .button.email-access::after, .button.voucher-access::after {\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px!important;\n'+
+        '}\n\n'+
+
+        '.social.voucher-access {\n'+
+        '\tbackground-color: {{splash.voucher_button_colour}};\n'+
+        '\tcolor: {{splash.voucher_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.voucher_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Pqc5UMwtQ764Brl4a9A2\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/oefOuGVjSeqxT3o8JUZO\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '\tborder: 1px solid {{splash.voucher_button_border_colour}}!important;\n'+
+        '}\n\n'+
+
+        '.social.voucher-access:hover, .social.voucher-access:focus {\n'+
+        '\tcolor: {{splash.voucher_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.voucher_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Pqc5UMwtQ764Brl4a9A2\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/oefOuGVjSeqxT3o8JUZO\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '}\n\n'+
+
+        '.social.password-access {\n'+
+        '\tbackground-color: {{splash.password_button_colour}};\n'+
+        '\tcolor: {{splash.password_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.password_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/UDXA7p6KRsC3eJ2Jx1ZN\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/anRrI4EmQJOCuq8F7aUe\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '\tborder: 1px solid {{splash.password_button_border_colour}}!important;\n'+
+        '}\n\n'+
+
+        '.social.password-access:hover, .social.password-access:focus {\n'+
+        '\tcolor: {{splash.password_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.password_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/UDXA7p6KRsC3eJ2Jx1ZN\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/anRrI4EmQJOCuq8F7aUe\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '}\n\n'+
+
+        '.social.code-access {\n'+
+        '\tbackground-color: {{splash.codes_button_colour}};\n'+
+        '\tcolor: {{splash.codes_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.codes_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/hsHgqCkWS2OIf8P2p23G\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/zbxXh1LkSiufAjkzyxai\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '\tborder: 1px solid {{splash.codes_button_border_colour}}!important;\n'+
+        '}\n\n'+
+
+        '.social.code-access:hover, .social.code-access:focus {\n'+
+        '\tcolor: {{splash.codes_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.codes_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/hsHgqCkWS2OIf8P2p23G\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/zbxXh1LkSiufAjkzyxai\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '}\n\n'+
+
+        '.social.email-access {\n'+
+        '\tbackground-color: {{splash.email_button_colour}};\n'+
+        '\tcolor: {{splash.email_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
+        '\tborder: 1px solid {{splash.email_button_border_colour}}!important;\n'+
+        '}\n\n'+
+
+        '.social.email-access:hover, .social.email-access:focus {\n'+
+        '\tcolor: {{splash.email_btn_font_colour}};\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
+        '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
         '}\n\n'+
 
         '{{ splash.custom_css }}';
@@ -984,6 +1114,40 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
     link: link
   };
 
+}]);
+
+
+app.directive('popupAdvert', ['$location', '$compile', '$window', '$rootScope', '$timeout', function($location, $compile, $window, $rootScope, $timeout) {
+  var link = function(scope, element, attrs) {
+    var init = function(data) {
+      var template =
+        '<div id="popup_container">'+
+        '<div id="popup_ad">'+
+        '<div class="row">'+
+        '<div class="small-12">'+
+        '<img src="{{ splash.popup_image }}">'+
+        '</div>'+
+        '</div>'+
+        '<div class="row">'+
+        '<div class="small-12 text-center">'+
+        '<span id="popupCounter">'+
+        '<a class="btn button" id="countDown">5 sec</a>'+
+        '</span>'+
+        '<span>'+
+        '<a class="btn button" id="popupBoxClose">Close</a>'+
+        '</span>'+
+        '</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+    init();
+  };
+  return {
+    link: link,
+  };
 }]);
 
 app.directive('googleAnalytics', ['$compile', function($compile) {
@@ -1017,4 +1181,121 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
       id: '@'
     }
   };
+}]);
+
+app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', '$timeout', '$cookies', function($location, $compile, $window, $rootScope, $timeout, $cookies) {
+
+  var link = function(scope, element, attrs) {
+
+    var cookieName = 'gdpr-2018041';
+    var getCookie = $cookies.get(cookieName);
+
+    scope.gdprToggle = function() {
+      $('.gdpr-slider').toggleClass('close');
+    };
+
+    scope.gdprSubmit = function() {
+      var expireDate = new Date();
+      expireDate.setMonth(expireDate.getMonth() + 1);
+      $cookies.put(cookieName, true , { expires: expireDate });
+      $('.gdpr-slider').toggleClass('close');
+      $('.gdpr-back').toggleClass('submitted');
+    };
+
+    var showGdpr = function(id) {
+      var template =
+        '<div class="gdpr-back submitted" ng-click="gdprToggle()"></div>'+
+        '<div class="gdpr-slider close" ng-show="gdprForm == \'true\'">'+
+        '<div class="gdpr-tab" ng-click="gdprToggle()">'+
+        '<span ng-show="poweredBy == \'true\'">'+
+        '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
+        '<img ng-if="poweredByName == \'Cucumber Tony\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/KflR9VnS1KUuKOCOmFAo"></img>'+
+        '</span>'+
+        '</div>'+
+        '<div class="gdpr-body">'+
+        '<div class="row align-center">'+
+        '<div class="small-12">'+
+        '<p><b>We need your consent before you can log in.</b></p>'+
+        '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'"> and powered by {{poweredByName}}</span>.</p>'+
+        '<form id="gdpr-form" ng-submit="gdprSubmit()">'+
+        '<fieldset class="gdpr-fields">'+
+        '<legend>You must accept the terms of service</legend>'+
+        '<span ng-if="poweredByName == \'MIMO\'">'+
+        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
+        '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
+        '</span>'+
+        '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
+        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
+        '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
+        '</span>'+
+        '<span ng-if="poweredBy == \'false\'">'+
+        '<p>Read {{locationName}}\'s full terms of service <a href="{{termsUrl}}" target="_blank">here.</a></p>'+
+        '<input id="location_terms" type="checkbox" required><label for="location_terms">I agree to the terms of service</label><br>'+
+        '</span>'+
+        '</fieldset>'+
+        '<div ng-if="isClickthrough == \'false\'">'+
+        '<span ng-if="newsletterConsent == \'false\'">'+
+        '<fieldset class="gdpr-fields">'+
+        '<legend>How would you like to hear from us?</legend>'+
+        '<p>{{gdprContactMessage}}</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
+        '</fieldset>'+
+        '</span>'+
+        '<span ng-if="newsletterConsent == \'true\'">'+
+        '<fieldset class="gdpr-fields">'+
+        '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
+        '<p>{{gdprContactMessage}}</p>'+
+        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox" required><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
+        '</fieldset>'+
+        '</span>'+
+        '</div>'+
+        // '<p>You can change your preferences at a later date <a href="https://oh-mimo.com/self-service" target="_blank">here.</a></p>'+
+        '<div>'+
+        '<button class="gdpr-submit">Submit</button>'+
+        '</div>'+
+        '</form>'+
+        '</div>'+
+        '</div>'+
+        '</div>'+
+        '</div>';
+      var templateObj = $compile(template)(scope);
+      element.html(templateObj);
+    };
+
+    var init = function () {
+      showGdpr()
+      if ( getCookie === undefined || getCookie === '' || getCookie === null) {
+        $('.gdpr-back').toggleClass('submitted');
+        $timeout(function() {
+          $('.gdpr-slider').toggleClass('close');
+          $timeout.cancel(timer);
+        },1000);
+      }
+    }
+
+    init();
+
+  };
+
+  return {
+    link: link,
+    scope: {
+      locationName: '@',
+      isClickthrough: '@',
+      hideTerms: '@',
+      termsUrl: '@',
+      poweredBy: '@',
+      poweredByName: '@',
+      backupSms: '@',
+      backupEmail: '@',
+      newsletterConsent: '@',
+      gdprEmailField: '@',
+      gdprSmsField: '@',
+      gdprContactMessage: '@',
+      gdprForm: '@',
+    }
+  };
+
 }]);

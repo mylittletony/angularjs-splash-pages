@@ -43,7 +43,7 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
   var link = function(scope,element,attrs,controller) {
 
     var user, authResponse, appId;
-    var mimo = ['app.mimo.com', 's.oh-mimo.com', 'splash.oh-mimo.com', 'app.my-wifi.test'];
+    var mimo = ['s.oh-mimo.com'];
 
     function errorMsg(msg) {
       $rootScope.banneralert = 'banner-alert alert-box alert';
@@ -74,10 +74,9 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
     }
 
     scope.login = function() {
-
       Client.details().then(function(client) {
         var host = window.location.host;
-        var params = JSON.stringify(client);
+        var params = window.btoa(angular.toJson(client));
         window.location = 'https://www.facebook.com/v2.12/dialog/oauth?display=page&client_id=' + appId + '&redirect_uri=http://' + host + '/auth/facebook&action&oauth_facebook_callback&scope=email&state=' + params;
       });
     };

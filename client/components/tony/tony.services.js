@@ -130,15 +130,30 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     };
 
-    function login(params) {
-
+    function otp(params) {
       var deferred = $q.defer();
+      params = params || {};
+      Client.details().then(function(resp) {
+        client = resp;
+        createOTP(params.data.number).then(function(response) {
+          if (response.error) {
+            deferred.reject(response);
+          } else {
+            deferred.resolve();
+          }
+        });
+      });
+      return deferred.promise;
+    }
 
+    function login(params) {
+      var deferred = $q.defer();
       params = params || {};
 
       loginDetails.data               = params.data;
       loginDetails.username           = params.username;
       loginDetails.password           = params.password;
+      loginDetails.otp                = params.otp;
       loginDetails.logincode          = params.logincode;
       loginDetails.email              = params.email;
       loginDetails.newsletter         = params.newsletter;
@@ -150,39 +165,35 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.type               = params.type;
       loginDetails.screen_name        = params.screen_name;
 
-      Client.details()
-        .then(function(resp) {
-          client = resp;
-          status()
-            .then(function(coovaResp) {
-              loginDetails.authResp = coovaResp;
-              createLogin()
-                .then(function(response) {
-                  //////////////////////////////////////////////////
-                  // Meraki login if state is present in response /////////
-                  // Is now also for VSG users or other server side auth ///
-                  // ///////////////////////////////////////////////
-                  if (response.state !== undefined) {
-                    if (response.state === 1) {
-                      deferred.resolve();
-                    } else {
-                      deferred.reject(response);
-                    }
-                  } else {
-                    finaliseLogin(response)
-                      .then(function() {
-                        deferred.resolve(auth);
-                      }, function(err) {
-                        deferred.reject(err);
-                      });
-                  }
-                }, function(err) {
-                  deferred.reject(err);
-                });
-            });
-        }, function(err) {
-          deferred.reject(err);
+      Client.details().then(function(resp) {
+        client = resp;
+        status().then(function(coovaResp) {
+          loginDetails.authResp = coovaResp;
+          createLogin().then(function(response) {
+            //////////////////////////////////////////////////
+            // Meraki login if state is present in response /////////
+            // Is now also for VSG users or other server side auth ///
+            // ///////////////////////////////////////////////
+            if (response.state !== undefined) {
+              if (response.state === 1) {
+                deferred.resolve();
+              } else {
+                deferred.reject(response);
+              }
+            } else {
+              finaliseLogin(response).then(function() {
+                deferred.resolve(auth);
+              }, function(err) {
+                deferred.reject(err);
+              });
+            }
+          }, function(err) {
+            deferred.reject(err);
+          });
         });
+      }, function(err) {
+        deferred.reject(err);
+      });
       return deferred.promise;
     }
 
@@ -409,6 +420,22 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     }
 
+    var createOTP = function(number) {
+      var deferred = $q.defer();
+      Tony.create({
+        splash_id:          loginDetails.splash_id,
+        clientMac:          client.clientMac,
+        request_uri:        client.requestUri,
+        apMac:              client.apMac,
+        number:             number
+      }).$promise.then(function(res) {
+        deferred.resolve(res);
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    };
+
     var createLogin = function() {
 
       var deferred = $q.defer();
@@ -418,6 +445,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       Tony.create({
         username:           loginDetails.username,
         password:           loginDetails.password,
+        otp:                loginDetails.otp,
         logincode:          loginDetails.logincode,
         guestId:            loginDetails.guestId,
         splash_id:          loginDetails.splash_id,
@@ -591,6 +619,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     };
 
     return {
+      otp: otp,
       login: login,
       logout: logout,
       status: status,
@@ -811,7 +840,6 @@ app.factory('Ping', ['$http', '$q',
     };
 
     var handleSuccess = function(response) {
-      console.log(response);
       return( response );
     };
 
