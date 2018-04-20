@@ -357,6 +357,9 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
       if (scope.otp.password) {
         scope.password = scope.otp.password;
+        scope.otp_login = true;
+      } else if (scope.user.password) {
+        scope.password = scope.user.password;
       }
 
       scope.error = undefined;
@@ -374,7 +377,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data:       scope.fields
+        data:       scope.fields,
+        otp:        scope.otp_login
       }).then(onSuccess, onFail);
     };
 
