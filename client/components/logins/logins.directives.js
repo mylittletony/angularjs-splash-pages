@@ -1070,14 +1070,14 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '.social.email-access {\n'+
         '\tbackground-color: {{splash.email_button_colour}};\n'+
         '\tcolor: {{splash.email_btn_font_colour}};\n'+
-        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/mKAGsvSJq5uT5lZtUAvQ\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/g8K9goqSbS6c9ktdyMQ6\' }});\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
         '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
         '\tborder: 1px solid {{splash.email_button_border_colour}}!important;\n'+
         '}\n\n'+
 
         '.social.email-access:hover, .social.email-access:focus {\n'+
         '\tcolor: {{splash.email_btn_font_colour}};\n'+
-        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/mKAGsvSJq5uT5lZtUAvQ\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/g8K9goqSbS6c9ktdyMQ6\' }});\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
         '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
         '}\n\n'+
 
