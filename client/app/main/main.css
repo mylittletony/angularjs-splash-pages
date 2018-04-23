@@ -494,6 +494,16 @@ input.has-error {
   margin-bottom: -1px;
 }
 
+.gdpr-tab.close img {
+  position: absolute;
+  bottom: 0px;
+  height: 30px;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 42;
+}
+
 .gdpr-body {
   background: white;
   height: 100%;

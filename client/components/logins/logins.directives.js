@@ -1189,6 +1189,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
     var cookieName = 'gdpr-20180423';
     var getCookie = $cookies.get(cookieName);
+    var gdprForm = scope.gdprForm;
 
     scope.gdprToggle = function() {
       $('.gdpr-slider').toggleClass('close');
@@ -1204,8 +1205,17 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
     var showGdpr = function(id) {
       var template =
+        '<span ng-show="gdprForm == \'false\'">'+
+        '<div class="gdpr-tab close">'+
+        '<span ng-show="poweredBy == \'true\'">'+
+        '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
+        '<img ng-if="poweredByName == \'Cucumber Tony\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/KflR9VnS1KUuKOCOmFAo"></img>'+
+        '</span>'+
+        '</div>'+
+        '</span>'+
+        '<span ng-show="gdprForm == \'true\'">'+
         '<div class="gdpr-back submitted" ng-click="gdprToggle()"></div>'+
-        '<div class="gdpr-slider close" ng-show="gdprForm == \'true\'">'+
+        '<div class="gdpr-slider close">'+
         '<div class="gdpr-tab" ng-click="gdprToggle()">'+
         '<span ng-show="poweredBy == \'true\'">'+
         '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
@@ -1221,11 +1231,11 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<fieldset class="gdpr-fields">'+
         '<legend>You must accept the terms of service</legend>'+
         '<span ng-if="poweredByName == \'MIMO\'">'+
-        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
+        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms/users" target="_blank">here.</a></p>'+
         '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
-        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
+        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/users" target="_blank">here.</a></p>'+
         '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredBy == \'false\'">'+
@@ -1259,12 +1269,14 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '</div>'+
         '</div>'+
         '</div>'+
-        '</div>';
+        '</div>'+
+        '</span>';
       var templateObj = $compile(template)(scope);
       element.html(templateObj);
     };
 
     var init = function () {
+      console.log(scope)
       showGdpr()
       if ( getCookie === undefined || getCookie === '' || getCookie === null) {
         $('.gdpr-back').toggleClass('submitted');
