@@ -1187,7 +1187,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
   var link = function(scope, element, attrs) {
 
-    var cookieName = 'gdpr-2018041';
+    var cookieName = 'gdpr-20180423';
     var getCookie = $cookies.get(cookieName);
 
     scope.gdprToggle = function() {
@@ -1266,13 +1266,13 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
     var init = function () {
       showGdpr()
-      // if ( getCookie === undefined || getCookie === '' || getCookie === null) {
-      //   $('.gdpr-back').toggleClass('submitted');
-      //   $timeout(function() {
-      //     $('.gdpr-slider').toggleClass('close');
-      //     $timeout.cancel(timer);
-      //   },1000);
-      // }
+      if ( getCookie === undefined || getCookie === '' || getCookie === null) {
+        $('.gdpr-back').toggleClass('submitted');
+        $timeout(function() {
+          $('.gdpr-slider').toggleClass('close');
+          $timeout.cancel(timer);
+        },1000);
+      }
     }
 
     init();
