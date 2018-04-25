@@ -1322,8 +1322,7 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
       gdprEmailField: '@',
       gdprSmsField: '@',
       gdprContactMessage: '@',
-      gdprForm: '@',
-      consentNew: '='
+      gdprForm: '@'
     }
   };
 
