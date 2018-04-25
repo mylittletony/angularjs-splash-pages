@@ -360,6 +360,12 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
 
       if (scope.otp.password) {
         scope.password = scope.otp.password;
+        scope.otp_login = true;
+      } else if (scope.user.password) {
+        scope.password = scope.user.password;
+        if (scope.user.username) {
+          scope.username = scope.user.username;
+        }
       }
 
       scope.error = undefined;
@@ -377,7 +383,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
-        data:       scope.fields
+        data:       scope.fields,
+        otp:        scope.otp_login
       }).then(onSuccess, onFail);
     };
 
@@ -1070,14 +1077,14 @@ app.directive('buildPage', ['$location', '$compile', '$window', '$rootScope', '$
         '.social.email-access {\n'+
         '\tbackground-color: {{splash.email_button_colour}};\n'+
         '\tcolor: {{splash.email_btn_font_colour}};\n'+
-        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/mKAGsvSJq5uT5lZtUAvQ\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/g8K9goqSbS6c9ktdyMQ6\' }});\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
         '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
         '\tborder: 1px solid {{splash.email_button_border_colour}}!important;\n'+
         '}\n\n'+
 
         '.social.email-access:hover, .social.email-access:focus {\n'+
         '\tcolor: {{splash.email_btn_font_colour}};\n'+
-        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/mKAGsvSJq5uT5lZtUAvQ\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/g8K9goqSbS6c9ktdyMQ6\' }});\n'+
+        '\tbackground-image: url({{splash.email_button_icon ? \'https://d247kqobagyqjh.cloudfront.net/api/file/Bo1KkVPRK6xu1otggMJg\' : \'https://d247kqobagyqjh.cloudfront.net/api/file/J8r124irRIahUEwwkOrw\' }});\n'+
         '\tbackground-position: {{splash.button_radius === \'9001px\' ? \'20px\' : \'10px\'}} 10px;\n'+
         '}\n\n'+
 
@@ -1180,8 +1187,9 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
   var link = function(scope, element, attrs) {
 
-    var cookieName = 'gdpr-2018041';
+    var cookieName = 'gdpr-20180423';
     var getCookie = $cookies.get(cookieName);
+    var gdprForm = scope.gdprForm;
 
     scope.gdprToggle = function() {
       $('.gdpr-slider').toggleClass('close');
@@ -1197,8 +1205,17 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
 
     var showGdpr = function(id) {
       var template =
+        '<span ng-show="gdprForm == \'false\'">'+
+        '<div class="gdpr-tab close">'+
+        '<span ng-show="poweredBy == \'true\'">'+
+        '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
+        '<img ng-if="poweredByName == \'Cucumber Tony\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/KflR9VnS1KUuKOCOmFAo"></img>'+
+        '</span>'+
+        '</div>'+
+        '</span>'+
+        '<span ng-show="gdprForm == \'true\'">'+
         '<div class="gdpr-back submitted" ng-click="gdprToggle()"></div>'+
-        '<div class="gdpr-slider close" ng-show="gdprForm == \'true\'">'+
+        '<div class="gdpr-slider close">'+
         '<div class="gdpr-tab" ng-click="gdprToggle()">'+
         '<span ng-show="poweredBy == \'true\'">'+
         '<img ng-if="poweredByName == \'MIMO\'" src="https://d247kqobagyqjh.cloudfront.net/api/file/8Zw1a8xJQbCqGIjVOJF6"></img>'+
@@ -1214,11 +1231,11 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<fieldset class="gdpr-fields">'+
         '<legend>You must accept the terms of service</legend>'+
         '<span ng-if="poweredByName == \'MIMO\'">'+
-        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms" target="_blank">here.</a></p>'+
+        '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms/users" target="_blank">here.</a></p>'+
         '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
-        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/" target="_blank">here.</a></p>'+
+        '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/users" target="_blank">here.</a></p>'+
         '<input id="ct_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredBy == \'false\'">'+
@@ -1252,12 +1269,14 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '</div>'+
         '</div>'+
         '</div>'+
-        '</div>';
+        '</div>'+
+        '</span>';
       var templateObj = $compile(template)(scope);
       element.html(templateObj);
     };
 
     var init = function () {
+      console.log(scope)
       showGdpr()
       if ( getCookie === undefined || getCookie === '' || getCookie === null) {
         $('.gdpr-back').toggleClass('submitted');
