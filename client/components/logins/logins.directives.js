@@ -1183,13 +1183,22 @@ app.directive('googleAnalytics', ['$compile', function($compile) {
   };
 }]);
 
-app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', '$timeout', '$cookies', function($location, $compile, $window, $rootScope, $timeout, $cookies) {
+app.factory('CONSENT', [function() {
+
+  var a = {};
+
+  return a;
+
+}]);
+
+app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$rootScope', '$timeout', '$cookies', function(CONSENT, $location, $compile, $window, $rootScope, $timeout, $cookies) {
 
   var link = function(scope, element, attrs) {
-
+    var timer;
     var cookieName = 'gdpr-20180423';
     var getCookie = $cookies.get(cookieName);
     var gdprForm = scope.gdprForm;
+    scope.consent = {};
 
     scope.gdprToggle = function() {
       $('.gdpr-slider').toggleClass('close');
@@ -1198,7 +1207,15 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
     scope.gdprSubmit = function() {
       var expireDate = new Date();
       expireDate.setMonth(expireDate.getMonth() + 1);
-      $cookies.put(cookieName, true , { expires: expireDate });
+      var consent = {
+        terms: true,
+        email: scope.consent.email,
+        sms: scope.consent.sms,
+        timestamp: Date.now()
+      };
+      CONSENT.new = true;
+      $cookies.put(cookieName, window.btoa(JSON.stringify(consent)), { expires: expireDate });
+
       $('.gdpr-slider').toggleClass('close');
       $('.gdpr-back').toggleClass('submitted');
     };
@@ -1232,7 +1249,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<legend>You must accept the terms of service</legend>'+
         '<span ng-if="poweredByName == \'MIMO\'">'+
         '<p>Read MIMO\'s full terms of service <a href="https://www.oh-mimo.com/terms/users" target="_blank">here.</a></p>'+
-        '<input id="mimo_terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
+        '<input id="mimo_terms" ng-model="consent.terms" type="checkbox" required><label for="mimo_terms">I agree to the terms of service</label><br>'+
         '</span>'+
         '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
         '<p>Read CT\'s full terms of service <a href="https://www.ct-networks.io/terms/users" target="_blank">here.</a></p>'+
@@ -1248,16 +1265,16 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
         '<fieldset class="gdpr-fields">'+
         '<legend>How would you like to hear from us?</legend>'+
         '<p>{{gdprContactMessage}}</p>'+
-        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox"><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
-        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox"><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
+        '<span ng-if="backupEmail"><input id="email_consent" ng-model="consent.email" type="checkbox"><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" ng-model="consent.sms" type="checkbox"><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
         '</fieldset>'+
         '</span>'+
         '<span ng-if="newsletterConsent == \'true\'">'+
         '<fieldset class="gdpr-fields">'+
         '<legend>Confirm that you agree to be contacted via the below methods</legend>'+
         '<p>{{gdprContactMessage}}</p>'+
-        '<span ng-if="backupEmail"><input id="email_consent" type="checkbox" required><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
-        '<span ng-if="backupSms"><input id="sms_consent" type="checkbox" required><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
+        '<span ng-if="backupEmail"><input id="email_consent" ng-model="consent.email" type="checkbox" required><label for="email_consent">{{gdprEmailField}}</label><br></span>'+
+        '<span ng-if="backupSms"><input id="sms_consent" ng-model="consent.sms" type="checkbox" required><label for="sms_consent">{{gdprSmsField}}</label><br></span>'+
         '</fieldset>'+
         '</span>'+
         '</div>'+
@@ -1276,8 +1293,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
     };
 
     var init = function () {
-      console.log(scope)
-      showGdpr()
+      showGdpr();
       if ( getCookie === undefined || getCookie === '' || getCookie === null) {
         $('.gdpr-back').toggleClass('submitted');
         $timeout(function() {
@@ -1285,7 +1301,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
           $timeout.cancel(timer);
         },1000);
       }
-    }
+    };
 
     init();
 
@@ -1307,6 +1323,7 @@ app.directive('consentForm', ['$location', '$compile', '$window', '$rootScope', 
       gdprSmsField: '@',
       gdprContactMessage: '@',
       gdprForm: '@',
+      consentNew: '='
     }
   };
 
