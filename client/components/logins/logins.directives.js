@@ -1199,6 +1199,7 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
     var getCookie = $cookies.get(cookieName);
     var gdprForm = scope.gdprForm;
     scope.consent = {};
+    scope.cookiePresent = undefined;
 
     scope.gdprToggle = function() {
       $('.gdpr-slider').toggleClass('close');
@@ -1215,6 +1216,7 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
       };
       CONSENT.new = true;
       $cookies.put(cookieName, window.btoa(JSON.stringify(consent)), { expires: expireDate });
+      scope.cookiePresent = true;
 
       $('.gdpr-slider').toggleClass('close');
       $('.gdpr-back').toggleClass('submitted');
@@ -1241,7 +1243,12 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
         '</div>'+
         '<div class="gdpr-body">'+
         '<div class="row align-center">'+
-        '<div class="small-12">'+
+        '<div class="small-12" ng-if="cookiePresent">'+
+        '<p><b>You have recently provided your consent.</b></p>'+
+        '<p>Click below if you\'d like to update your consent preferences.</p>'+
+        '<button>Update Consent</button>'+
+        '</div>'+
+        '<div class="small-12" ng-if="!cookiePresent">'+
         '<p><b>We need your consent before you can log in.</b></p>'+
         '<p>This service is provided by {{locationName}}<span ng-if="poweredBy == \'true\'"> and powered by {{poweredByName}}</span>.</p>'+
         '<form id="gdpr-form" ng-submit="gdprSubmit()">'+
@@ -1300,7 +1307,10 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
           $('.gdpr-slider').toggleClass('close');
           $timeout.cancel(timer);
         },1000);
+      } else {
+        scope.cookiePresent = true;
       }
+
     };
 
     init();
