@@ -2,8 +2,8 @@
 
 var app = angular.module('ctLoginsApp.tony.services', ['ngResource']);
 
-app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'Cisco', 'API_END_POINT', '$sce', '$compile',
-  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, Cisco, API_END_POINT, $sce, $compile) {
+app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$rootScope', '$location', '$window', 'CONSENT', 'Coova', 'Client', 'Tony', 'Aruba', 'Xirrus', 'Ruckus', 'Microtik', 'Cisco', 'API_END_POINT', '$sce', '$compile',
+  function($routeParams, $timeout, $cookies, $http, $q, $rootScope, $location, $window, CONSENT, Coova, Client, Tony, Aruba, Xirrus, Ruckus, Microtik, Cisco, API_END_POINT, $sce, $compile) {
 
     var auth, client, loginDetails = {};
 
@@ -441,31 +441,39 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var deferred = $q.defer();
       var challenge = (loginDetails.authResp && loginDetails.authResp.challenge ) ? loginDetails.authResp.challenge : client.challenge;
       var gid = $cookies.get('_ga');
+      var consentObj = {};
+
+      if (CONSENT.new) {
+        consentObj = JSON.parse(window.atob($cookies.get('gdpr-20180423')));
+      }
 
       Tony.create({
-        username:           loginDetails.username,
-        password:           loginDetails.password,
-        otp:                loginDetails.otp,
-        logincode:          loginDetails.logincode,
-        guestId:            loginDetails.guestId,
-        splash_id:          loginDetails.splash_id,
-        challenge:          challenge,
-        request_uri:        client.requestUri,
-        clientMac:          client.clientMac,
-        clientIp:           client.clientIp,
-        apMac:              client.apMac,
-        loginUri:           client.loginUri,
-        device:             client.device,
-        token:              loginDetails.token,
-        memberId:           loginDetails.memberId,
-        expires:            loginDetails.expires,
-        email:              loginDetails.email,
-        newsletter:         loginDetails.newsletter,
-        uamip:              client.uamip,
-        gid:                gid,
-        screen_name:        loginDetails.screen_name,
-        social_type:        loginDetails.type,
-        data:               JSON.stringify(loginDetails.data)
+        username:                 loginDetails.username,
+        password:                 loginDetails.password,
+        otp:                      loginDetails.otp,
+        logincode:                loginDetails.logincode,
+        guestId:                  loginDetails.guestId,
+        splash_id:                loginDetails.splash_id,
+        challenge:                challenge,
+        request_uri:              client.requestUri,
+        clientMac:                client.clientMac,
+        clientIp:                 client.clientIp,
+        apMac:                    client.apMac,
+        loginUri:                 client.loginUri,
+        device:                   client.device,
+        token:                    loginDetails.token,
+        memberId:                 loginDetails.memberId,
+        expires:                  loginDetails.expires,
+        email:                    loginDetails.email,
+        newsletter:               loginDetails.newsletter,
+        uamip:                    client.uamip,
+        gid:                      gid,
+        terms:                    consentObj.terms,
+        email_consent:            consentObj.email,
+        sms_consent:              consentObj.sms,
+        screen_name:              loginDetails.screen_name,
+        social_type:              loginDetails.type,
+        data:                     JSON.stringify(loginDetails.data)
 
       }).$promise.then(function(res) {
         if (res.error) {
@@ -785,7 +793,10 @@ app.factory('Tony', ['$resource', 'API_END_POINT',
           request_uri: '@request_uri',
           login_uri: '@loginUri',
           type: 'create', // important for CT and JSONP
-          action: 'logins'
+          action: 'logins',
+          terms: '@terms',
+          email_consent: '@email_consent',
+          sms_consent: '@sms_consent',
         }
       },
       addToCart: {
