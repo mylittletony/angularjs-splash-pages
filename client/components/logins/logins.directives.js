@@ -1285,6 +1285,9 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
         '</form>'+
         '</div>'+
         '</div>'+
+        '<div class="small-12">'+
+        '<small>hi</small>'+
+        '</div>'+
         '</div>'+
         '</div>'+
         '</span>';
