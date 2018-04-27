@@ -1,3 +1,6 @@
+<meta name="theme-color" content="{{splash.body_background_colour}}">
+<meta name="msapplication-navbutton-color" content="{{splash.body_background_colour}}">
+<meta name="apple-mobile-web-app-status-bar-style" content="{{splash.body_background_colour}}">
 <script>
 $(document).ready( function() {
 
@@ -46,10 +49,10 @@ $(document).ready( function() {
   <div class='row'>
     <div class='small-12'>
       <div class="location_logo" ng-if="splash.header_image_type == 1">
-        <a href='{{splash.website}}'><img src="{{ splash.logo_file_name }}" ng-class="splash.header_image_type == 1 ? 'logo' : 'banner'"></img></a>
+        <img src="{{ splash.logo_file_name }}" ng-class="splash.header_image_type == 1 ? 'logo' : 'banner'"></img>
       </div>
       <div class="banner" ng-if="splash.header_image_type == 2">
-        <a href='{{splash.website}}'><img src="{{ splash.header_image_name }}" class='banner'></img></a>
+        <img src="{{ splash.header_image_name }}" class='banner'></img>
       </div>
     </div>
   </div>

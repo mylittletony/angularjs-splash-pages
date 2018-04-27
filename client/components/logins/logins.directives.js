@@ -1285,6 +1285,14 @@ app.directive('consentForm', ['CONSENT', '$location', '$compile', '$window', '$r
         '</form>'+
         '</div>'+
         '</div>'+
+        '<div class="small-12">'+
+        '<span ng-if="poweredByName == \'MIMO\'">'+
+        '<small>To view your captured data, <a href="https://www.oh-mimo.com/gdpr-wifi-tools/request" target="_blank">click here.</a></small>'+
+        '</span>';
+        '<span ng-if="poweredByName == \'Cucumber Tony\'">'+
+        '<small>To view your captured data, <a href="https://www.ct-networks.io/gdpr-wifi-tools/request" target="_blank">click here.</a></small>'+
+        '</span>';
+        '</div>'+
         '</div>'+
         '</div>'+
         '</span>';

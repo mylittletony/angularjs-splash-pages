@@ -6,6 +6,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body, html {
+  height: 100vh;
+}
+
 body.login-reset {
 }
 
@@ -472,8 +476,8 @@ input.has-error {
 .gdpr-slider {
   position: fixed;
   z-index: 42;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: calc(100% - 10px);
   overflow: hidden;
   transition: all 400ms ease-in-out;
   bottom: 0px;
