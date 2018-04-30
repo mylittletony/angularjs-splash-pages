@@ -442,9 +442,23 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var challenge = (loginDetails.authResp && loginDetails.authResp.challenge ) ? loginDetails.authResp.challenge : client.challenge;
       var gid = $cookies.get('_ga');
       var consentObj = {};
+      var cookies = $cookies.get('gdpr-20180423');
+      var email;
+
+      if (cookies) {
+        try {
+          cookies = JSON.parse(window.atob(cookies));
+          if (cookies.email) {
+            email = loginDetails.email;
+          }
+        } catch (err) {
+          console.log(err);
+          cookies = undefined;
+        }
+      }
 
       if (CONSENT.new) {
-        consentObj = JSON.parse(window.atob($cookies.get('gdpr-20180423')));
+        consentObj = cookies;
       }
 
       Tony.create({
@@ -464,7 +478,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         token:                    loginDetails.token,
         memberId:                 loginDetails.memberId,
         expires:                  loginDetails.expires,
-        email:                    loginDetails.email,
+        email:                    email,
         newsletter:               loginDetails.newsletter,
         uamip:                    client.uamip,
         gid:                      gid,
