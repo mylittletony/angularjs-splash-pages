@@ -37,6 +37,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var redirectUser = function() {
       if ( attrs.redirects !== undefined || attrs.redirects !== '') {
         var redirects = JSON.parse(attrs.redirects);
+        console.log(redirects)
         if (redirects.show_welcome ) {
           $location.path('/welcome');
         } else {
