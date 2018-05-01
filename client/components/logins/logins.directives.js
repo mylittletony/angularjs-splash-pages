@@ -37,14 +37,17 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     var redirectUser = function() {
       if ( attrs.redirects !== undefined || attrs.redirects !== '') {
         var redirects = JSON.parse(attrs.redirects);
-        console.log(redirects)
+        console.log(redirects);
         if (redirects.show_welcome ) {
           $location.path('/welcome');
         } else {
           var redirectTo;
+          console.log('hello');
           if (redirects.success_url !== '' && redirects.success_url !== null) {
+            console.log('hey');
             redirectTo = redirects.success_url;
           } else {
+            console.log('hi');
             redirectTo = 'http://bbc.co.uk';
           }
           $window.location.href = redirectTo;
