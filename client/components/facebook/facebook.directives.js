@@ -56,6 +56,10 @@ app.directive('facebook', ['$window', '$compile', '$q', '$rootScope', '$localSto
     }
 
     function statusChangeCallback(response) {
+      if (attrs.appId !== '' && attrs.appId !== null) {
+        appId = attrs.appId;
+      }
+
       if (attrs.appId === '' || attrs.appId === null) {
         appId = '468282836525087'; // ct
       }
