@@ -368,6 +368,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         }
       }
 
+      if (scope.access) {
+        scope.email_consent = scope.access.email_consent;
+      }
+
       scope.error = undefined;
       $rootScope.banneralert = undefined;
       $rootScope.error = undefined;
@@ -384,7 +388,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         newsletter: scope.newsletter,
         splash_id:  $routeParams.splash_id,
         data:       scope.fields,
-        otp:        scope.otp_login
+        otp:        scope.otp_login,
+        email_consent: scope.email_consent
       }).then(onSuccess, onFail);
     };
 
