@@ -368,6 +368,10 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
         }
       }
 
+      if (scope.access) {
+        scope.email_consent = scope.access.email_consent;
+      }
+
       scope.error = undefined;
       $rootScope.banneralert = undefined;
       $rootScope.error = undefined;

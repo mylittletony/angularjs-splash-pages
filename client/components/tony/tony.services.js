@@ -446,14 +446,13 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var cookieName = 'gdpr-20180423';
       var cookies = $cookies.get('gdpr-20180423');
       var email;
-      console.log(JSON.stringify(loginDetails))
 
-      if (loginDetails.email_consent == 'true') {
+      if (loginDetails.email_consent === true) {
         console.log('apples');
         var expireDate = new Date();
         expireDate.setMonth(expireDate.getMonth() + 1);
         var consent = {
-          email: scope.consent.email,
+          email: loginDetails.email_consent,
           timestamp: Date.now()
         };
         CONSENT.new = true;
