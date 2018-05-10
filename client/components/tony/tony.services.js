@@ -164,6 +164,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       loginDetails.splash_id          = params.splash_id;
       loginDetails.type               = params.type;
       loginDetails.screen_name        = params.screen_name;
+      loginDetails.email_consent      = params.email_consent;
 
       Client.details().then(function(resp) {
         client = resp;
@@ -442,8 +443,22 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var challenge = (loginDetails.authResp && loginDetails.authResp.challenge ) ? loginDetails.authResp.challenge : client.challenge;
       var gid = $cookies.get('_ga');
       var consentObj = {};
+      var cookieName = 'gdpr-20180423';
       var cookies = $cookies.get('gdpr-20180423');
       var email;
+      console.log(JSON.stringify(loginDetails))
+
+      if (loginDetails.email_consent == 'true') {
+        console.log('apples');
+        var expireDate = new Date();
+        expireDate.setMonth(expireDate.getMonth() + 1);
+        var consent = {
+          email: scope.consent.email,
+          timestamp: Date.now()
+        };
+        CONSENT.new = true;
+        $cookies.put(cookieName, window.btoa(JSON.stringify(consent)), { expires: expireDate });
+      }
 
       if (cookies) {
         try {
@@ -946,4 +961,3 @@ app.factory('CTDebugger', ['CTDebug', '$rootScope', '$routeParams', '$cookies', 
   };
 
 }]);
-
