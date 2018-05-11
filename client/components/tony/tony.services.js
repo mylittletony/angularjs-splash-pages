@@ -444,11 +444,9 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       var gid = $cookies.get('_ga');
       var consentObj = {};
       var cookieName = 'gdpr-20180423';
-      var cookies = $cookies.get('gdpr-20180423');
       var email;
 
       if (loginDetails.email_consent === true) {
-        console.log('apples');
         var expireDate = new Date();
         expireDate.setMonth(expireDate.getMonth() + 1);
         var consent = {
@@ -458,6 +456,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
         CONSENT.new = true;
         $cookies.put(cookieName, window.btoa(JSON.stringify(consent)), { expires: expireDate });
       }
+
+      var cookies = $cookies.get('gdpr-20180423');
 
       if (cookies) {
         try {
