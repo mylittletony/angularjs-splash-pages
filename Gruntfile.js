@@ -41,8 +41,8 @@ module.exports = function (grunt) {
         constants: {
           // API_END_POINT: 'https://api.ctapp.io/api/v1',
           // API_URL: 'https://api.ctapp.io',
-          API_END_POINT: 'http://mywifi.test:8080/api/v1',
-          API_URL: 'http://mywifi.test:8080',
+          API_END_POINT: 'http://mimo.api:3000/api/v1',
+          API_URL: 'http://mimo.api:3000',
           ENVIRONMENT: 'development'
           // API_END_POINT: 'https://api.polkaspots.com/api/v1',
           // API_URL: 'https://api.polkaspots.com'

@@ -31,7 +31,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
             deferred.resolve(results);
           }
         }
-
       }, function(err) {
         var generic =
             '<h2>Connection Error.</h2>'+
@@ -147,6 +146,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     }
 
     function login(params) {
+      console.log(params)
+
       var deferred = $q.defer();
       params = params || {};
 
@@ -474,6 +475,8 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       if (CONSENT.new) {
         consentObj = cookies;
       }
+
+      console.log(loginDetails);
 
       Tony.create({
         username:                 loginDetails.username,

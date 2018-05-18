@@ -2,9 +2,9 @@
 
  angular.module('config', [])
 
-.constant('API_END_POINT', 'http://mywifi.test:8080/api/v1')
+.constant('API_END_POINT', 'http://mimo.api:3000/api/v1')
 
-.constant('API_URL', 'http://mywifi.test:8080')
+.constant('API_URL', 'http://mimo.api:3000')
 
 .constant('ENVIRONMENT', 'development')
 

@@ -271,16 +271,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       });
     };
 
-    // var addSocial = function() {
-    //   scope.code = attrs.code;
-    //   var template =
-    //     '<div></div>';
-
-    //   var templateObj = $compile(template)(scope);
-    //   element.html(templateObj);
-    //   cleanUp();
-    // };
-
     var addReg = function() {
       var template =
         '<div ng-hide=\'login == true\'>'+
@@ -345,7 +335,7 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       }
       var number = scope.otp.cc + scope.otp.number;
       CT.otp({
-        splash_id:  $routeParams.splash_id,
+        splash_id: $routeParams.splash_id || $routeParams.splash.splash_id,
         data: { number: number }
       }).then(onSuccessOTP, onFailOTP);
     };
@@ -380,13 +370,16 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (custom_data && custom_data.fields) {
         scope.fields = custom_data.fields;
       }
+
+      console.log($rootScope.splash);
+
       CT.login({
         email:      scope.email || scope.user.email,
         username:   scope.username,
         password:   scope.password,
         logincode:  scope.logincode,
         newsletter: scope.newsletter,
-        splash_id:  $routeParams.splash_id,
+        splash_id:  $routeParams.splash_id || $rootScope.splash.splash_id,
         data:       scope.fields,
         otp:        scope.otp_login,
         email_consent: scope.email_consent

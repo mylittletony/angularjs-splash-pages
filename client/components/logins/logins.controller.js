@@ -25,6 +25,7 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
       };
 
       CT.init(params).then(function(results) {
+
         $scope.products = results.products;
         if ($location.path() === '/shop' && ($scope.products === undefined || $scope.products.length < 1)) {
           $scope.goHome();
@@ -54,12 +55,14 @@ app.controller('LoginsController', ['$rootScope', '$scope', '$routeParams', 'CT'
             gdpr_email_field: $scope.splash.gdpr_email_field,
             gdpr_sms_field: $scope.splash.gdpr_sms_field,
             gdpr_contact_message: $scope.splash.gdpr_contact_message,
-            gdpr_form: $scope.splash.gdpr_form
+            gdpr_form: $scope.splash.gdpr_form,
+            splash_id: $scope.splash.id
           };
 
           if (results.form) {
-            $scope.form       = results.form.body;
+            $scope.form = results.form.body;
           }
+
           $scope.redirects  = results.redirects;
           $scope.custom_css = results.splash.custom_css;
 
@@ -174,7 +177,6 @@ app.controller('LoginsShopController', ['$q', '$cookies', '$rootScope', '$scope'
 ]);
 
 app.controller('LoginsResetGuestController', ['$q', '$scope', '$routeParams', '$location', '$rootScope', 'CT',
-
   function($q, $scope, $routeParams, $location, $rootScope, CT) {
     CT.init({request_uri: $location.host()}).then(function(results) {
       $rootScope.bodylayout = 'login-reset';
@@ -182,5 +184,4 @@ app.controller('LoginsResetGuestController', ['$q', '$scope', '$routeParams', '$
     }, function() {
     });
   }
-
 ]);
