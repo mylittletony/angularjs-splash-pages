@@ -134,7 +134,7 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       params = params || {};
       Client.details().then(function(resp) {
         client = resp;
-        createOTP(params.data.number).then(function(response) {
+        createOTP(params).then(function(response) {
           if (response.error) {
             deferred.reject(response);
           } else {
@@ -146,8 +146,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
     }
 
     function login(params) {
-      console.log(params)
-
       var deferred = $q.defer();
       params = params || {};
 
@@ -422,14 +420,14 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       return deferred.promise;
     }
 
-    var createOTP = function(number) {
+    var createOTP = function(params) {
       var deferred = $q.defer();
       Tony.create({
-        splash_id:          loginDetails.splash_id,
+        splash_id:          params.splash_id,
         clientMac:          client.clientMac,
         request_uri:        client.requestUri,
         apMac:              client.apMac,
-        number:             number
+        number:             params.data.number
       }).$promise.then(function(res) {
         deferred.resolve(res);
       }, function(err) {
@@ -475,8 +473,6 @@ app.factory('CT', ['$routeParams', '$timeout', '$cookies', '$http', '$q', '$root
       if (CONSENT.new) {
         consentObj = cookies;
       }
-
-      console.log(loginDetails);
 
       Tony.create({
         username:                 loginDetails.username,

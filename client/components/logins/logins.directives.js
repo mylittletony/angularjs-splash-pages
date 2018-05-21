@@ -35,12 +35,12 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
     }
 
     var redirectUser = function() {
-      if ( attrs.redirects !== undefined || attrs.redirects !== '') {
+      var redirectTo;
+      if (attrs.redirects !== undefined && attrs.redirects !== '') {
         var redirects = JSON.parse(attrs.redirects);
         if (redirects.show_welcome ) {
           $location.path('/welcome');
         } else {
-          var redirectTo;
           if (redirects.success_url !== '' && redirects.success_url !== null) {
             redirectTo = redirects.success_url;
           } else {
@@ -49,6 +49,8 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
           $window.location.href = redirectTo;
         }
       }
+      redirectTo = 'https://www.google.com/';
+      $window.location.href = redirectTo;
     };
 
     var finishLogin = function() {
@@ -333,10 +335,11 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (myForm) {
         myForm.$setPristine();
       }
+
       var number = scope.otp.cc + scope.otp.number;
       CT.otp({
-        splash_id: $routeParams.splash_id || $routeParams.splash.splash_id,
-        data: { number: number }
+        data: { number: number },
+        splash_id: $routeParams.splash_id || $rootScope.splash.splash_id
       }).then(onSuccessOTP, onFailOTP);
     };
 
@@ -370,8 +373,6 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       if (custom_data && custom_data.fields) {
         scope.fields = custom_data.fields;
       }
-
-      console.log($rootScope.splash);
 
       CT.login({
         email:      scope.email || scope.user.email,
