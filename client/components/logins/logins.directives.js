@@ -179,8 +179,12 @@ app.directive('formCode', ['$q', '$sce', '$timeout', 'Client', '$routeParams', '
       scope.otp = { cc: '+44' };
       $cookies.remove('mimo-otp');
 
-      if ( auth !== undefined && auth.type === 'ruckus' ) {
+      if ( auth && auth.type === 'ruckus' ) {
         loginRuckus(auth);
+      } else if ( auth && auth.type === 'unifi' ) {
+        $timeout(function() {
+          finishLogin();
+        },1500);
       } else {
         finishLogin();
       }
