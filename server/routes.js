@@ -22,6 +22,7 @@ module.exports = function(app) {
     query.client_secret = process.env.CLIENT_SECRET;
     query.redirect_uri = redirect_url;
     query.code = req.query.code;
+    console.log(query)
 
     var url = 'https://graph.facebook.com/v2.12/oauth/access_token';
     request({url: url, qs: query}, function(err, response, body) {
