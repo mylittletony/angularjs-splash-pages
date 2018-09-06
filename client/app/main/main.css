@@ -498,6 +498,15 @@ input.has-error {
   margin-bottom: -1px;
 }
 
+@media screen and (max-height: 500px) {
+  .gdpr-tab img {
+    display: none;
+  }
+  .gdpr-tab.close img {
+    display: none;
+  }
+}
+
 .gdpr-tab.close img {
   position: absolute;
   bottom: 0px;
