@@ -15,7 +15,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "fs": "0.0.2",
-    "lodash": "~2.4.1",
+    "lodash": "~4.17.13",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
     "oauth": "^0.9.15",
